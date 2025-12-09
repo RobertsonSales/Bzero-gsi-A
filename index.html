@@ -1,0 +1,3536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operação Barricada Zero | Dashboard Estratégico Avançado</title>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ESTILOS MANTIDOS IGUAIS - NÃO PRECISAM SER ALTERADOS */
+    :root {
+      --primary: #0d47a1;
+      --primary-dark: #002171;
+      --primary-light: #5472d3;
+      --success: #2e7d32;
+      --success-light: #e8f5e9;
+      --warning: #f9a825;
+      --warning-light: #fff8e1;
+      --danger: #d32f2f;
+      --danger-light: #ffebee;
+      --info: #0288d1;
+      --info-light: #e1f5fe;
+      --light: #f5f7fa;
+      --gray-100: #f8f9fa;
+      --gray-200: #e9ecef;
+      --gray-300: #dee2e6;
+      --gray-600: #6c757d;
+      --gray-800: #343a40;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --shadow-xl: 0 12px 48px rgba(0,0,0,0.15);
+    }
+    
+    * { box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #263238; 
+      margin: 0; 
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    
+    /* HEADER */
+    header { 
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white; 
+      padding: 40px; 
+      text-align: center; 
+      border-radius: 24px; 
+      margin-bottom: 40px; 
+      box-shadow: var(--shadow-xl);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+    
+    header h1 { 
+      font-size: 48px; 
+      margin: 0; 
+      font-weight: 800;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    
+    header p {
+      margin: 15px 0 0;
+      opacity: 0.95;
+      font-size: 20px;
+      font-weight: 500;
+      position: relative;
+    }
+    
+    .header-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 30px;
+      position: relative;
+    }
+    
+    .header-stat {
+      text-align: center;
+    }
+    
+    .header-stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      display: block;
+    }
+    
+    .header-stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+    }
+    
+    /* UPLOAD SECTION */
+    .upload { 
+      text-align: center; 
+      background: white; 
+      padding: 50px; 
+      border-radius: 24px; 
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 40px;
+      border: 3px dashed var(--gray-300);
+      transition: all 0.3s ease;
+    }
+    
+    .upload:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .upload h2 {
+      color: var(--primary);
+      margin-bottom: 30px;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .btn { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white; 
+      border: none; 
+      padding: 18px 40px; 
+      border-radius: 16px; 
+      font-size: 18px; 
+      cursor: pointer; 
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .btn:hover { 
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-pdf {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+    }
+
+    .btn-pdf:hover {
+      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+    }
+    
+    /* FILTROS */
+    .filtros-container {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 30px;
+      border-top: 6px solid var(--primary);
+    }
+    
+    .filtros-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .filtros-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .btn-filtro {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-filtro:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-limpar {
+      background: linear-gradient(135deg, var(--danger) 0%, #b71c1c 100%);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 16px;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .btn-limpar:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+    }
+    
+    .filtros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .filtro-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .filtro-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-800);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .filtro-select, .filtro-input {
+      padding: 12px 15px;
+      border: 2px solid var(--gray-300);
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .filtro-select:focus, .filtro-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+    }
+    
+    /* GRID SYSTEM */
+    .grid { 
+      display: grid; 
+      gap: 30px; 
+      margin-top: 30px; 
+    }
+    
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); }
+    .grid-1 { grid-template-columns: 1fr; }
+    
+    /* CARDS */
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      border-left: 6px solid var(--primary);
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(13,71,161,0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    .card h3 {
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      color: var(--gray-600);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      opacity: 0.2;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+    
+    .big { 
+      font-size: 64px; 
+      font-weight: 800; 
+      color: var(--primary); 
+      margin: 20px 0;
+      line-height: 1;
+      position: relative;
+    }
+    
+    .medium {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 15px 0;
+    }
+    
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 1000px;
+      margin: 50px auto;
+      border-radius: 20px;
+      box-shadow: var(--shadow-xl);
+      animation: modalFadeIn 0.3s ease;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      padding: 25px 30px;
+      border-radius: 20px 20px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .modal-body {
+      padding: 30px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    .modal-section {
+      margin-bottom: 25px;
+    }
+    
+    .modal-section h4 {
+      color: var(--primary);
+      font-size: 18px;
+      margin: 0 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    
+    /* CPA CARDS */
+    .cpa-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      border-top: 4px solid var(--primary);
+      cursor: pointer;
+    }
+    
+    .cpa-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .cpa-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .cpa-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .cpa-info h4 {
+      margin: 0;
+      font-size: 22px;
+      color: var(--primary-dark);
+    }
+    
+    .cpa-info p {
+      margin: 5px 0 0;
+      color: var(--gray-600);
+      font-size: 14px;
+    }
+    
+    .cpa-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .cpa-detail {
+      background: var(--gray-100);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .cpa-detail-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+    
+    .cpa-detail-label {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+    
+    /* COMANDANTE CARDS */
+    .comandante-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-left: 4px solid;
+    }
+    
+    .comandante-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .comandante-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .comandante-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+    
+    .comandante-cpa {
+      background: var(--primary-light);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .comandante-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 15px 0;
+    }
+    
+    .comandante-stat {
+      text-align: center;
+      padding: 10px;
+      background: var(--gray-100);
+      border-radius: 10px;
+    }
+    
+    .comandante-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+    
+    .comandante-stat-label {
+      font-size: 11px;
+      color: var(--gray-600);
+      margin-top: 3px;
+    }
+    
+    /* INSIGHTS */
+    .insight { 
+      padding: 15px 20px; 
+      border-radius: 12px; 
+      font-weight: 600; 
+      font-size: 15px; 
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .insight i {
+      font-size: 20px;
+    }
+    
+    .insight.success { 
+      background: var(--success-light); 
+      color: var(--success);
+      border: 2px solid rgba(46,125,50,0.2);
+    }
+    
+    .insight.warning { 
+      background: var(--warning-light); 
+      color: #f57c00;
+      border: 2px solid rgba(249,168,37,0.2);
+    }
+    
+    .insight.danger {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 2px solid rgba(211,47,47,0.2);
+    }
+    
+    .insight.info {
+      background: var(--info-light);
+      color: var(--info);
+      border: 2px solid rgba(2,136,209,0.2);
+    }
+    
+    /* SECTION HEADERS */
+    .section-header {
+      text-align: center;
+      margin: 60px 0 30px;
+      position: relative;
+    }
+    
+    .section-header h2 {
+      color: white;
+      font-size: 38px;
+      font-weight: 800;
+      margin: 0;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      display: inline-block;
+      padding: 0 30px;
+      position: relative;
+    }
+    
+    .section-header::before,
+    .section-header::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 2px;
+      background: rgba(255,255,255,0.3);
+    }
+    
+    .section-header::before { left: 0; }
+    .section-header::after { right: 0; }
+    
+    /* CHARTS */
+    .chart-container {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .chart-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 25px;
+    }
+    
+    canvas { 
+      border-radius: 12px;
+      max-height: 400px;
+    }
+    
+    /* AREA CARDS */
+    .area-card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      transition: all 0.3s ease;
+    }
+    
+    .area-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .area-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .area-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+    
+    .area-badge {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .area-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .area-stat {
+      text-align: center;
+      padding: 15px;
+      background: var(--gray-100);
+      border-radius: 12px;
+    }
+    
+    .area-stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .area-stat-label {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    .progress-container {
+      margin: 15px 0;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 0.5s ease;
+    }
+    
+    /* RANKING TABLE */
+    .ranking-table {
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .ranking-table th {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      text-align: left;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 14px;
+    }
+    
+    .ranking-table td {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .ranking-table tr:hover {
+      background: var(--gray-100);
+    }
+    
+    .ranking-position {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      width: 60px;
+    }
+    
+    .ranking-medal {
+      font-size: 28px;
+    }
+    
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: white;
+      padding: 10px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 15px 25px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-600);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .tab:hover {
+      background: var(--gray-100);
+    }
+    
+    .tab.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    /* FOOTER */
+    footer { 
+      text-align: center; 
+      padding: 60px 20px; 
+      color: white; 
+      font-size: 16px;
+      margin-top: 60px;
+    }
+    
+    footer strong {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    /* LISTAS EM MODAL */
+    .localidades-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .localidade-item {
+      background: var(--gray-100);
+      padding: 12px 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    
+    .localidade-item:hover {
+      background: var(--gray-200);
+    }
+    
+    .localidade-nome {
+      font-weight: 500;
+    }
+    
+    .localidade-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .localidade-link:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    
+    /* MODAL PDF PREVIEW */
+    .pdf-preview-container {
+      width: 100%;
+      height: 70vh;
+      border: 2px solid var(--gray-300);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+    
+    .pdf-preview-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .pdf-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      padding: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+    
+    /* UTILITIES */
+    .hidden { display: none !important; }
+    
+    .text-center { text-align: center; }
+    
+    .mt-1 { margin-top: 10px; }
+    .mt-2 { margin-top: 20px; }
+    .mt-3 { margin-top: 30px; }
+    
+    .mb-1 { margin-bottom: 10px; }
+    .mb-2 { margin-bottom: 20px; }
+    .mb-3 { margin-bottom: 30px; }
+    
+    /* LOADING */
+    .loading {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      header h1 { font-size: 32px; }
+      .section-header h2 { font-size: 28px; }
+      .big { font-size: 48px; }
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .header-stats { flex-direction: column; gap: 20px; }
+      .modal-content { width: 95%; margin: 20px auto; }
+      .cpa-details { grid-template-columns: 1fr; }
+      .comandante-stats { grid-template-columns: repeat(2, 1fr); }
+      .filtros-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+      }
+      .btn-filtro, .btn-limpar {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-bottom: 10px;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+      .btn, .btn-limpar, .btn-pdf {
+        width: 100%;
+        justify-content: center;
+      }
+      .pdf-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1><i class="fas fa-shield-alt"></i> Operação Barricada Zero</h1>
+  <p>Dashboard Estratégico Avançado • Atualização Diária</p>
+  <div class="header-stats">
+    <div class="header-stat">
+      <span class="header-stat-value" id="headerBarricadas">-</span>
+      <span class="header-stat-label">Removidas</span>
+    </div>
+    <div class="header-stat">
+      <span class="header-stat-value" id="headerVias">-</span>
+      <span class="header-stat-label">Vias Liberadas</span>
+    </div>
+    <div class="header-stat">
+      <span class="header-stat-value" id="headerPeso">-</span>
+      <span class="header-stat-label">Toneladas</span>
+    </div>
+  </div>
+</header>
+
+<div class="upload">
+  <h2><i class="fas fa-cloud-upload-alt"></i> Carregar Dados Operacionais</h2>
+  <p style="color: var(--gray-600); margin-bottom: 25px; font-size: 18px;">Selecione a planilha Excel (.xlsx) para atualizar todas as métricas</p>
+  <input type="file" id="fileInput" accept=".xlsx" style="margin: 20px 0; font-size: 18px;">
+  <br><br>
+  
+  <div class="action-buttons">
+    <button class="btn" onclick="processarPlanilha()"><i class="fas fa-sync-alt"></i> Processar e Atualizar</button>
+    <button class="btn-limpar" onclick="limparFiltros()"><i class="fas fa-times"></i> Limpar Filtros</button>
+    <button class="btn btn-pdf" onclick="visualizarPDF()"><i class="fas fa-eye"></i> Visualizar PDF</button>
+  </div>
+</div>
+
+<div class="filtros-container">
+  <div class="filtros-header">
+    <div class="filtros-title">
+      <i class="fas fa-filter"></i> Filtros Avançados
+      <span id="statusFiltros" style="font-size: 14px; background: var(--primary-light); color: white; padding: 4px 12px; border-radius: 20px; margin-left: 10px;">
+        Nenhum filtro ativo
+      </span>
+    </div>
+    <div>
+      <button class="btn-filtro" onclick="aplicarFiltros()">
+        <i class="fas fa-search"></i> Aplicar Filtros
+      </button>
+    </div>
+  </div>
+  
+  <div class="filtros-grid">
+    <div class="filtro-group">
+      <label class="filtro-label">Data Inicial</label>
+      <input type="date" class="filtro-input" id="filtroDataInicio">
+    </div>
+    
+    <div class="filtro-group">
+      <label class="filtro-label">Data Final</label>
+      <input type="date" class="filtro-input" id="filtroDataFim">
+    </div>
+
+    <div class="filtro-group">
+      <label class="filtro-label">CPA</label>
+      <select class="filtro-select" id="filtroCPA">
+        <option value="todos">Todas as CPAs</option>
+        <option value="ALPHA">CPA ALPHA</option>
+        <option value="BRAVO">CPA BRAVO</option>
+        <option value="CHARLIE">CPA CHARLIE</option>
+        <option value="DELTA">CPA DELTA</option>
+        <option value="ECHO">CPA ECHO</option>
+        <option value="FOX">CPA FOX</option>
+      </select>
+    </div>
+    
+    <div class="filtro-group">
+      <label class="filtro-label">Comandante</label>
+      <select class="filtro-select" id="filtroComandante">
+        <option value="todos">Todos os Comandantes</option>
+        </select>
+    </div>
+    
+    <div class="filtro-group">
+      <label class="filtro-label">Batalhão (BPM)</label>
+      <select class="filtro-select" id="filtroBPM">
+        <option value="todos">Todos os Batalhões</option>
+        <option value="16º">16º BPM</option>
+        <option value="18º">18º BPM</option>
+        <option value="15º">15º BPM</option>
+        <option value="20º">20º BPM</option>
+        <option value="24º">24º BPM</option>
+        <option value="7º">7º BPM - São Gonçalo</option>
+        <option value="21º">21º BPM - SJM</option>
+        <option value="41º">41º BPM</option>
+      </select>
+    </div>
+    
+    <div class="filtro-group">
+      <label class="filtro-label">Mínimo de Remoções</label>
+      <input type="number" class="filtro-input" id="filtroRemocoes" placeholder="Ex: 10" min="0">
+    </div>
+    
+    <div class="filtro-group">
+      <label class="filtro-label">Município</label>
+      <select class="filtro-select" id="filtroMunicipio">
+        <option value="todos">Todos os Municípios</option>
+        </select>
+    </div>
+  </div>
+</div>
+
+<div id="dashboard" class="hidden">
+
+  <div class="section-header">
+    <h2><i class="fas fa-map-marked-alt"></i> CPAs e Batalhões</h2>
+  </div>
+  
+  <div class="grid grid-3" id="cpaGrid"></div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-users"></i> Comandantes</h2>
+  </div>
+  
+  <div class="grid grid-3" id="comandantesGrid"></div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-chart-line"></i> Indicadores Principais</h2>
+  </div>
+  
+  <div class="grid grid-4">
+    <div class="card">
+      <i class="fas fa-road card-icon"></i>
+      <h3>Barricadas Removidas</h3>
+      <div class="big" id="totalBarricadas">0</div>
+      <div class="insight success" id="insightBarricadas">
+        <i class="fas fa-check-circle"></i>
+        <span>Carregando...</span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-map-marked-alt card-icon"></i>
+      <h3>Vias Liberadas</h3>
+      <div class="big" id="totalVias">0</div>
+      <div class="insight info" id="insightVias">
+        <i class="fas fa-info-circle"></i>
+        <span>Carregando...</span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-dumpster card-icon"></i>
+      <h3>Entulho Removido</h3>
+      <div class="big" id="totalToneladas">0<small style="font-size:24px; font-weight:500;"> ton</small></div>
+      <div class="insight warning" id="insightToneladas">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span>Carregando...</span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-calendar-day card-icon"></i>
+      <h3>Média Diária</h3>
+      <div class="big" id="mediaDiaria">0</div>
+      <div class="insight success" id="insightMedia">
+        <i class="fas fa-trophy"></i>
+        <span>Carregando...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-chart-bar"></i> Análise de Performance</h2>
+  </div>
+  
+  <div class="grid grid-4">
+    <div class="card">
+      <i class="fas fa-balance-scale card-icon"></i>
+      <h3>Eficiência Média</h3>
+      <div class="medium" id="eficienciaMedia">0</div>
+      <p style="color: var(--gray-600); margin: 10px 0 0 0;">ton/barricada</p>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-star card-icon"></i>
+      <h3>Melhor Dia</h3>
+      <div class="medium" id="melhorDiaValor">0</div>
+      <div class="insight info" id="melhorDiaData">
+        <i class="fas fa-calendar-check"></i>
+        <span>-</span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-tachometer-alt card-icon"></i>
+      <h3>CPA Mais Eficiente</h3>
+      <div class="medium" id="areaMaisEficiente">-</div>
+      <div class="insight success" id="eficienciaAreaValor">
+        <i class="fas fa-award"></i>
+        <span>-</span>
+      </div>
+    </div>
+    
+    <div class="card">
+      <i class="fas fa-weight-hanging card-icon"></i>
+      <h3>Maior Volume</h3>
+      <div class="medium" id="areaMaiorVolume">-</div>
+      <div class="insight warning" id="volumeAreaValor">
+        <i class="fas fa-crown"></i>
+        <span>-</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-tasks"></i> Progresso por CPA</h2>
+  </div>
+  
+  <div class="grid grid-2" id="areasGrid"></div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-chart-pie"></i> Visualizações Estratégicas</h2>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(0)"><i class="fas fa-chart-line"></i> Evolução Temporal</button>
+    <button class="tab" onclick="switchTab(1)"><i class="fas fa-chart-bar"></i> Rankings</button>
+    <button class="tab" onclick="switchTab(2)"><i class="fas fa-chart-area"></i> Distribuição</button>
+  </div>
+  
+  <div class="tab-content active" id="tab0">
+    <div class="grid grid-2">
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-calendar-alt"></i> Evolução Diária de Remoções</div>
+        <canvas id="chartEvolucaoDiaria"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-weight"></i> Evolução Diária de Toneladas</div>
+        <canvas id="chartEvolucaoPeso"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="tab1">
+    <div class="grid grid-2">
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-trophy"></i> Ranking por Barricadas Removidas</div>
+        <canvas id="chartRankingBarricadas"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-truck-loading"></i> Ranking por Toneladas Removidas</div>
+        <canvas id="chartRankingPeso"></canvas>
+      </div>
+    </div>
+    <div class="grid grid-2 mt-3">
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-tachometer-alt"></i> Ranking por Eficiência</div>
+        <canvas id="chartRankingEficiencia"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-road"></i> Ranking por Vias Liberadas</div>
+        <canvas id="chartRankingVias"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="tab2">
+    <div class="grid grid-2">
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-pie-chart"></i> Distribuição de Barricadas por CPA</div>
+        <canvas id="chartPizzaBarricadas"></canvas>
+      </div>
+      <div class="chart-container">
+        <div class="chart-title"><i class="fas fa-chart-pie"></i> Distribuição de Peso por CPA</div>
+        <canvas id="chartPizzaPeso"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-lightbulb"></i> Insights Estratégicos</h2>
+  </div>
+  
+  <div class="grid grid-3" id="insightsGrid"></div>
+
+  <div class="section-header">
+    <h2><i class="fas fa-table"></i> Comparativo Detalhado</h2>
+  </div>
+  
+  <div class="chart-container">
+    <table class="ranking-table" id="tabelaComparativa"></table>
+  </div>
+
+</div>
+
+<div id="modalCPA" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalCPATitle"></h3>
+      <button class="modal-close" onclick="fecharModal('modalCPA')">×</button>
+    </div>
+    <div class="modal-body" id="modalCPABody"></div>
+  </div>
+</div>
+
+<div id="modalComandante" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalComandanteTitle"></h3>
+      <button class="modal-close" onclick="fecharModal('modalComandante')">×</button>
+    </div>
+    <div class="modal-body" id="modalComandanteBody"></div>
+  </div>
+</div>
+
+<div id="modalMapa" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modalMapaTitle"></h3>
+      <button class="modal-close" onclick="fecharModal('modalMapa')">×</button>
+    </div>
+    <div class="modal-body" id="modalMapaBody"></div>
+  </div>
+</div>
+
+<!-- NOVO MODAL PARA VISUALIZAÇÃO DE PDF -->
+<div id="modalPDF" class="modal">
+  <div class="modal-content" style="max-width: 1000px;">
+    <div class="modal-header">
+      <h3 class="modal-title"><i class="fas fa-file-pdf"></i> Visualização do Relatório PDF</h3>
+      <button class="modal-close" onclick="fecharModal('modalPDF')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="pdf-preview-container">
+        <iframe class="pdf-preview-iframe" id="pdfPreview"></iframe>
+      </div>
+      <div class="pdf-actions">
+        <button class="btn" onclick="baixarPDF()">
+          <i class="fas fa-download"></i> Baixar PDF
+        </button>
+        <button class="btn-limpar" onclick="fecharModal('modalPDF')">
+          <i class="fas fa-times"></i> Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong><i class="fas fa-shield-alt"></i> Operação Barricada Zero</strong><br>
+  Dashboard Estratégico Avançado v6.0 • Dezembro 2025<br>
+  <small style="opacity: 0.8; margin-top: 10px; display: block;">
+    Desenvolvido com foco em inteligência operacional e análise de dados
+  </small>
+</footer>
+
+</div>
+
+<script>
+// Configuração global dos gráficos
+Chart.defaults.font.family = 'Inter';
+Chart.defaults.font.size = 13;
+Chart.defaults.color = '#6c757d';
+
+// Paleta de cores atualizada para as CPAs da planilha
+const colors = {
+  ALPHA: '#d32f2f',   // Vermelho
+  BRAVO: '#1976d2',    // Azul
+  CHARLIE: '#388e3c',  // Verde
+  DELTA: '#f57c00',    // Laranja
+  ECHO: '#7b1fa2',     // Roxo
+  FOX: '#c2185b',      // Rosa
+  GOLF: '#00796b'      // Verde-azulado
+};
+
+// Mapeamento de CPAs para Comandantes (da aba CPA x BTL)
+const cpaComandantes = {
+  'ALPHA': 'Cel PM Luciano de Vasconcelos',
+  'BRAVO': 'Cel PM Walter Teixeira da Silva Júnior',
+  'CHARLIE': 'Cel PM Paulo Roberto das Neves Júnior',
+  'DELTA': 'Cel PM Paulo Roberto das Neves Júnior',
+  'ECHO': 'Cel PM Paulo Roberto das Neves Júnior',
+  'FOX': 'Cel PM Paulo Roberto das Neves Júnior',
+  'GOLF': 'Cel PM Paulo Roberto das Neves Júnior'
+};
+
+// Mapeamento de CPAs para BPMs
+const cpaBPMs = {
+  'ALPHA': ['16º', '22º'],
+  'BRAVO': ['18º', '41º'],
+  'CHARLIE': ['15º'],
+  'DELTA': ['20º'],
+  'ECHO': ['24º'],
+  'FOX': ['7º'],
+  'GOLF': ['21º']
+};
+
+// Configuração de filtros
+let filtrosAtivos = {
+  cpa: 'todos',
+  comandante: 'todos',
+  bpm: 'todos',
+  municipio: 'todos',
+  remocoesMin: 0,
+  dataInicio: null,
+  dataFim: null
+};
+
+// Variáveis globais
+let dadosGlobais = null;
+let dadosOriginais = null;
+let dadosFiltrados = null;
+
+// Armazenar instâncias dos gráficos
+let graficosInstancias = {
+  chartEvolucaoDiaria: null,
+  chartEvolucaoPeso: null,
+  chartRankingBarricadas: null,
+  chartRankingPeso: null,
+  chartRankingEficiencia: null,
+  chartRankingVias: null,
+  chartPizzaBarricadas: null,
+  chartPizzaPeso: null
+};
+
+// Mapa de municípios abreviados
+const municipiosMap = {
+  'RIO': 'Rio de Janeiro',
+  'D. CAXIAS': 'Duque de Caxias',
+  'N. IGUAÇU': 'Nova Iguaçu',
+  'SG': 'São Gonçalo',
+  'JAPERI': 'Japeri',
+  'MESQUITA': 'Mesquita',
+  'SÃO JOÃO': 'São João de Meriti',
+  'SJM': 'São João de Meriti'
+};
+
+// Função para destruir gráficos existentes
+function destruirGraficos() {
+  for (const [id, grafico] of Object.entries(graficosInstancias)) {
+    if (grafico) {
+      grafico.destroy();
+      graficosInstancias[id] = null;
+    }
+  }
+}
+
+// Atualizar status dos filtros
+function atualizarStatusFiltros() {
+  const statusElement = document.getElementById('statusFiltros');
+  const filtrosAplicados = [];
+  
+  if (filtrosAtivos.dataInicio) filtrosAplicados.push(`Data Início: ${filtrosAtivos.dataInicio}`);
+  if (filtrosAtivos.dataFim) filtrosAplicados.push(`Data Fim: ${filtrosAtivos.dataFim}`);
+  if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
+  if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
+  if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
+  if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
+  if (filtrosAtivos.remocoesMin > 0) filtrosAplicados.push(`Mínimo: ${filtrosAtivos.remocoesMin}`);
+  
+  if (filtrosAplicados.length > 0) {
+    statusElement.textContent = `${filtrosAplicados.length} filtro(s) ativo(s)`;
+    statusElement.style.background = 'linear-gradient(135deg, var(--warning) 0%, #f57c00 100%)';
+  } else {
+    statusElement.textContent = 'Nenhum filtro ativo';
+    statusElement.style.background = 'var(--primary-light)';
+  }
+}
+
+// Inicializar filtros com dados reais
+function inicializarFiltros(dados) {
+  const filtroComandante = document.getElementById('filtroComandante');
+  const filtroMunicipio = document.getElementById('filtroMunicipio');
+  
+  // Limpar opções existentes
+  filtroComandante.innerHTML = '<option value="todos">Todos os Comandantes</option>';
+  filtroMunicipio.innerHTML = '<option value="todos">Todos os Municípios</option>';
+  
+  // Comandantes únicos
+  const comandantes = [...new Set(Object.values(cpaComandantes))];
+  comandantes.forEach(cmd => {
+    const option = document.createElement('option');
+    option.value = cmd;
+    option.textContent = cmd;
+    filtroComandante.appendChild(option);
+  });
+  
+  // Municípios únicos da planilha
+  const municipiosPadrao = ['RIO', 'D. CAXIAS', 'N. IGUAÇU', 'SG', 'JAPERI', 'MESQUITA', 'SÃO JOÃO', 'SJM'];
+  municipiosPadrao.forEach(municipio => {
+    const option = document.createElement('option');
+    option.value = municipio;
+    option.textContent = municipiosMap[municipio] || municipio;
+    filtroMunicipio.appendChild(option);
+  });
+  
+  atualizarStatusFiltros();
+}
+
+// Função para alternar tabs
+function switchTab(index) {
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.tab-content').forEach((content, i) => {
+    content.classList.toggle('active', i === index);
+  });
+}
+
+// Função para abrir modal
+function abrirModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Função para fechar modal
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Função para limpar filtros
+function limparFiltros() {
+  document.getElementById('filtroCPA').value = 'todos';
+  document.getElementById('filtroComandante').value = 'todos';
+  document.getElementById('filtroBPM').value = 'todos';
+  document.getElementById('filtroMunicipio').value = 'todos';
+  document.getElementById('filtroRemocoes').value = '';
+  document.getElementById('filtroDataInicio').value = '';
+  document.getElementById('filtroDataFim').value = '';
+  
+  filtrosAtivos = {
+    cpa: 'todos',
+    comandante: 'todos',
+    bpm: 'todos',
+    municipio: 'todos',
+    remocoesMin: 0,
+    dataInicio: null,
+    dataFim: null
+  };
+  
+  atualizarStatusFiltros();
+  
+  if (dadosOriginais) {
+    dadosFiltrados = JSON.parse(JSON.stringify(dadosOriginais));
+    atualizarDashboardComFiltros();
+    mostrarMensagem('Filtros limpos! Dashboard restaurado aos dados originais.', 'success');
+  } else if (dadosGlobais) {
+    atualizarDashboardComFiltros();
+    mostrarMensagem('Filtros limpos!', 'info');
+  } else {
+    mostrarMensagem('Nenhum dado carregado para limpar filtros.', 'warning');
+  }
+}
+
+// Função para mostrar mensagens
+function mostrarMensagem(mensagem, tipo = 'info') {
+  const cores = {
+    success: 'var(--success)',
+    warning: 'var(--warning)',
+    danger: 'var(--danger)',
+    info: 'var(--info)'
+  };
+  
+  const iconos = {
+    success: 'fa-check-circle',
+    warning: 'fa-exclamation-triangle',
+    danger: 'fa-times-circle',
+    info: 'fa-info-circle'
+  };
+  
+  const mensagensAnteriores = document.querySelectorAll('.mensagem-flutuante');
+  mensagensAnteriores.forEach(msg => msg.remove());
+  
+  const mensagemDiv = document.createElement('div');
+  mensagemDiv.className = 'mensagem-flutuante';
+  mensagemDiv.innerHTML = `
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 9999; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid ${cores[tipo]}; display: flex; align-items: center; gap: 12px; min-width: 300px; max-width: 400px; animation: slideInRight 0.3s ease;">
+      <i class="fas ${iconos[tipo]}" style="color: ${cores[tipo]}; font-size: 20px;"></i>
+      <span style="flex: 1; font-weight: 600;">${mensagem}</span>
+      <button onclick="this.parentElement.remove()" style="background: none; border: none; color: var(--gray-600); cursor: pointer; font-size: 18px; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(mensagemDiv);
+  
+  setTimeout(() => {
+    if (mensagemDiv.parentElement) {
+      mensagemDiv.remove();
+    }
+  }, 5000);
+}
+
+// Adicionar animação CSS para a mensagem
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+`;
+document.head.appendChild(style);
+
+// Função para aplicar filtros
+function aplicarFiltros() {
+  const dataInicioInput = document.getElementById('filtroDataInicio').value;
+  const dataFimInput = document.getElementById('filtroDataFim').value;
+  
+  filtrosAtivos = {
+    cpa: document.getElementById('filtroCPA').value,
+    comandante: document.getElementById('filtroComandante').value,
+    bpm: document.getElementById('filtroBPM').value,
+    municipio: document.getElementById('filtroMunicipio').value,
+    remocoesMin: parseInt(document.getElementById('filtroRemocoes').value) || 0,
+    dataInicio: dataInicioInput || null,
+    dataFim: dataFimInput || null
+  };
+  
+  atualizarStatusFiltros();
+  
+  if (dadosGlobais) {
+    atualizarDashboardComFiltros();
+    mostrarMensagem('Filtros aplicados com sucesso!', 'success');
+  } else {
+    mostrarMensagem('Carregue os dados primeiro!', 'warning');
+  }
+}
+
+// Função principal para atualizar dashboard com filtros
+function atualizarDashboardComFiltros() {
+  if (!dadosGlobais) return;
+  
+  // Filtrar dados com base nos filtros ativos
+  dadosFiltrados = filtrarDados(dadosGlobais);
+  
+  // Atualizar todos os componentes do dashboard
+  atualizarHeader(dadosFiltrados);
+  atualizarKPIs(dadosFiltrados);
+  atualizarMetricasAvancadas(dadosFiltrados);
+  atualizarAreasGrid(dadosFiltrados);
+  atualizarCPAsGrid(dadosFiltrados);
+  atualizarComandantesGrid(dadosFiltrados);
+  
+  destruirGraficos();
+  criarGraficos(dadosFiltrados);
+  
+  atualizarInsights(dadosFiltrados);
+  criarTabelaComparativa(dadosFiltrados);
+}
+
+// Função para converter string de data da planilha para objeto Date
+function parseDataPlanilha(dataStr) {
+  // Formato: "2025-11-24 00:00:00"
+  if (!dataStr) return null;
+  
+  // Remover a parte do tempo se existir
+  const datePart = dataStr.toString().split(' ')[0];
+  const parts = datePart.split('-');
+  
+  if (parts.length === 3) {
+    const ano = parseInt(parts[0]);
+    const mes = parseInt(parts[1]) - 1; // Meses são 0-indexados
+    const dia = parseInt(parts[2]);
+    
+    if (!isNaN(ano) && !isNaN(mes) && !isNaN(dia)) {
+      return new Date(ano, mes, dia);
+    }
+  }
+  
+  // Tentar outros formatos
+  try {
+    const date = new Date(dataStr);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+  } catch (e) {
+    console.warn('Não foi possível converter a data:', dataStr, e);
+  }
+  
+  return null;
+}
+
+// Função para filtrar dados
+function filtrarDados(dados) {
+  if (!dados || !dados.registros || !Array.isArray(dados.registros)) {
+    console.error('Dados inválidos para filtragem');
+    return null;
+  }
+  
+  const dadosFiltrados = {
+    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
+    areas: {},
+    evolucao: [],
+    diasOperacao: [],
+    comandantes: {},
+    municipios: {},
+    registros: []
+  };
+  
+  // Filtrar registros individuais
+  dados.registros.forEach(registro => {
+    // Filtro de data
+    let incluir = true;
+    
+    if (filtrosAtivos.dataInicio) {
+      const dataInicio = new Date(filtrosAtivos.dataInicio);
+      if (registro.data < dataInicio) incluir = false;
+    }
+    
+    if (filtrosAtivos.dataFim) {
+      const dataFim = new Date(filtrosAtivos.dataFim);
+      dataFim.setHours(23, 59, 59);
+      if (registro.data > dataFim) incluir = false;
+    }
+    
+    // Filtro de CPA
+    if (filtrosAtivos.cpa !== 'todos' && registro.area !== filtrosAtivos.cpa) {
+      incluir = false;
+    }
+    
+    // Filtro de Comandante
+    if (filtrosAtivos.comandante !== 'todos' && registro.cmte !== filtrosAtivos.comandante) {
+      incluir = false;
+    }
+    
+    // Filtro de BPM
+    if (filtrosAtivos.bpm !== 'todos') {
+      // Normalizar o BPM para comparação (remover "º")
+      const registroBpm = registro.bpm ? registro.bpm.replace('º', '') : '';
+      const filtroBpm = filtrosAtivos.bpm.replace('º', '');
+      if (registroBpm !== filtroBpm) {
+        incluir = false;
+      }
+    }
+    
+    // Filtro de Município
+    if (filtrosAtivos.municipio !== 'todos' && registro.municipio !== filtrosAtivos.municipio) {
+      incluir = false;
+    }
+    
+    // Filtro de mínimo de remoções
+    if (filtrosAtivos.remocoesMin > 0 && registro.remocoes < filtrosAtivos.remocoesMin) {
+      incluir = false;
+    }
+    
+    if (incluir) {
+      dadosFiltrados.registros.push(registro);
+    }
+  });
+  
+  // Processar dados filtrados
+  const areasMap = {};
+  const comandantesMap = {};
+  const municipiosData = {}; // NOME ALTERADO: evita conflito com constante global
+  const evolucaoMap = {};
+  
+  dadosFiltrados.registros.forEach(registro => {
+    const area = registro.area;
+    const comandante = registro.cmte;
+    const municipio = registro.municipio;
+    const dataKey = registro.data.toISOString().split('T')[0];
+    
+    // Inicializar área
+    if (!areasMap[area]) {
+      areasMap[area] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0,
+        diasAtivos: new Set(),
+        municipios: new Set(),
+        comandantes: new Set()
+      };
+    }
+    
+    // Inicializar comandante
+    if (!comandantesMap[comandante]) {
+      comandantesMap[comandante] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0,
+        areas: new Set(),
+        bpm: registro.bpm
+      };
+    }
+    
+    // Inicializar município - NOME ALTERADO
+    if (!municipiosData[municipio]) {
+      municipiosData[municipio] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0
+      };
+    }
+    
+    // Inicializar evolução diária
+    if (!evolucaoMap[dataKey]) {
+      evolucaoMap[dataKey] = {
+        data: registro.data,
+        barricadas: 0,
+        vias: 0,
+        peso: 0
+      };
+    }
+    
+    // Adicionar valores
+    areasMap[area].barricadas += registro.remocoes;
+    areasMap[area].vias += registro.vias;
+    areasMap[area].peso += registro.peso;
+    areasMap[area].diasAtivos.add(dataKey);
+    areasMap[area].municipios.add(municipio);
+    areasMap[area].comandantes.add(comandante);
+    
+    comandantesMap[comandante].barricadas += registro.remocoes;
+    comandantesMap[comandante].vias += registro.vias;
+    comandantesMap[comandante].peso += registro.peso;
+    comandantesMap[comandante].areas.add(area);
+    
+    // Usar o novo nome da variável
+    municipiosData[municipio].barricadas += registro.remocoes;
+    municipiosData[municipio].vias += registro.vias;
+    municipiosData[municipio].peso += registro.peso;
+    
+    evolucaoMap[dataKey].barricadas += registro.remocoes;
+    evolucaoMap[dataKey].vias += registro.vias;
+    evolucaoMap[dataKey].peso += registro.peso;
+  });
+  
+  // Converter maps para arrays/objetos
+  dadosFiltrados.areas = areasMap;
+  dadosFiltrados.comandantes = comandantesMap;
+  dadosFiltrados.municipios = municipiosData; // ALTERADO
+  
+  // Ordenar evolução por data
+  dadosFiltrados.evolucao = Object.values(evolucaoMap)
+    .sort((a, b) => a.data - b.data)
+    .map(item => ({
+      data: item.data.toLocaleDateString('pt-BR'),
+      barricadas: item.barricadas,
+      vias: item.vias,
+      peso: item.peso
+    }));
+  
+  // Dias únicos de operação
+  dadosFiltrados.diasOperacao = [...new Set(dadosFiltrados.evolucao.map(d => d.data))];
+  
+  // Calcular totais
+  dadosFiltrados.totais.barricadas = Object.values(areasMap).reduce((sum, a) => sum + a.barricadas, 0);
+  dadosFiltrados.totais.vias = Object.values(areasMap).reduce((sum, a) => sum + a.vias, 0);
+  dadosFiltrados.totais.peso = Object.values(areasMap).reduce((sum, a) => sum + a.peso, 0);
+  dadosFiltrados.totais.dias = dadosFiltrados.diasOperacao.length;
+  
+  // Calcular métricas adicionais para cada área
+  for (let area in areasMap) {
+    const a = areasMap[area];
+    a.eficiencia = a.barricadas > 0 ? a.peso / a.barricadas : 0;
+    a.percentualPeso = dadosFiltrados.totais.peso > 0 ? (a.peso / dadosFiltrados.totais.peso * 100) : 0;
+    a.percentualBarricadas = dadosFiltrados.totais.barricadas > 0 ? (a.barricadas / dadosFiltrados.totais.barricadas * 100) : 0;
+    a.mediaDiaria = a.diasAtivos.size > 0 ? a.barricadas / a.diasAtivos.size : 0;
+  }
+  
+  // Calcular métricas para comandantes
+  for (let comandante in comandantesMap) {
+    const c = comandantesMap[comandante];
+    c.eficiencia = c.barricadas > 0 ? c.peso / c.barricadas : 0;
+    c.percentualPeso = dadosFiltrados.totais.peso > 0 ? (c.peso / dadosFiltrados.totais.peso * 100) : 0;
+    c.percentualBarricadas = dadosFiltrados.totais.barricadas > 0 ? (c.barricadas / dadosFiltrados.totais.barricadas * 100) : 0;
+  }
+  
+  return dadosFiltrados;
+}
+
+// Função para atualizar grid de CPAs
+function atualizarCPAsGrid(dados) {
+  const grid = document.getElementById('cpaGrid');
+  grid.innerHTML = '';
+  
+  if (!dados || !dados.areas) {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado encontrado</div>';
+    return;
+  }
+  
+  for (const [area, dadosArea] of Object.entries(dados.areas)) {
+    const bpmList = cpaBPMs[area] || [];
+    
+    const card = `
+      <div class="cpa-card" onclick="abrirModalCPA('${area}')">
+        <div class="cpa-header">
+          <div class="cpa-icon" style="background: linear-gradient(135deg, ${colors[area]} 0%, ${colors[area]}dd 100%);">
+            ${area.charAt(0)}
+          </div>
+          <div class="cpa-info">
+            <h4>CPA ${area}</h4>
+            <p>${cpaComandantes[area] || 'Comandante não especificado'}</p>
+            <small>BPMs: ${bpmList.join(', ')}</small>
+          </div>
+        </div>
+        
+        <div class="cpa-details">
+          <div class="cpa-detail">
+            <span class="cpa-detail-value">${Math.round(dadosArea.barricadas)}</span>
+            <span class="cpa-detail-label">Remoções</span>
+          </div>
+          <div class="cpa-detail">
+            <span class="cpa-detail-value">${Math.round(dadosArea.vias)}</span>
+            <span class="cpa-detail-label">Vias</span>
+          </div>
+          <div class="cpa-detail">
+            <span class="cpa-detail-value">${Math.round(dadosArea.peso)}</span>
+            <span class="cpa-detail-label">Toneladas</span>
+          </div>
+          <div class="cpa-detail">
+            <span class="cpa-detail-value">${dadosArea.eficiencia.toFixed(1)}</span>
+            <span class="cpa-detail-label">ton/rem</span>
+          </div>
+        </div>
+        
+        <div class="insight info mt-2">
+          <i class="fas fa-chart-line"></i>
+          <span>${dadosArea.diasAtivos.size} dias de operação</span>
+        </div>
+      </div>
+    `;
+    
+    grid.innerHTML += card;
+  }
+  
+  if (grid.innerHTML === '') {
+     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado encontrado para os filtros selecionados.</div>';
+  }
+}
+
+// Função para abrir modal de CPA - ALTERADA: exibe TODOS os registros
+function abrirModalCPA(area) {
+  const comandante = cpaComandantes[area] || 'Não especificado';
+  const bpmList = cpaBPMs[area] || [];
+  const dadosArea = dadosFiltrados ? dadosFiltrados.areas[area] : { barricadas: 0, vias: 0, peso: 0 };
+  
+  document.getElementById('modalCPATitle').textContent = `CPA ${area}`;
+  
+  // Coletar informações dos registros desta CPA
+  const registrosCPA = dadosFiltrados ? dadosFiltrados.registros.filter(r => r.area === area) : [];
+  const municipios = [...new Set(registrosCPA.map(r => municipiosMap[r.municipio] || r.municipio))];
+  
+  // Ordenar registros por data (mais recente primeiro)
+  registrosCPA.sort((a, b) => b.data - a.data);
+  
+  document.getElementById('modalCPABody').innerHTML = `
+    <div class="modal-section">
+      <h4><i class="fas fa-user"></i> Informações da CPA</h4>
+      <p><strong>Comandante:</strong> ${comandante}</p>
+      <p><strong>Batalhões:</strong> ${bpmList.join(', ')}</p>
+      <p><strong>Municípios de atuação:</strong> ${municipios.join(', ')}</p>
+      <p><strong>Dias de operação:</strong> ${dadosArea.diasAtivos ? dadosArea.diasAtivos.size : 0} dias</p>
+    </div>
+    
+    <div class="modal-section">
+      <h4><i class="fas fa-chart-bar"></i> Estatísticas</h4>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px;">
+        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.barricadas)}</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Barricadas Removidas</div>
+        </div>
+        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.peso)}</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Toneladas</div>
+        </div>
+        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.vias)}</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Vias Liberadas</div>
+        </div>
+        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
+          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${dadosArea.eficiencia.toFixed(2)}</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Eficiência (ton/rem)</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <h4><i class="fas fa-map"></i> Localidades Atendidas (${registrosCPA.length} registros)</h4>
+      <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: var(--gray-100);">
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Data</th>
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Município</th>
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Localidade</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Remoções</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Peso</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Vias</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${registrosCPA.map(registro => `
+              <tr style="border-bottom: 1px solid var(--gray-200);">
+                <td style="padding: 10px; font-size: 12px;">${registro.data.toLocaleDateString('pt-BR')}</td>
+                <td style="padding: 10px; font-size: 12px;">${municipiosMap[registro.municipio] || registro.municipio}</td>
+                <td style="padding: 10px; font-size: 12px;">${registro.bairro || registro.localidade || 'Não especificado'}</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px; font-weight: 700;">${registro.remocoes}</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.peso || 0} ton</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.vias || 0}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  
+  abrirModal('modalCPA');
+}
+
+// Função para atualizar grid de comandantes
+function atualizarComandantesGrid(dados) {
+  const grid = document.getElementById('comandantesGrid');
+  grid.innerHTML = '';
+  
+  if (!dados || !dados.comandantes) {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum comandante encontrado</div>';
+    return;
+  }
+  
+  for (const [comandante, dadosCmd] of Object.entries(dados.comandantes)) {
+    const areasArray = Array.from(dadosCmd.areas || []);
+    const areaCor = areasArray.length > 0 ? colors[areasArray[0]] : colors.ALPHA;
+    
+    const card = `
+      <div class="comandante-card" onclick="abrirModalComandante('${comandante}')" style="border-left-color: ${areaCor};">
+        <div class="comandante-header">
+          <div class="comandante-name">${comandante.split('Cel PM ')[1] || comandante}</div>
+          <div class="comandante-cpa">${areasArray.length > 0 ? areasArray.join(', ') : 'N/A'}</div>
+        </div>
+        
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+          <div style="width: 50px; height: 50px; background: ${areaCor}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            ${comandante.charAt(0)}
+          </div>
+          <div>
+            <p style="margin: 0; font-weight: 600;">${dadosCmd.bpm || 'BPM não especificado'}</p>
+            <p style="margin: 5px 0 0; font-size: 14px; color: var(--gray-600);">Batalhão</p>
+          </div>
+        </div>
+        
+        <div class="comandante-stats">
+          <div class="comandante-stat">
+            <span class="comandante-stat-value">${Math.round(dadosCmd.barricadas)}</span>
+            <span class="comandante-stat-label">Remoções</span>
+          </div>
+          <div class="comandante-stat">
+             <span class="comandante-stat-value">${Math.round(dadosCmd.peso)}</span>
+             <span class="comandante-stat-label">Toneladas</span>
+          </div>
+        </div>
+        
+        <div class="insight info mt-2">
+          <i class="fas fa-chart-line"></i>
+          <span>Eficiência: ${dadosCmd.eficiencia.toFixed(2)} ton/rem</span>
+        </div>
+      </div>
+    `;
+    
+    grid.innerHTML += card;
+  }
+  
+  if (grid.innerHTML === '') {
+     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum comandante correspondente aos filtros.</div>';
+  }
+}
+
+// Função para abrir modal de comandante - ALTERADA: exibe TODOS os registros
+function abrirModalComandante(comandante) {
+  const dadosCmd = dadosFiltrados ? dadosFiltrados.comandantes[comandante] : { barricadas: 0, vias: 0, peso: 0 };
+  const areasArray = Array.from(dadosCmd.areas || []);
+  const areaCor = areasArray.length > 0 ? colors[areasArray[0]] : colors.ALPHA;
+  
+  document.getElementById('modalComandanteTitle').textContent = comandante;
+  
+  // Coletar registros deste comandante
+  const registrosCmd = dadosFiltrados ? dadosFiltrados.registros.filter(r => r.cmte === comandante) : [];
+  const municipios = [...new Set(registrosCmd.map(r => municipiosMap[r.municipio] || r.municipio))];
+  
+  // Ordenar registros por data (mais recente primeiro)
+  registrosCmd.sort((a, b) => b.data - a.data);
+  
+  document.getElementById('modalComandanteBody').innerHTML = `
+    <div class="modal-section">
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+        <div>
+          <h4><i class="fas fa-info-circle"></i> Informações</h4>
+          <p><strong>Batalhão:</strong> ${dadosCmd.bpm || 'Não especificado'}</p>
+          <p><strong>CPAs sob comando:</strong> ${areasArray.join(', ')}</p>
+          <p><strong>Municípios de atuação:</strong> ${municipios.join(', ')}</p>
+          <p><strong>Total de operações:</strong> ${registrosCmd.length}</p>
+        </div>
+        
+        <div>
+          <h4><i class="fas fa-chart-line"></i> Estatísticas</h4>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.barricadas)}</div>
+              <div style="font-size: 11px; color: var(--gray-600);">Remoções</div>
+            </div>
+            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.peso)}</div>
+              <div style="font-size: 11px; color: var(--gray-600);">Toneladas</div>
+            </div>
+            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.vias)}</div>
+              <div style="font-size: 11px; color: var(--gray-600);">Vias</div>
+            </div>
+            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${dadosCmd.eficiencia.toFixed(2)}</div>
+              <div style="font-size: 11px; color: var(--gray-600);">Eficiência</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <h4><i class="fas fa-map-marked-alt"></i> Todas as Operações (${registrosCmd.length} registros)</h4>
+      <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: var(--gray-100);">
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Data</th>
+              <th style="padding: 10px; text-align: left; font-size: 12px;">CPA</th>
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Município</th>
+              <th style="padding: 10px; text-align: left; font-size: 12px;">Localidade</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Remoções</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Peso</th>
+              <th style="padding: 10px; text-align: center; font-size: 12px;">Vias</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${registrosCmd.map(registro => `
+              <tr style="border-bottom: 1px solid var(--gray-200);">
+                <td style="padding: 10px; font-size: 12px;">${registro.data.toLocaleDateString('pt-BR')}</td>
+                <td style="padding: 10px; font-size: 12px;">${registro.area}</td>
+                <td style="padding: 10px; font-size: 12px;">${municipiosMap[registro.municipio] || registro.municipio}</td>
+                <td style="padding: 10px; font-size: 12px;">${registro.bairro || registro.localidade || 'Não especificado'}</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px; font-weight: 700;">${registro.remocoes}</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.peso || 0} ton</td>
+                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.vias || 0}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+  
+  abrirModal('modalComandante');
+}
+
+// Função principal de processamento da planilha
+function processarPlanilha() {
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) {
+    mostrarMensagem("⚠️ Por favor, selecione a planilha Excel!", "warning");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const wb = XLSX.read(e.target.result, {type: "array"});
+      const ws = wb.Sheets["GLOBAL"];
+      
+      if (!ws) {
+        mostrarMensagem("❌ Aba 'GLOBAL' não encontrada na planilha!", "danger");
+        return;
+      }
+      
+      // Converter para JSON mantendo os cabeçalhos
+      const rows = XLSX.utils.sheet_to_json(ws, {header: 1, defval: "", raw: false});
+      
+      if (rows.length < 2) {
+        mostrarMensagem("❌ Planilha vazia ou com formato inválido!", "danger");
+        return;
+      }
+      
+      // Processar os dados da planilha
+      dadosGlobais = processarDadosPlanilha(rows);
+      
+      if (!dadosGlobais || !dadosGlobais.registros || dadosGlobais.registros.length === 0) {
+        mostrarMensagem("❌ Nenhum dado válido encontrado na planilha!", "danger");
+        return;
+      }
+      
+      dadosOriginais = JSON.parse(JSON.stringify(dadosGlobais));
+      dadosFiltrados = JSON.parse(JSON.stringify(dadosGlobais));
+      
+      // Inicializar filtros com dados reais
+      inicializarFiltros(dadosGlobais);
+      
+      atualizarDashboardComFiltros();
+      
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("dashboard").style.animation = "fadeIn 0.5s ease";
+      
+      setTimeout(() => {
+        document.getElementById("dashboard").scrollIntoView({ behavior: 'smooth' });
+      }, 200);
+      
+      mostrarMensagem("✅ Dashboard atualizado com sucesso! " + dadosGlobais.registros.length + " registros processados.", "success");
+      
+    } catch (error) {
+      console.error(error);
+      mostrarMensagem("❌ Erro ao processar planilha: " + error.message, "danger");
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// Função para processar os dados da planilha real - CORRIGIDA
+function processarDadosPlanilha(rows) {
+  const dados = {
+    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
+    areas: {},
+    evolucao: [],
+    diasOperacao: [],
+    comandantes: {},
+    municipios: {},
+    registros: []
+  };
+  
+  // Pular cabeçalho (linha 0) e começar da linha 1
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row || row.length < 11) continue;
+    
+    // Extrair dados da linha - baseado na estrutura da planilha
+    const dataStr = row[0] || ''; // Coluna A: DATA
+    const area = row[1] || ''; // Coluna B: ÁREA
+    const municipio = row[2] || ''; // Coluna C: MUNICÍPIO
+    const bairro = row[3] || ''; // Coluna D: BAIRRO
+    const localidade = row[4] || ''; // Coluna E: LOCALIDADE
+    const remocoes = parseFloat(row[5]) || 0; // Coluna F: REMOÇÕES
+    const vias = parseFloat(row[6]) || 0; // Coluna G: VIAS
+    const peso = parseFloat(row[7]) || 0; // Coluna H: PESO/TON
+    const cpa = row[8] || ''; // Coluna I: CPA
+    const cmte = row[9] || ''; // Coluna J: CMTE
+    const bpm = row[10] || ''; // Coluna K: BPM
+    
+    // Validar dados mínimos - agora aceitamos registros mesmo com remoções = 0
+    if (!dataStr || !area) continue;
+    
+    // Converter data
+    const data = parseDataPlanilha(dataStr);
+    if (!data) {
+      console.warn('Data inválida na linha', i, ':', dataStr);
+      continue;
+    }
+    
+    // Normalizar BPM (remover espaços extras)
+    const bpmNormalizado = bpm ? bpm.toString().trim() : '';
+    
+    // Criar registro
+    const registro = {
+      data: data,
+      area: area.toString().trim(),
+      municipio: municipio.toString().trim(),
+      bairro: bairro.toString().trim(),
+      localidade: localidade.toString().trim(),
+      remocoes: remocoes,
+      vias: vias,
+      peso: peso,
+      cpa: cpa.toString().trim(),
+      cmte: cmte.toString().trim(),
+      bpm: bpmNormalizado
+    };
+    
+    dados.registros.push(registro);
+    
+    // Atualizar totais
+    dados.totais.barricadas += remocoes;
+    dados.totais.vias += vias;
+    dados.totais.peso += peso;
+  }
+  
+  // Se não houver registros, retornar estrutura vazia
+  if (dados.registros.length === 0) {
+    console.warn('Nenhum registro válido encontrado na planilha');
+    return dados;
+  }
+  
+  // Calcular dias únicos
+  const datasUnicas = [...new Set(dados.registros.map(r => r.data.toISOString().split('T')[0]))];
+  dados.totais.dias = datasUnicas.length;
+  dados.diasOperacao = datasUnicas.sort().map(d => new Date(d).toLocaleDateString('pt-BR'));
+  
+  // Agrupar por área (CPA)
+  dados.registros.forEach(registro => {
+    const area = registro.area;
+    
+    if (!dados.areas[area]) {
+      dados.areas[area] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0,
+        diasAtivos: new Set(),
+        municipios: new Set(),
+        comandantes: new Set()
+      };
+    }
+    
+    dados.areas[area].barricadas += registro.remocoes;
+    dados.areas[area].vias += registro.vias;
+    dados.areas[area].peso += registro.peso;
+    dados.areas[area].diasAtivos.add(registro.data.toISOString().split('T')[0]);
+    dados.areas[area].municipios.add(registro.municipio);
+    dados.areas[area].comandantes.add(registro.cmte);
+  });
+  
+  // Agrupar por comandante
+  dados.registros.forEach(registro => {
+    const comandante = registro.cmte;
+    if (!comandante || comandante.trim() === '') return;
+    
+    if (!dados.comandantes[comandante]) {
+      dados.comandantes[comandante] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0,
+        areas: new Set(),
+        bpm: registro.bpm
+      };
+    }
+    
+    dados.comandantes[comandante].barricadas += registro.remocoes;
+    dados.comandantes[comandante].vias += registro.vias;
+    dados.comandantes[comandante].peso += registro.peso;
+    dados.comandantes[comandante].areas.add(registro.area);
+  });
+  
+  // Agrupar por município
+  dados.registros.forEach(registro => {
+    const municipio = registro.municipio;
+    if (!municipio || municipio.trim() === '') return;
+    
+    if (!dados.municipios[municipio]) {
+      dados.municipios[municipio] = {
+        barricadas: 0,
+        vias: 0,
+        peso: 0,
+        areas: new Set()
+      };
+    }
+    
+    dados.municipios[municipio].barricadas += registro.remocoes;
+    dados.municipios[municipio].vias += registro.vias;
+    dados.municipios[municipio].peso += registro.peso;
+    dados.municipios[municipio].areas.add(registro.area);
+  });
+  
+  // Criar evolução temporal
+  const evolucaoMap = {};
+  dados.registros.forEach(registro => {
+    const dataKey = registro.data.toISOString().split('T')[0];
+    
+    if (!evolucaoMap[dataKey]) {
+      evolucaoMap[dataKey] = {
+        data: registro.data,
+        barricadas: 0,
+        vias: 0,
+        peso: 0
+      };
+    }
+    
+    evolucaoMap[dataKey].barricadas += registro.remocoes;
+    evolucaoMap[dataKey].vias += registro.vias;
+    evolucaoMap[dataKey].peso += registro.peso;
+  });
+  
+  // Ordenar evolução por data
+  dados.evolucao = Object.values(evolucaoMap)
+    .sort((a, b) => a.data - b.data)
+    .map(item => ({
+      data: item.data.toLocaleDateString('pt-BR'),
+      barricadas: item.barricadas,
+      vias: item.vias,
+      peso: item.peso
+    }));
+  
+  // Calcular métricas adicionais para cada área
+  for (let area in dados.areas) {
+    const a = dados.areas[area];
+    a.eficiencia = a.barricadas > 0 ? a.peso / a.barricadas : 0;
+    a.percentualPeso = dados.totais.peso > 0 ? (a.peso / dados.totais.peso * 100) : 0;
+    a.percentualBarricadas = dados.totais.barricadas > 0 ? (a.barricadas / dados.totais.barricadas * 100) : 0;
+    a.mediaDiaria = a.diasAtivos.size > 0 ? a.barricadas / a.diasAtivos.size : 0;
+  }
+  
+  // Calcular métricas para comandantes
+  for (let comandante in dados.comandantes) {
+    const c = dados.comandantes[comandante];
+    c.eficiencia = c.barricadas > 0 ? c.peso / c.barricadas : 0;
+    c.percentualPeso = dados.totais.peso > 0 ? (c.peso / dados.totais.peso * 100) : 0;
+    c.percentualBarricadas = dados.totais.barricadas > 0 ? (c.barricadas / dados.totais.barricadas * 100) : 0;
+  }
+  
+  console.log('Dados processados:', {
+    totalRegistros: dados.registros.length,
+    areas: Object.keys(dados.areas),
+    comandantes: Object.keys(dados.comandantes),
+    totais: dados.totais
+  });
+  
+  return dados;
+}
+
+// Atualizar header
+function atualizarHeader(dados) {
+  if (!dados) return;
+  
+  document.getElementById('headerBarricadas').textContent = Math.round(dados.totais.barricadas).toLocaleString('pt-BR');
+  document.getElementById('headerVias').textContent = Math.round(dados.totais.vias).toLocaleString('pt-BR');
+  document.getElementById('headerPeso').textContent = Math.round(dados.totais.peso).toLocaleString('pt-BR');
+}
+
+// Atualizar KPIs principais
+function atualizarKPIs(dados) {
+  if (!dados) return;
+  
+  document.getElementById('totalBarricadas').textContent = Math.round(dados.totais.barricadas).toLocaleString('pt-BR');
+  document.getElementById('totalVias').textContent = Math.round(dados.totais.vias).toLocaleString('pt-BR');
+  document.getElementById('totalToneladas').innerHTML = Math.round(dados.totais.peso).toLocaleString('pt-BR') + '<small style="font-size:24px; font-weight:500;"> ton</small>';
+  
+  const mediaDiaria = dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0;
+  document.getElementById('mediaDiaria').textContent = mediaDiaria.toLocaleString('pt-BR');
+  
+  document.getElementById('insightBarricadas').innerHTML = 
+    `<i class="fas fa-check-circle"></i><span>${Math.round(dados.totais.barricadas)} remoções em ${dados.totais.dias} dias</span>`;
+  
+  document.getElementById('insightVias').innerHTML =
+    `<i class="fas fa-info-circle"></i><span>${Math.round(dados.totais.vias)} vias liberadas para circulação</span>`;
+  
+  const areaMaiorPeso = Object.entries(dados.areas).sort((a, b) => b[1].peso - a[1].peso)[0];
+  document.getElementById('insightToneladas').innerHTML =
+    `<i class="fas fa-exclamation-triangle"></i><span>${areaMaiorPeso ? areaMaiorPeso[0] + ': ' + areaMaiorPeso[1].percentualPeso.toFixed(1) + '% do total' : 'Nenhum dado'}</span>`;
+  
+  document.getElementById('insightMedia').innerHTML =
+    `<i class="fas fa-chart-line"></i><span>Média operacional atual: ${mediaDiaria} por dia</span>`;
+}
+
+// Atualizar métricas avançadas
+function atualizarMetricasAvancadas(dados) {
+  if (!dados) return;
+  
+  const eficienciaMedia = dados.totais.barricadas > 0 ? dados.totais.peso / dados.totais.barricadas : 0;
+  document.getElementById('eficienciaMedia').textContent = eficienciaMedia.toFixed(2);
+  
+  const melhorDia = dados.evolucao.length > 0 ? dados.evolucao.reduce((max, dia) => dia.barricadas > max.barricadas ? dia : max, dados.evolucao[0]) : { barricadas: 0, data: '-' };
+  document.getElementById('melhorDiaValor').textContent = Math.round(melhorDia.barricadas);
+  document.getElementById('melhorDiaData').innerHTML = 
+    `<i class="fas fa-calendar-check"></i><span>${melhorDia.data}</span>`;
+  
+  const areaMaisEfic = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0];
+  document.getElementById('areaMaisEficiente').textContent = areaMaisEfic ? areaMaisEfic[0] : '-';
+  document.getElementById('eficienciaAreaValor').innerHTML =
+    `<i class="fas fa-award"></i><span>${areaMaisEfic ? areaMaisEfic[1].eficiencia.toFixed(2) + ' ton/remoção' : '-'}</span>`;
+  
+  const areaMaiorVol = Object.entries(dados.areas).sort((a, b) => b[1].peso - a[1].peso)[0];
+  document.getElementById('areaMaiorVolume').textContent = areaMaiorVol ? areaMaiorVol[0] : '-';
+  document.getElementById('volumeAreaValor').innerHTML =
+    `<i class="fas fa-crown"></i><span>${areaMaiorVol ? Math.round(areaMaiorVol[1].peso) + ' toneladas (' + areaMaiorVol[1].percentualPeso.toFixed(1) + '%)' : '-'}</span>`;
+}
+
+// Atualizar grid de áreas
+function atualizarAreasGrid(dados) {
+  const grid = document.getElementById('areasGrid');
+  grid.innerHTML = '';
+  
+  if (!dados || !dados.areas) {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhuma área encontrada</div>';
+    return;
+  }
+  
+  const areasOrdenadas = Object.entries(dados.areas).sort((a, b) => b[1].barricadas - a[1].barricadas);
+  
+  if (areasOrdenadas.length === 0) {
+    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado disponível</div>';
+    return;
+  }
+  
+  areasOrdenadas.forEach(([area, dadosArea]) => {
+    const progresso = dados.totais.barricadas > 0 ? (dadosArea.barricadas / dados.totais.barricadas * 100) : 0;
+    
+    const card = `
+      <div class="area-card">
+        <div class="area-header">
+          <div class="area-name">CPA ${area}</div>
+          <div class="area-badge" style="background: ${colors[area]}; color: white;">
+            ${dadosArea.diasAtivos.size} DIAS
+          </div>
+        </div>
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>Participação no Total</span>
+            <span>${progresso.toFixed(1)}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" style="width: ${progresso}%; background: linear-gradient(90deg, ${colors[area]} 0%, ${colors[area]}aa 100%);">
+            </div>
+          </div>
+        </div>
+        <div class="area-stats">
+          <div class="area-stat">
+            <div class="area-stat-value">${Math.round(dadosArea.barricadas)}</div>
+            <div class="area-stat-label">Remoções</div>
+          </div>
+          <div class="area-stat">
+            <div class="area-stat-value">${Math.round(dadosArea.vias)}</div>
+            <div class="area-stat-label">Vias</div>
+          </div>
+          <div class="area-stat">
+            <div class="area-stat-value">${Math.round(dadosArea.peso)}</div>
+            <div class="area-stat-label">Toneladas</div>
+          </div>
+        </div>
+        <div class="insight info">
+          <i class="fas fa-info-circle"></i>
+          <span>Comandante: ${cpaComandantes[area] || 'Não especificado'} • Eficiência: ${dadosArea.eficiencia.toFixed(2)} ton/rem</span>
+        </div>
+      </div>
+    `;
+    
+    grid.innerHTML += card;
+  });
+}
+
+// Criar todos os gráficos
+function criarGraficos(dados) {
+  destruirGraficos();
+  
+  if (!dados) return;
+  
+  // Gráfico de evolução diária de barricadas
+  if (document.getElementById('chartEvolucaoDiaria') && dados.evolucao.length > 0) {
+    const ctx = document.getElementById('chartEvolucaoDiaria').getContext('2d');
+    graficosInstancias.chartEvolucaoDiaria = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: dados.evolucao.map(d => d.data),
+        datasets: [{
+          label: 'Remoções Realizadas',
+          data: dados.evolucao.map(d => d.barricadas),
+          borderColor: '#0d47a1',
+          backgroundColor: 'rgba(13, 71, 161, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointBackgroundColor: '#0d47a1',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            padding: 12,
+            titleFont: { size: 14, weight: 'bold' },
+            bodyFont: { size: 13 }
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Número de Remoções'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  }
+  
+  // Gráfico de evolução diária de peso
+  if (document.getElementById('chartEvolucaoPeso') && dados.evolucao.length > 0) {
+    const ctx = document.getElementById('chartEvolucaoPeso').getContext('2d');
+    graficosInstancias.chartEvolucaoPeso = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: dados.evolucao.map(d => d.data),
+        datasets: [{
+          label: 'Toneladas Removidas',
+          data: dados.evolucao.map(d => d.peso),
+          backgroundColor: 'rgba(249, 168, 37, 0.8)',
+          borderColor: '#f9a825',
+          borderWidth: 2,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            padding: 12
+          }
+        },
+        scales: {
+          y: { 
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Toneladas'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+          },
+          x: {
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  }
+  
+  // Criar outros gráficos de ranking
+  const areasComDados = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0);
+  
+  // Ranking por barricadas
+  if (document.getElementById('chartRankingBarricadas') && areasComDados.length > 0) {
+    const rankingBarric = areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas);
+    const ctx = document.getElementById('chartRankingBarricadas').getContext('2d');
+    graficosInstancias.chartRankingBarricadas = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rankingBarric.map(a => a[0]),
+        datasets: [{
+          label: 'Remoções',
+          data: rankingBarric.map(a => a[1].barricadas),
+          backgroundColor: rankingBarric.map(a => colors[a[0]]),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'CPAs com Maior Número de Remoções'
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true, 
+            title: {
+              display: true,
+              text: 'Número de Remoções'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
+          },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+  }
+  
+  // Ranking por peso
+  if (document.getElementById('chartRankingPeso') && areasComDados.length > 0) {
+    const rankingPeso = areasComDados.sort((a, b) => b[1].peso - a[1].peso);
+    const ctx = document.getElementById('chartRankingPeso').getContext('2d');
+    graficosInstancias.chartRankingPeso = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rankingPeso.map(a => a[0]),
+        datasets: [{
+          label: 'Toneladas',
+          data: rankingPeso.map(a => a[1].peso),
+          backgroundColor: rankingPeso.map(a => colors[a[0]]),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'CPAs com Maior Volume de Entulho'
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Toneladas'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
+          },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+  }
+  
+  // Ranking por eficiência
+  if (document.getElementById('chartRankingEficiencia') && areasComDados.length > 0) {
+    const rankingEfic = areasComDados.sort((a, b) => b[1].eficiencia - a[1].eficiencia);
+    const ctx = document.getElementById('chartRankingEficiencia').getContext('2d');
+    graficosInstancias.chartRankingEficiencia = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rankingEfic.map(a => a[0]),
+        datasets: [{
+          label: 'Eficiência (ton/remoção)',
+          data: rankingEfic.map(a => a[1].eficiencia),
+          backgroundColor: rankingEfic.map(a => colors[a[0]]),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'CPAs Mais Eficientes'
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Toneladas por Remoção'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
+          },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+  }
+  
+  // Ranking por vias
+  if (document.getElementById('chartRankingVias') && areasComDados.length > 0) {
+    const rankingVias = areasComDados.sort((a, b) => b[1].vias - a[1].vias);
+    const ctx = document.getElementById('chartRankingVias').getContext('2d');
+    graficosInstancias.chartRankingVias = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: rankingVias.map(a => a[0]),
+        datasets: [{
+          label: 'Vias Liberadas',
+          data: rankingVias.map(a => a[1].vias),
+          backgroundColor: rankingVias.map(a => colors[a[0]]),
+          borderRadius: 8
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'CPAs que Mais Liberaram Vias'
+          }
+        },
+        scales: {
+          x: { 
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Vias Liberadas'
+            },
+            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
+          },
+          y: { grid: { display: false } }
+        }
+      }
+    });
+  }
+  
+  // Gráficos de Pizza
+  const areasComDadosArray = Object.keys(dados.areas).filter(area => dados.areas[area].barricadas > 0);
+  const coresAreas = areasComDadosArray.map(a => colors[a]);
+  
+  // Pizza de barricadas
+  if (document.getElementById('chartPizzaBarricadas') && areasComDadosArray.length > 0) {
+    const ctx = document.getElementById('chartPizzaBarricadas').getContext('2d');
+    graficosInstancias.chartPizzaBarricadas = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: areasComDadosArray,
+        datasets: [{
+          data: areasComDadosArray.map(a => dados.areas[a].barricadas),
+          backgroundColor: coresAreas,
+          borderWidth: 3,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: { padding: 15, font: { size: 14 } }
+          },
+          title: {
+            display: true,
+            text: 'Distribuição de Remoções por CPA'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percent = total > 0 ? (context.parsed / total * 100).toFixed(1) : 0;
+                return context.label + ': ' + context.parsed.toFixed(0) + ' (' + percent + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Pizza de peso
+  if (document.getElementById('chartPizzaPeso') && areasComDadosArray.length > 0) {
+    const ctx = document.getElementById('chartPizzaPeso').getContext('2d');
+    graficosInstancias.chartPizzaPeso = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: areasComDadosArray,
+        datasets: [{
+          data: areasComDadosArray.map(a => dados.areas[a].peso),
+          backgroundColor: coresAreas,
+          borderWidth: 3,
+          borderColor: '#fff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'right',
+            labels: { padding: 15, font: { size: 14 } }
+          },
+          title: {
+            display: true,
+            text: 'Distribuição de Entulho por CPA'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percent = total > 0 ? (context.parsed / total * 100).toFixed(1) : 0;
+                return context.label + ': ' + context.parsed.toFixed(0) + ' ton (' + percent + '%)';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+// Atualizar insights estratégicos
+function atualizarInsights(dados) {
+  const grid = document.getElementById('insightsGrid');
+  
+  if (!dados) return;
+  
+  const areasComDados = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0);
+  const comandantesComDados = Object.entries(dados.comandantes).filter(([_, c]) => c.barricadas > 0);
+  
+  const insights = [
+    {
+      icone: 'fa-trophy',
+      titulo: 'CPA Campeã',
+      valor: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0] : '-',
+      descricao: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? `${Math.round(areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][1].barricadas)} remoções` : 'Nenhum dado',
+      classe: 'warning'
+    },
+    {
+      icone: 'fa-bolt',
+      titulo: 'CPA Mais Eficiente',
+      valor: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][0] : '-',
+      descricao: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? `${areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][1].eficiencia.toFixed(2)} ton/rem` : 'Nenhum dado',
+      classe: 'success'
+    },
+    {
+      icone: 'fa-user-shield',
+      titulo: 'Comandante Destaque',
+      valor: comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0].split('Cel PM ')[1] || comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0] : '-',
+      descricao: comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? `${Math.round(comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][1].barricadas)} remoções` : 'Nenhum dado',
+      classe: 'info'
+    },
+    {
+      icone: 'fa-calendar-check',
+      titulo: 'Melhor Dia',
+      valor: dados.evolucao.length > 0 ? dados.evolucao.reduce((max, d) => d.barricadas > max.barricadas ? d : max, dados.evolucao[0]).data : '-',
+      descricao: dados.evolucao.length > 0 ? `${Math.round(dados.evolucao.reduce((max, d) => d.barricadas > max.barricadas ? d : max, dados.evolucao[0]).barricadas)} remoções` : 'Nenhum dado',
+      classe: 'info'
+    },
+    {
+      icone: 'fa-chart-line',
+      titulo: 'Ritmo Operacional',
+      valor: dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0,
+      descricao: 'Média de remoções por dia',
+      classe: 'success'
+    },
+    {
+      icone: 'fa-weight-hanging',
+      titulo: 'Total Acumulado',
+      valor: Math.round(dados.totais.peso).toLocaleString('pt-BR'),
+      descricao: 'Toneladas de entulho removidas',
+      classe: 'warning'
+    }
+  ];
+  
+  grid.innerHTML = insights.map(insight => `
+    <div class="card">
+      <i class="fas ${insight.icone} card-icon"></i>
+      <h3>${insight.titulo}</h3>
+      <div class="medium">${insight.valor}</div>
+      <div class="insight ${insight.classe}">
+        <i class="fas fa-info-circle"></i>
+        <span>${insight.descricao}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Criar tabela comparativa
+function criarTabelaComparativa(dados) {
+  const tabela = document.getElementById('tabelaComparativa');
+  
+  if (!dados) return;
+  
+  const areasOrdenadas = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].barricadas - a[1].barricadas);
+  
+  const medalhas = ['🥇', '🥈', '🥉'];
+  
+  let html = `
+    <thead>
+      <tr>
+        <th style="width: 80px;">Posição</th>
+        <th>CPA</th>
+        <th style="text-align: center;">Comandante</th>
+        <th style="text-align: center;">Remoções</th>
+        <th style="text-align: center;">Vias</th>
+        <th style="text-align: center;">Peso (ton)</th>
+        <th style="text-align: center;">Eficiência</th>
+        <th style="text-align: center;">% do Total</th>
+      </tr>
+    </thead>
+    <tbody>
+  `;
+  
+  if (areasOrdenadas.length === 0) {
+    html += `
+      <tr>
+        <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-600);">
+          <i class="fas fa-database" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px; display: block;"></i>
+          Nenhum dado disponível para exibir
+        </td>
+      </tr>
+    `;
+  } else {
+    areasOrdenadas.forEach(([area, dadosArea], index) => {
+      html += `
+        <tr>
+          <td class="ranking-position">
+            ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
+          </td>
+          <td><strong style="color: ${colors[area]};">${area}</strong></td>
+          <td style="text-align: center;"><small>${cpaComandantes[area] || 'Não especificado'}</small></td>
+          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.barricadas)}</td>
+          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.vias)}</td>
+          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.peso)}</td>
+          <td style="text-align: center; font-weight: 600;">${dadosArea.eficiencia.toFixed(2)}</td>
+          <td style="text-align: center;">
+            <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+              <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                <div style="width: ${dadosArea.percentualBarricadas}%; height: 100%; background: ${colors[area]};"></div>
+              </div>
+              <span style="font-weight: 600;">${dadosArea.percentualBarricadas.toFixed(1)}%</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+  }
+  
+  html += '</tbody>';
+  tabela.innerHTML = html;
+}
+
+// NOVA FUNÇÃO: Visualizar PDF - ALTERADA: Melhor distribuição das informações
+async function visualizarPDF() {
+  if (!dadosFiltrados) {
+    mostrarMensagem('Carregue os dados primeiro antes de visualizar!', 'warning');
+    return;
+  }
+  
+  mostrarMensagem('Gerando visualização do PDF... Por favor, aguarde.', 'info');
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4'
+    });
+    
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 15;
+    let yPos = margin;
+    
+    // PÁGINA 1: Cabeçalho e KPIs
+    pdf.setFillColor(13, 71, 161);
+    pdf.rect(0, 0, pageWidth, 35, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(24);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Operação Barricada Zero - Relatório Operacional', pageWidth / 2, 15, { align: 'center' });
+    
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    const dataAtual = new Date().toLocaleDateString('pt-BR');
+    pdf.text(`Período analisado: ${dadosFiltrados.diasOperacao[0] || ''} a ${dadosFiltrados.diasOperacao[dadosFiltrados.diasOperacao.length - 1] || ''}`, pageWidth / 2, 25, { align: 'center' });
+    
+    // Adicionar informações dos filtros
+    pdf.setFontSize(10);
+    let filtrosTexto = 'Filtros aplicados: ';
+    const filtrosAplicados = [];
+    if (filtrosAtivos.dataInicio) filtrosAplicados.push(`Data Início: ${filtrosAtivos.dataInicio}`);
+    if (filtrosAtivos.dataFim) filtrosAplicados.push(`Data Fim: ${filtrosAtivos.dataFim}`);
+    if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
+    if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
+    if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
+    if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
+    if (filtrosAtivos.remocoesMin > 0) filtrosAplicados.push(`Mínimo: ${filtrosAtivos.remocoesMin}`);
+    
+    if (filtrosAplicados.length > 0) {
+      filtrosTexto += filtrosAplicados.join(', ');
+    } else {
+      filtrosTexto += 'Nenhum filtro aplicado';
+    }
+    
+    pdf.setTextColor(0, 0, 0);
+    pdf.text(filtrosTexto, margin, 42, { maxWidth: pageWidth - 2 * margin });
+    
+    yPos = 52;
+    
+    // Cards de KPIs
+    const kpis = [
+      { label: 'Remoções Realizadas', valor: Math.round(dadosFiltrados.totais.barricadas), cor: [13, 71, 161] },
+      { label: 'Vias Liberadas', valor: Math.round(dadosFiltrados.totais.vias), cor: [2, 136, 209] },
+      { label: 'Toneladas Removidas', valor: Math.round(dadosFiltrados.totais.peso), cor: [249, 168, 37] },
+      { label: 'Média Diária', valor: Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias), cor: [46, 125, 50] }
+    ];
+    
+    const cardWidth = (pageWidth - margin * 2 - 15) / 4;
+    const cardHeight = 28;
+    
+    kpis.forEach((kpi, idx) => {
+      const xPos = margin + idx * (cardWidth + 5);
+      
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(xPos, yPos, cardWidth, cardHeight, 3, 3, 'F');
+      
+      pdf.setFillColor(...kpi.cor);
+      pdf.rect(xPos, yPos, 4, cardHeight, 'F');
+      
+      pdf.setFontSize(10);
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(kpi.label, xPos + cardWidth / 2, yPos + 8, { align: 'center' });
+      
+      pdf.setFontSize(20);
+      pdf.setTextColor(...kpi.cor);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(kpi.valor.toString(), xPos + cardWidth / 2, yPos + 20, { align: 'center' });
+    });
+    
+    yPos += cardHeight + 25;
+    
+    // Tabela de CPAs - ALTERADA: Melhor uso do espaço
+    pdf.setFontSize(16);
+    pdf.setTextColor(13, 71, 161);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Desempenho por CPA (Dados Filtrados)', margin, yPos);
+    
+    yPos += 10;
+    
+    // Cabeçalho da tabela - COLUNAS OTIMIZADAS
+    pdf.setFillColor(13, 71, 161);
+    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    
+    // Distribuição otimizada das colunas
+    const colWidths = {
+      cpa: 25,
+      comandante: 55,
+      remocoes: 30,
+      vias: 25,
+      peso: 35,
+      eficiencia: 35,
+      percentual: 25
+    };
+    
+    let currentX = margin + 5;
+    pdf.text('CPA', currentX, yPos + 5);
+    currentX += colWidths.cpa;
+    
+    pdf.text('Comandante', currentX, yPos + 5);
+    currentX += colWidths.comandante;
+    
+    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
+    currentX += colWidths.remocoes;
+    
+    pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
+    currentX += colWidths.vias;
+    
+    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
+    currentX += colWidths.peso;
+    
+    pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
+    currentX += colWidths.eficiencia;
+    
+    pdf.text('% Total', currentX, yPos + 5, { align: 'center' });
+    
+    yPos += 8;
+    
+    const areasOrdenadas = Object.entries(dadosFiltrados.areas)
+      .filter(([_, a]) => a.barricadas > 0)
+      .sort((a, b) => b[1].barricadas - a[1].barricadas);
+    
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont('helvetica', 'normal');
+    
+    areasOrdenadas.forEach(([area, dadosArea], idx) => {
+      if (yPos > pageHeight - 30) {
+        pdf.addPage();
+        yPos = margin;
+        
+        // Recriar cabeçalho na nova página
+        pdf.setFillColor(13, 71, 161);
+        pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+        
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'bold');
+        
+        currentX = margin + 5;
+        pdf.text('CPA', currentX, yPos + 5);
+        currentX += colWidths.cpa;
+        
+        pdf.text('Comandante', currentX, yPos + 5);
+        currentX += colWidths.comandante;
+        
+        pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
+        currentX += colWidths.remocoes;
+        
+        pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
+        currentX += colWidths.vias;
+        
+        pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
+        currentX += colWidths.peso;
+        
+        pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
+        currentX += colWidths.eficiencia;
+        
+        pdf.text('% Total', currentX, yPos + 5, { align: 'center' });
+        
+        yPos += 8;
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont('helvetica', 'normal');
+      }
+      
+      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+      pdf.setFillColor(...rowColor);
+      pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+      
+      pdf.setFontSize(10);
+      
+      // Desenhar cada célula com posicionamento correto
+      currentX = margin + 5;
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(area, currentX, yPos + 5);
+      currentX += colWidths.cpa;
+      
+      pdf.setFont('helvetica', 'normal');
+      const comandanteTexto = cpaComandantes[area] || 'Não especificado';
+      pdf.text(comandanteTexto.substring(0, 20) + (comandanteTexto.length > 20 ? '...' : ''), currentX, yPos + 5);
+      currentX += colWidths.comandante;
+      
+      pdf.text(Math.round(dadosArea.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += colWidths.remocoes;
+      
+      pdf.text(Math.round(dadosArea.vias).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += colWidths.vias;
+      
+      pdf.text(Math.round(dadosArea.peso).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += colWidths.peso;
+      
+      pdf.text(dadosArea.eficiencia.toFixed(2), currentX, yPos + 5, { align: 'center' });
+      currentX += colWidths.eficiencia;
+      
+      pdf.text(dadosArea.percentualBarricadas.toFixed(1) + '%', currentX, yPos + 5, { align: 'center' });
+      
+      yPos += 8;
+    });
+    
+    // PÁGINA 2: Evolução e Insights
+    pdf.addPage();
+    yPos = margin;
+    
+    pdf.setFillColor(13, 71, 161);
+    pdf.rect(0, 0, pageWidth, 25, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Evolução Temporal e Comandantes', pageWidth / 2, 15, { align: 'center' });
+    
+    yPos = 35;
+    pdf.setTextColor(0, 0, 0);
+    
+    // Tabela de Evolução Diária
+    pdf.setFontSize(14);
+    pdf.setTextColor(13, 71, 161);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Evolução Diária (Dados Filtrados)', margin, yPos);
+    
+    yPos += 8;
+    
+    // Cabeçalho otimizado
+    pdf.setFillColor(13, 71, 161);
+    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    
+    const evolColWidths = {
+      data: 40,
+      remocoes: 40,
+      vias: 40,
+      peso: 50
+    };
+    
+    currentX = margin + 10;
+    pdf.text('Data', currentX, yPos + 5);
+    currentX += evolColWidths.data;
+    
+    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
+    currentX += evolColWidths.remocoes;
+    
+    pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
+    currentX += evolColWidths.vias;
+    
+    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
+    
+    yPos += 8;
+    
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont('helvetica', 'normal');
+    
+    dadosFiltrados.evolucao.forEach((dia, idx) => {
+      if (yPos > pageHeight - 30) {
+        pdf.addPage();
+        yPos = margin + 20;
+      }
+      
+      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+      pdf.setFillColor(...rowColor);
+      pdf.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
+      
+      pdf.setFontSize(10);
+      
+      currentX = margin + 10;
+      pdf.text(dia.data, currentX, yPos + 5);
+      currentX += evolColWidths.data;
+      
+      pdf.text(Math.round(dia.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += evolColWidths.remocoes;
+      
+      pdf.text(Math.round(dia.vias).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += evolColWidths.vias;
+      
+      pdf.text(Math.round(dia.peso).toString(), currentX, yPos + 5, { align: 'center' });
+      
+      yPos += 7;
+    });
+    
+    // Tabela de Comandantes
+    yPos += 15;
+    
+    if (yPos > pageHeight - 60) {
+      pdf.addPage();
+      yPos = margin;
+    }
+    
+    pdf.setFontSize(14);
+    pdf.setTextColor(13, 71, 161);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Desempenho por Comandante', margin, yPos);
+    
+    yPos += 8;
+    
+    // Cabeçalho otimizado
+    pdf.setFillColor(13, 71, 161);
+    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+    
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    
+    const cmdColWidths = {
+      nome: 70,
+      cpas: 40,
+      remocoes: 35,
+      peso: 40,
+      eficiencia: 40
+    };
+    
+    currentX = margin + 5;
+    pdf.text('Comandante', currentX, yPos + 5);
+    currentX += cmdColWidths.nome;
+    
+    pdf.text('CPAs', currentX, yPos + 5);
+    currentX += cmdColWidths.cpas;
+    
+    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
+    currentX += cmdColWidths.remocoes;
+    
+    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
+    currentX += cmdColWidths.peso;
+    
+    pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
+    
+    yPos += 8;
+    
+    const comandantesOrdenados = Object.entries(dadosFiltrados.comandantes)
+      .filter(([_, c]) => c.barricadas > 0)
+      .sort((a, b) => b[1].barricadas - a[1].barricadas);
+    
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont('helvetica', 'normal');
+    
+    comandantesOrdenados.forEach(([comandante, dadosCmd], idx) => {
+      if (yPos > pageHeight - 30) {
+        pdf.addPage();
+        yPos = margin;
+        
+        // Recriar cabeçalho
+        pdf.setFillColor(13, 71, 161);
+        pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+        
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'bold');
+        
+        currentX = margin + 5;
+        pdf.text('Comandante', currentX, yPos + 5);
+        currentX += cmdColWidths.nome;
+        
+        pdf.text('CPAs', currentX, yPos + 5);
+        currentX += cmdColWidths.cpas;
+        
+        pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
+        currentX += cmdColWidths.remocoes;
+        
+        pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
+        currentX += cmdColWidths.peso;
+        
+        pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
+        
+        yPos += 8;
+        pdf.setTextColor(0, 0, 0);
+        pdf.setFont('helvetica', 'normal');
+      }
+      
+      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+      pdf.setFillColor(...rowColor);
+      pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+      
+      pdf.setFontSize(10);
+      
+      currentX = margin + 5;
+      const nomeCurto = comandante.split('Cel PM ')[1] || comandante;
+      pdf.text(nomeCurto.substring(0, 25) + (nomeCurto.length > 25 ? '...' : ''), currentX, yPos + 5);
+      currentX += cmdColWidths.nome;
+      
+      const areasArray = Array.from(dadosCmd.areas || []);
+      pdf.text(areasArray.join(', ').substring(0, 15) + (areasArray.join(', ').length > 15 ? '...' : ''), currentX, yPos + 5);
+      currentX += cmdColWidths.cpas;
+      
+      pdf.text(Math.round(dadosCmd.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += cmdColWidths.remocoes;
+      
+      pdf.text(Math.round(dadosCmd.peso).toString(), currentX, yPos + 5, { align: 'center' });
+      currentX += cmdColWidths.peso;
+      
+      pdf.text(dadosCmd.eficiencia.toFixed(2), currentX, yPos + 5, { align: 'center' });
+      
+      yPos += 8;
+    });
+    
+    // Insights
+    yPos += 15;
+    
+    if (yPos > pageHeight - 50) {
+      pdf.addPage();
+      yPos = margin;
+    }
+    
+    pdf.setFontSize(14);
+    pdf.setTextColor(13, 71, 161);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Principais Insights', margin, yPos);
+    
+    yPos += 10;
+    
+    const insights = [
+      `Total de remoções realizadas: ${Math.round(dadosFiltrados.totais.barricadas)}`,
+      `Total de vias liberadas: ${Math.round(dadosFiltrados.totais.vias)}`,
+      `Total de toneladas removidas: ${Math.round(dadosFiltrados.totais.peso)}`,
+      `Média diária: ${Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias)} remoções/dia`,
+      `Período analisado: ${dadosFiltrados.totais.dias} dias`,
+      `CPAs com atividade: ${areasOrdenadas.length}`,
+      `Comandantes com atividade: ${comandantesOrdenados.length}`,
+      `Municípios atendidos: ${Object.keys(dadosFiltrados.municipios).length}`
+    ];
+    
+    pdf.setFontSize(11);
+    pdf.setTextColor(0, 0, 0);
+    pdf.setFont('helvetica', 'normal');
+    
+    insights.forEach((insight, idx) => {
+      if (yPos > pageHeight - 20) {
+        pdf.addPage();
+        yPos = margin;
+      }
+      
+      pdf.text(`• ${insight}`, margin + 5, yPos);
+      yPos += 7;
+    });
+    
+    // Rodapé em todas as páginas
+    const totalPages = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(8);
+      pdf.setTextColor(150, 150, 150);
+      pdf.text(`Página ${i} de ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
+      pdf.text(`Gerado em ${dataAtual}`, margin, pageHeight - 5);
+      pdf.text('Operação Barricada Zero - Dashboard Estratégico', pageWidth / 2, pageHeight - 5, { align: 'center' });
+    }
+    
+    // Gerar URL do PDF
+    const pdfBlob = pdf.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    
+    // Mostrar no modal
+    document.getElementById('pdfPreview').src = pdfUrl;
+    abrirModal('modalPDF');
+    
+    // Armazenar o PDF para download posterior
+    window.pdfParaDownload = pdf;
+    
+    mostrarMensagem('PDF gerado com sucesso! Visualize no modal.', 'success');
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    mostrarMensagem('Erro ao gerar PDF: ' + error.message, 'danger');
+  }
+}
+
+// Função para baixar o PDF já gerado
+function baixarPDF() {
+  if (!window.pdfParaDownload) {
+    mostrarMensagem('Gere o PDF primeiro!', 'warning');
+    return;
+  }
+  
+  const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+  const nomeArquivo = `Relatorio_Barricada_Zero_${dataAtual}.pdf`;
+  
+  window.pdfParaDownload.save(nomeArquivo);
+  mostrarMensagem('PDF baixado com sucesso!', 'success');
+}
+
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+  // Inicializar filtros básicos
+  inicializarFiltros();
+  atualizarStatusFiltros();
+});
+
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal')) {
+    event.target.style.display = 'none';
+  }
+};
+
+</script>
+</body>
+</html>
