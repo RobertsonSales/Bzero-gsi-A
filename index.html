@@ -1001,6 +1001,44 @@
         flex-direction: column;
       }
     }
+
+    /* ESTILOS PARA O NOVO FILTRO DE LOCALIDADES */
+    .localidade-checkbox-item:hover {
+      background: var(--gray-100);
+    }
+
+    #localidadesContainer::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #localidadesContainer::-webkit-scrollbar-track {
+      background: var(--gray-200);
+      border-radius: 3px;
+    }
+
+    #localidadesContainer::-webkit-scrollbar-thumb {
+      background: var(--gray-400);
+      border-radius: 3px;
+    }
+
+    #localidadesContainer::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-500);
+    }
+
+    #localidadesSelecionadas::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+
+    #localidadesSelecionadas::-webkit-scrollbar-track {
+      background: var(--gray-200);
+      border-radius: 2px;
+    }
+
+    #localidadesSelecionadas::-webkit-scrollbar-thumb {
+      background: var(--gray-400);
+      border-radius: 2px;
+    }
   </style>
 </head>
 <body>
@@ -1055,26 +1093,18 @@
   </div>
   
   <div class="filtros-grid">
-    <div class="filtro-group">
-      <label class="filtro-label">Data Inicial</label>
-      <input type="date" class="filtro-input" id="filtroDataInicio">
-    </div>
-    
-    <div class="filtro-group">
-      <label class="filtro-label">Data Final</label>
-      <input type="date" class="filtro-input" id="filtroDataFim">
-    </div>
+
 
     <div class="filtro-group">
       <label class="filtro-label">CPA</label>
       <select class="filtro-select" id="filtroCPA">
         <option value="todos">Todas as CPAs</option>
-        <option value="ALPHA">CPA ALPHA</option>
-        <option value="BRAVO">CPA BRAVO</option>
-        <option value="CHARLIE">CPA CHARLIE</option>
-        <option value="DELTA">CPA DELTA</option>
-        <option value="ECHO">CPA ECHO</option>
-        <option value="FOX">CPA FOX</option>
+        <option value="ALPHA">ÁREA ALPHA</option>
+        <option value="BRAVO">ÁREA BRAVO</option>
+        <option value="CHARLIE">ÁREA CHARLIE</option>
+        <option value="DELTA">ÁREA DELTA</option>
+        <option value="ECHO">ÁREA ECHO</option>
+        <option value="FOX">ÁREA FOX</option>
       </select>
     </div>
     
@@ -1082,7 +1112,7 @@
       <label class="filtro-label">Comandante</label>
       <select class="filtro-select" id="filtroComandante">
         <option value="todos">Todos os Comandantes</option>
-        </select>
+      </select>
     </div>
     
     <div class="filtro-group">
@@ -1100,16 +1130,28 @@
       </select>
     </div>
     
-    <div class="filtro-group">
-      <label class="filtro-label">Mínimo de Remoções</label>
-      <input type="number" class="filtro-input" id="filtroRemocoes" placeholder="Ex: 10" min="0">
+    <div class="filtro-group" style="grid-column: span 2;">
+      <label class="filtro-label">Localidade(s)</label>
+      <div style="position: relative;">
+        <input type="text" class="filtro-input" id="filtroLocalidadeInput" placeholder="Digite para buscar..." onkeyup="filtrarLocalidades()">
+        <div id="localidadesContainer" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid var(--gray-300); border-radius: 8px; max-height: 300px; overflow-y: auto; width: 100%; box-shadow: var(--shadow-lg); margin-top: 5px;">
+          <div style="padding: 10px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 600;">Selecionar localidades</span>
+            <button onclick="selecionarTodasLocalidades()" style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Todas</button>
+          </div>
+          <div id="localidadesLista" style="max-height: 250px; overflow-y: auto;">
+            <!-- As localidades serão carregadas dinamicamente -->
+          </div>
+        </div>
+      </div>
+      <div id="localidadesSelecionadas" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; max-height: 80px; overflow-y: auto;"></div>
     </div>
     
     <div class="filtro-group">
       <label class="filtro-label">Município</label>
       <select class="filtro-select" id="filtroMunicipio">
         <option value="todos">Todos os Municípios</option>
-        </select>
+      </select>
     </div>
   </div>
 </div>
@@ -1198,7 +1240,7 @@
     
     <div class="card">
       <i class="fas fa-tachometer-alt card-icon"></i>
-      <h3>CPA Mais Eficiente</h3>
+      <h3>ÁREA Mais Eficiente</h3>
       <div class="medium" id="areaMaisEficiente">-</div>
       <div class="insight success" id="eficienciaAreaValor">
         <i class="fas fa-award"></i>
@@ -1378,7 +1420,7 @@ const colors = {
   GOLF: '#00796b'      // Verde-azulado
 };
 
-// Mapeamento de CPAs para Comandantes (da aba CPA x BTL)
+// Mapeamento de ÁREA para Comandantes (da aba CPA x BTL)
 const cpaComandantes = {
   'ALPHA': 'Cel PM Luciano de Vasconcelos',
   'BRAVO': 'Cel PM Walter Teixeira da Silva Júnior',
@@ -1406,9 +1448,8 @@ let filtrosAtivos = {
   comandante: 'todos',
   bpm: 'todos',
   municipio: 'todos',
-  remocoesMin: 0,
-  dataInicio: null,
-  dataFim: null
+  localidades: [], // NOVO: array de localidades selecionadas
+
 };
 
 // Variáveis globais
@@ -1440,6 +1481,9 @@ const municipiosMap = {
   'SJM': 'São João de Meriti'
 };
 
+// Variável para armazenar todas as localidades únicas
+let todasLocalidades = [];
+
 // Função para destruir gráficos existentes
 function destruirGraficos() {
   for (const [id, grafico] of Object.entries(graficosInstancias)) {
@@ -1455,13 +1499,21 @@ function atualizarStatusFiltros() {
   const statusElement = document.getElementById('statusFiltros');
   const filtrosAplicados = [];
   
-  if (filtrosAtivos.dataInicio) filtrosAplicados.push(`Data Início: ${filtrosAtivos.dataInicio}`);
-  if (filtrosAtivos.dataFim) filtrosAplicados.push(`Data Fim: ${filtrosAtivos.dataFim}`);
+
+  
   if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
   if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
   if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
   if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
-  if (filtrosAtivos.remocoesMin > 0) filtrosAplicados.push(`Mínimo: ${filtrosAtivos.remocoesMin}`);
+  
+  // Localidades (nova funcionalidade)
+  if (filtrosAtivos.localidades.length > 0) {
+    if (filtrosAtivos.localidades.length === 1) {
+      filtrosAplicados.push(`Localidade: ${filtrosAtivos.localidades[0]}`);
+    } else {
+      filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.length} selecionadas`);
+    }
+  }
   
   if (filtrosAplicados.length > 0) {
     statusElement.textContent = `${filtrosAplicados.length} filtro(s) ativo(s)`;
@@ -1502,6 +1554,147 @@ function inicializarFiltros(dados) {
   atualizarStatusFiltros();
 }
 
+// Função para inicializar o filtro de localidades
+function inicializarFiltroLocalidades(dados) {
+  if (!dados || !dados.registros) return;
+  
+  // Extrair todas as localidades únicas dos dados
+  const localidadesSet = new Set();
+  dados.registros.forEach(registro => {
+    if (registro.localidade && registro.localidade.trim() !== '') {
+      localidadesSet.add(registro.localidade.trim());
+    }
+    if (registro.bairro && registro.bairro.trim() !== '') {
+      localidadesSet.add(registro.bairro.trim());
+    }
+  });
+  
+  todasLocalidades = Array.from(localidadesSet).sort();
+  
+  // Atualizar a lista de localidades no filtro
+  const localidadesLista = document.getElementById('localidadesLista');
+  localidadesLista.innerHTML = '';
+  
+  todasLocalidades.forEach(localidade => {
+    const div = document.createElement('div');
+    div.className = 'localidade-checkbox-item';
+    div.style.padding = '8px 12px';
+    div.style.borderBottom = '1px solid var(--gray-200)';
+    div.style.display = 'flex';
+    div.style.alignItems = 'center';
+    div.style.gap = '10px';
+    div.style.cursor = 'pointer';
+    div.style.transition = 'background 0.2s';
+    
+    div.innerHTML = `
+      <input type="checkbox" id="localidade_${localidade.replace(/[^a-zA-Z0-9]/g, '_')}" 
+             value="${localidade}" onchange="atualizarLocalidadesSelecionadas()" style="cursor: pointer;">
+      <label for="localidade_${localidade.replace(/[^a-zA-Z0-9]/g, '_')}" 
+             style="cursor: pointer; font-size: 13px; flex: 1;">${localidade}</label>
+    `;
+    
+    div.onmouseover = function() { this.style.background = 'var(--gray-100)'; };
+    div.onmouseout = function() { this.style.background = ''; };
+    
+    localidadesLista.appendChild(div);
+  });
+}
+
+// Função para filtrar localidades na lista
+function filtrarLocalidades() {
+  const input = document.getElementById('filtroLocalidadeInput');
+  const filtro = input.value.toLowerCase();
+  const container = document.getElementById('localidadesContainer');
+  const itens = document.querySelectorAll('.localidade-checkbox-item');
+  
+  // Mostrar container se houver texto
+  if (filtro.length > 0) {
+    container.style.display = 'block';
+  } else {
+    container.style.display = 'none';
+  }
+  
+  // Filtrar itens
+  itens.forEach(item => {
+    const label = item.querySelector('label');
+    const texto = label.textContent.toLowerCase();
+    item.style.display = texto.includes(filtro) ? 'flex' : 'none';
+  });
+}
+
+// Função para atualizar as localidades selecionadas
+function atualizarLocalidadesSelecionadas() {
+  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]:checked');
+  const container = document.getElementById('localidadesSelecionadas');
+  container.innerHTML = '';
+  
+  const localidadesSelecionadas = [];
+  
+  checkboxes.forEach(checkbox => {
+    localidadesSelecionadas.push(checkbox.value);
+    
+    const tag = document.createElement('div');
+    tag.style.background = 'var(--primary-light)';
+    tag.style.color = 'white';
+    tag.style.padding = '4px 8px';
+    tag.style.borderRadius = '12px';
+    tag.style.fontSize = '12px';
+    tag.style.display = 'flex';
+    tag.style.alignItems = 'center';
+    tag.style.gap = '5px';
+    
+    tag.innerHTML = `
+      ${checkbox.value}
+      <button onclick="removerLocalidade('${checkbox.value.replace(/'/g, "\\'")}')" 
+              style="background: none; border: none; color: white; cursor: pointer; font-size: 14px; padding: 0; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
+        ×
+      </button>
+    `;
+    
+    container.appendChild(tag);
+  });
+  
+  // Atualizar filtros ativos
+  filtrosAtivos.localidades = localidadesSelecionadas;
+  
+  // Esconder container de lista se não estiver digitando
+  const input = document.getElementById('filtroLocalidadeInput');
+  if (input.value === '') {
+    document.getElementById('localidadesContainer').style.display = 'none';
+  }
+}
+
+// Função para remover uma localidade específica
+function removerLocalidade(localidade) {
+  const checkbox = document.querySelector(`#localidadesLista input[value="${localidade.replace(/"/g, '\\"')}"]`);
+  if (checkbox) {
+    checkbox.checked = false;
+    atualizarLocalidadesSelecionadas();
+  }
+}
+
+// Função para selecionar todas as localidades
+function selecionarTodasLocalidades() {
+  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]');
+  const todasSelecionadas = Array.from(checkboxes).every(cb => cb.checked);
+  
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = !todasSelecionadas;
+  });
+  
+  atualizarLocalidadesSelecionadas();
+}
+
+// Fechar lista de localidades ao clicar fora
+document.addEventListener('click', function(event) {
+  const container = document.getElementById('localidadesContainer');
+  const input = document.getElementById('filtroLocalidadeInput');
+  
+  if (container && !container.contains(event.target) && event.target !== input) {
+    container.style.display = 'none';
+  }
+});
+
 // Função para alternar tabs
 function switchTab(index) {
   document.querySelectorAll('.tab').forEach((tab, i) => {
@@ -1528,16 +1721,22 @@ function limparFiltros() {
   document.getElementById('filtroComandante').value = 'todos';
   document.getElementById('filtroBPM').value = 'todos';
   document.getElementById('filtroMunicipio').value = 'todos';
-  document.getElementById('filtroRemocoes').value = '';
-  document.getElementById('filtroDataInicio').value = '';
-  document.getElementById('filtroDataFim').value = '';
+  document.getElementById('filtroLocalidadeInput').value = '';
+
+  
+  // Limpar checkboxes de localidades
+  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]');
+  checkboxes.forEach(checkbox => checkbox.checked = false);
+  
+  document.getElementById('localidadesSelecionadas').innerHTML = '';
+  document.getElementById('localidadesContainer').style.display = 'none';
   
   filtrosAtivos = {
     cpa: 'todos',
     comandante: 'todos',
     bpm: 'todos',
     municipio: 'todos',
-    remocoesMin: 0,
+    localidades: [], // Limpar localidades
     dataInicio: null,
     dataFim: null
   };
@@ -1606,18 +1805,13 @@ document.head.appendChild(style);
 
 // Função para aplicar filtros
 function aplicarFiltros() {
-  const dataInicioInput = document.getElementById('filtroDataInicio').value;
-  const dataFimInput = document.getElementById('filtroDataFim').value;
-  
-  filtrosAtivos = {
-    cpa: document.getElementById('filtroCPA').value,
-    comandante: document.getElementById('filtroComandante').value,
-    bpm: document.getElementById('filtroBPM').value,
-    municipio: document.getElementById('filtroMunicipio').value,
-    remocoesMin: parseInt(document.getElementById('filtroRemocoes').value) || 0,
-    dataInicio: dataInicioInput || null,
-    dataFim: dataFimInput || null
-  };
+	  filtrosAtivos = {
+	    cpa: document.getElementById('filtroCPA').value,
+	    comandante: document.getElementById('filtroComandante').value,
+	    bpm: document.getElementById('filtroBPM').value,
+	    municipio: document.getElementById('filtroMunicipio').value,
+	    localidades: filtrosAtivos.localidades // Manter as localidades já selecionadas
+	  };
   
   atualizarStatusFiltros();
   
@@ -1683,38 +1877,17 @@ function parseDataPlanilha(dataStr) {
   return null;
 }
 
-// Função para filtrar dados
+// Função para filtrar dados com supremacia do filtro de data
 function filtrarDados(dados) {
   if (!dados || !dados.registros || !Array.isArray(dados.registros)) {
     console.error('Dados inválidos para filtragem');
     return null;
   }
   
-  const dadosFiltrados = {
-    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
-    areas: {},
-    evolucao: [],
-    diasOperacao: [],
-    comandantes: {},
-    municipios: {},
-    registros: []
-  };
-  
-  // Filtrar registros individuais
-  dados.registros.forEach(registro => {
-    // Filtro de data
+	  // Aplicar filtros
+	  let registrosFiltrados = [...dados.registros];
+  registrosFiltrados = registrosFiltrados.filter(registro => {
     let incluir = true;
-    
-    if (filtrosAtivos.dataInicio) {
-      const dataInicio = new Date(filtrosAtivos.dataInicio);
-      if (registro.data < dataInicio) incluir = false;
-    }
-    
-    if (filtrosAtivos.dataFim) {
-      const dataFim = new Date(filtrosAtivos.dataFim);
-      dataFim.setHours(23, 59, 59);
-      if (registro.data > dataFim) incluir = false;
-    }
     
     // Filtro de CPA
     if (filtrosAtivos.cpa !== 'todos' && registro.area !== filtrosAtivos.cpa) {
@@ -1728,7 +1901,6 @@ function filtrarDados(dados) {
     
     // Filtro de BPM
     if (filtrosAtivos.bpm !== 'todos') {
-      // Normalizar o BPM para comparação (remover "º")
       const registroBpm = registro.bpm ? registro.bpm.replace('º', '') : '';
       const filtroBpm = filtrosAtivos.bpm.replace('º', '');
       if (registroBpm !== filtroBpm) {
@@ -1741,23 +1913,43 @@ function filtrarDados(dados) {
       incluir = false;
     }
     
-    // Filtro de mínimo de remoções
-    if (filtrosAtivos.remocoesMin > 0 && registro.remocoes < filtrosAtivos.remocoesMin) {
-      incluir = false;
+    // NOVO: Filtro de Localidades (múltipla seleção)
+    if (filtrosAtivos.localidades.length > 0) {
+      const localidadeRegistro = (registro.localidade || '').trim();
+      const bairroRegistro = (registro.bairro || '').trim();
+      
+      const correspondeLocalidade = filtrosAtivos.localidades.some(loc => 
+        localidadeRegistro.includes(loc) || 
+        bairroRegistro.includes(loc) ||
+        loc.includes(localidadeRegistro) ||
+        loc.includes(bairroRegistro)
+      );
+      
+      if (!correspondeLocalidade) {
+        incluir = false;
+      }
     }
     
-    if (incluir) {
-      dadosFiltrados.registros.push(registro);
-    }
+    return incluir;
   });
+  
+  const dadosFiltrados = {
+    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
+    areas: {},
+    evolucao: [],
+    diasOperacao: [],
+    comandantes: {},
+    municipios: {},
+    registros: registrosFiltrados  // Usar os registros filtrados
+  };
   
   // Processar dados filtrados
   const areasMap = {};
   const comandantesMap = {};
-  const municipiosData = {}; // NOME ALTERADO: evita conflito com constante global
+  const municipiosData = {};
   const evolucaoMap = {};
   
-  dadosFiltrados.registros.forEach(registro => {
+  registrosFiltrados.forEach(registro => {
     const area = registro.area;
     const comandante = registro.cmte;
     const municipio = registro.municipio;
@@ -1786,7 +1978,7 @@ function filtrarDados(dados) {
       };
     }
     
-    // Inicializar município - NOME ALTERADO
+    // Inicializar município
     if (!municipiosData[municipio]) {
       municipiosData[municipio] = {
         barricadas: 0,
@@ -1818,7 +2010,6 @@ function filtrarDados(dados) {
     comandantesMap[comandante].peso += registro.peso;
     comandantesMap[comandante].areas.add(area);
     
-    // Usar o novo nome da variável
     municipiosData[municipio].barricadas += registro.remocoes;
     municipiosData[municipio].vias += registro.vias;
     municipiosData[municipio].peso += registro.peso;
@@ -1831,7 +2022,7 @@ function filtrarDados(dados) {
   // Converter maps para arrays/objetos
   dadosFiltrados.areas = areasMap;
   dadosFiltrados.comandantes = comandantesMap;
-  dadosFiltrados.municipios = municipiosData; // ALTERADO
+  dadosFiltrados.municipios = municipiosData;
   
   // Ordenar evolução por data
   dadosFiltrados.evolucao = Object.values(evolucaoMap)
@@ -1892,7 +2083,7 @@ function atualizarCPAsGrid(dados) {
             ${area.charAt(0)}
           </div>
           <div class="cpa-info">
-            <h4>CPA ${area}</h4>
+            <h4>ÁREA ${area}</h4>
             <p>${cpaComandantes[area] || 'Comandante não especificado'}</p>
             <small>BPMs: ${bpmList.join(', ')}</small>
           </div>
@@ -1932,13 +2123,13 @@ function atualizarCPAsGrid(dados) {
   }
 }
 
-// Função para abrir modal de CPA - ALTERADA: exibe TODOS os registros
+// Função para abrir modal de CPA
 function abrirModalCPA(area) {
   const comandante = cpaComandantes[area] || 'Não especificado';
   const bpmList = cpaBPMs[area] || [];
   const dadosArea = dadosFiltrados ? dadosFiltrados.areas[area] : { barricadas: 0, vias: 0, peso: 0 };
   
-  document.getElementById('modalCPATitle').textContent = `CPA ${area}`;
+  document.getElementById('modalCPATitle').textContent = `ÁREA ${area}`;
   
   // Coletar informações dos registros desta CPA
   const registrosCPA = dadosFiltrados ? dadosFiltrados.registros.filter(r => r.area === area) : [];
@@ -2069,7 +2260,7 @@ function atualizarComandantesGrid(dados) {
   }
 }
 
-// Função para abrir modal de comandante - ALTERADA: exibe TODOS os registros
+// Função para abrir modal de comandante
 function abrirModalComandante(comandante) {
   const dadosCmd = dadosFiltrados ? dadosFiltrados.comandantes[comandante] : { barricadas: 0, vias: 0, peso: 0 };
   const areasArray = Array.from(dadosCmd.areas || []);
@@ -2196,6 +2387,9 @@ function processarPlanilha() {
       // Inicializar filtros com dados reais
       inicializarFiltros(dadosGlobais);
       
+      // Inicializar filtro de localidades
+      inicializarFiltroLocalidades(dadosGlobais);
+      
       atualizarDashboardComFiltros();
       
       document.getElementById("dashboard").classList.remove("hidden");
@@ -2215,7 +2409,7 @@ function processarPlanilha() {
   reader.readAsArrayBuffer(file);
 }
 
-// Função para processar os dados da planilha real - CORRIGIDA
+// Função para processar os dados da planilha real
 function processarDadosPlanilha(rows) {
   const dados = {
     totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
@@ -2492,7 +2686,7 @@ function atualizarAreasGrid(dados) {
     const card = `
       <div class="area-card">
         <div class="area-header">
-          <div class="area-name">CPA ${area}</div>
+          <div class="area-name">ÁREA ${area}</div>
           <div class="area-badge" style="background: ${colors[area]}; color: white;">
             ${dadosArea.diasAtivos.size} DIAS
           </div>
@@ -2896,14 +3090,14 @@ function atualizarInsights(dados) {
   const insights = [
     {
       icone: 'fa-trophy',
-      titulo: 'CPA Campeã',
+      titulo: 'ÁREA Campeã',
       valor: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0] : '-',
       descricao: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? `${Math.round(areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][1].barricadas)} remoções` : 'Nenhum dado',
       classe: 'warning'
     },
     {
       icone: 'fa-bolt',
-      titulo: 'CPA Mais Eficiente',
+      titulo: 'ÁREA Mais Eficiente',
       valor: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][0] : '-',
       descricao: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? `${areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][1].eficiencia.toFixed(2)} ton/rem` : 'Nenhum dado',
       classe: 'success'
@@ -3054,16 +3248,23 @@ async function visualizarPDF() {
     
     // Adicionar informações dos filtros
     pdf.setFontSize(10);
-    let filtrosTexto = 'Filtros aplicados: ';
     const filtrosAplicados = [];
-    if (filtrosAtivos.dataInicio) filtrosAplicados.push(`Data Início: ${filtrosAtivos.dataInicio}`);
-    if (filtrosAtivos.dataFim) filtrosAplicados.push(`Data Fim: ${filtrosAtivos.dataFim}`);
+
     if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
     if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
     if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
     if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
-    if (filtrosAtivos.remocoesMin > 0) filtrosAplicados.push(`Mínimo: ${filtrosAtivos.remocoesMin}`);
     
+    // NOVO: Adicionar localidades ao PDF
+    if (filtrosAtivos.localidades.length > 0) {
+      if (filtrosAtivos.localidades.length <= 3) {
+        filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.join(', ')}`);
+      } else {
+        filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.length} selecionadas`);
+      }
+    }
+    
+    let filtrosTexto = 'Filtros aplicados: ';
     if (filtrosAplicados.length > 0) {
       filtrosTexto += filtrosAplicados.join(', ');
     } else {
@@ -3107,11 +3308,11 @@ async function visualizarPDF() {
     
     yPos += cardHeight + 25;
     
-    // Tabela de CPAs - ALTERADA: Melhor uso do espaço
+    // Tabela de CPAs
     pdf.setFontSize(16);
     pdf.setTextColor(13, 71, 161);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('Desempenho por CPA (Dados Filtrados)', margin, yPos);
+    pdf.text('Desempenho por ÁREA (Dados Filtrados)', margin, yPos);
     
     yPos += 10;
     
