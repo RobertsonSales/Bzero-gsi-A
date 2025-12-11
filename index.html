@@ -181,7 +181,7 @@
       background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
     }
     
-    /* FILTROS */
+    /* FILTROS - ESTILOS MANTIDOS DO INDEX I */
     .filtros-container {
       background: white;
       padding: 25px 30px;
@@ -1002,7 +1002,16 @@
       }
     }
 
-    /* ESTILOS PARA O NOVO FILTRO DE LOCALIDADES */
+    /* ESTILOS PARA O NOVO FILTRO DE LOCALIDADES DO INDEX II */
+    .localidade-checkbox-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    
     .localidade-checkbox-item:hover {
       background: var(--gray-100);
     }
@@ -1038,6 +1047,27 @@
     #localidadesSelecionadas::-webkit-scrollbar-thumb {
       background: var(--gray-400);
       border-radius: 2px;
+    }
+    
+    .localidade-tag {
+      background: var(--primary);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .localidade-tag button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
     }
   </style>
 </head>
@@ -1077,6 +1107,7 @@
   </div>
 </div>
 
+<!-- SEÇÃO DE FILTROS - SUBSTITUÍDA PELA VERSÃO DO INDEX II -->
 <div class="filtros-container">
   <div class="filtros-header">
     <div class="filtros-title">
@@ -1093,18 +1124,10 @@
   </div>
   
   <div class="filtros-grid">
-
-
     <div class="filtro-group">
       <label class="filtro-label">CPA</label>
       <select class="filtro-select" id="filtroCPA">
         <option value="todos">Todas as CPAs</option>
-        <option value="ALPHA">ÁREA ALPHA</option>
-        <option value="BRAVO">ÁREA BRAVO</option>
-        <option value="CHARLIE">ÁREA CHARLIE</option>
-        <option value="DELTA">ÁREA DELTA</option>
-        <option value="ECHO">ÁREA ECHO</option>
-        <option value="FOX">ÁREA FOX</option>
       </select>
     </div>
     
@@ -1119,32 +1142,7 @@
       <label class="filtro-label">Batalhão (BPM)</label>
       <select class="filtro-select" id="filtroBPM">
         <option value="todos">Todos os Batalhões</option>
-        <option value="16º">16º BPM</option>
-        <option value="18º">18º BPM</option>
-        <option value="15º">15º BPM</option>
-        <option value="20º">20º BPM</option>
-        <option value="24º">24º BPM</option>
-        <option value="7º">7º BPM - São Gonçalo</option>
-        <option value="21º">21º BPM - SJM</option>
-        <option value="41º">41º BPM</option>
       </select>
-    </div>
-    
-    <div class="filtro-group" style="grid-column: span 2;">
-      <label class="filtro-label">Localidade(s)</label>
-      <div style="position: relative;">
-        <input type="text" class="filtro-input" id="filtroLocalidadeInput" placeholder="Digite para buscar..." onkeyup="filtrarLocalidades()">
-        <div id="localidadesContainer" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid var(--gray-300); border-radius: 8px; max-height: 300px; overflow-y: auto; width: 100%; box-shadow: var(--shadow-lg); margin-top: 5px;">
-          <div style="padding: 10px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 12px; font-weight: 600;">Selecionar localidades</span>
-            <button onclick="selecionarTodasLocalidades()" style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Todas</button>
-          </div>
-          <div id="localidadesLista" style="max-height: 250px; overflow-y: auto;">
-            <!-- As localidades serão carregadas dinamicamente -->
-          </div>
-        </div>
-      </div>
-      <div id="localidadesSelecionadas" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; max-height: 80px; overflow-y: auto;"></div>
     </div>
     
     <div class="filtro-group">
@@ -1152,6 +1150,26 @@
       <select class="filtro-select" id="filtroMunicipio">
         <option value="todos">Todos os Municípios</option>
       </select>
+    </div>
+    
+    <div class="filtro-group" style="grid-column: span 2;">
+      <label class="filtro-label">Localidade(s)</label>
+      <div style="position: relative;">
+        <input type="text" class="filtro-input" id="filtroLocalidadeInput" placeholder="Digite para buscar..." onkeyup="filtrarLocalidades()" onfocus="mostrarLocalidades()">
+        <div id="localidadesContainer" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid var(--gray-300); border-radius: 8px; max-height: 300px; overflow-y: auto; width: 100%; box-shadow: var(--shadow-lg); margin-top: 5px;">
+          <div style="padding: 10px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; font-weight: 600;">Selecionar localidades</span>
+            <div style="display: flex; gap: 5px;">
+              <button onclick="selecionarTodasLocalidades()" style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Todas</button>
+              <button onclick="limparTodasLocalidades()" style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Limpar</button>
+            </div>
+          </div>
+          <div id="localidadesLista" style="max-height: 250px; overflow-y: auto;">
+            <!-- As localidades serão carregadas dinamicamente -->
+          </div>
+        </div>
+      </div>
+      <div id="localidadesSelecionadas" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; max-height: 80px; overflow-y: auto;"></div>
     </div>
   </div>
 </div>
@@ -1340,6 +1358,7 @@
 
 </div>
 
+<!-- MODAIS ORIGINAIS DO INDEX I MANTIDOS -->
 <div id="modalCPA" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -1370,7 +1389,7 @@
   </div>
 </div>
 
-<!-- NOVO MODAL PARA VISUALIZAÇÃO DE PDF -->
+<!-- MODAL PDF ORIGINAL DO INDEX I MANTIDO -->
 <div id="modalPDF" class="modal">
   <div class="modal-content" style="max-width: 1000px;">
     <div class="modal-header">
@@ -1404,6 +1423,10 @@
 </div>
 
 <script>
+// ============================================================================
+// CONFIGURAÇÕES GLOBAIS DO INDEX I - MANTIDAS INTACTAS
+// ============================================================================
+
 // Configuração global dos gráficos
 Chart.defaults.font.family = 'Inter';
 Chart.defaults.font.size = 13;
@@ -1442,17 +1465,22 @@ const cpaBPMs = {
   'GOLF': ['21º']
 };
 
-// Configuração de filtros
+// ============================================================================
+// VARIÁVEIS GLOBAIS DO INDEX I - MANTIDAS
+// ============================================================================
+
+// Configuração de filtros - MODIFICADA PARA USAR O SISTEMA DO INDEX II
 let filtrosAtivos = {
   cpa: 'todos',
   comandante: 'todos',
   bpm: 'todos',
   municipio: 'todos',
-  localidades: [], // NOVO: array de localidades selecionadas
-
+  localidades: [], // MODIFICADO: agora é array vazio, será preenchido pelo sistema do index II
+  dataInicio: null,
+  dataFim: null
 };
 
-// Variáveis globais
+// Variáveis globais do index I
 let dadosGlobais = null;
 let dadosOriginais = null;
 let dadosFiltrados = null;
@@ -1481,37 +1509,148 @@ const municipiosMap = {
   'SJM': 'São João de Meriti'
 };
 
-// Variável para armazenar todas as localidades únicas
-let todasLocalidades = [];
+// ============================================================================
+// SISTEMA DE FILTROS DO INDEX II - INTEGRADO
+// ============================================================================
 
-// Função para destruir gráficos existentes
-function destruirGraficos() {
-  for (const [id, grafico] of Object.entries(graficosInstancias)) {
-    if (grafico) {
-      grafico.destroy();
-      graficosInstancias[id] = null;
-    }
-  }
+// VARIÁVEIS ESPECÍFICAS DO SISTEMA DE FILTROS DO INDEX II
+let localidadesSelecionadasSet = new Set(); // Sistema de seleção múltipla do index II
+
+// NORMALIZAR STRING PARA COMPARAÇÃO (remove espaços, acentos, case-insensitive) - DO INDEX II
+function normalizar(str) {
+  if (!str) return '';
+  return str.toString()
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
 }
 
-// Atualizar status dos filtros
+// FUNÇÕES DE FILTROS DO INDEX II - INTEGRADAS
+
+// CARREGAR LOCALIDADES NO DROPDOWN - DO INDEX II
+function carregarLocalidades() {
+  if (!dadosOriginais || dadosOriginais.length === 0) return;
+  
+  const localidades = [...new Set(dadosOriginais.map(d => d['LOCALIDADE']).filter(v => v))].sort();
+  const localidadesLista = document.getElementById('localidadesLista');
+  localidadesLista.innerHTML = '';
+  
+  localidades.forEach(loc => {
+    const item = document.createElement('div');
+    item.className = 'localidade-checkbox-item';
+    item.innerHTML = `
+      <input type="checkbox" id="loc_${normalizar(loc)}" value="${loc}" onchange="toggleLocalidade('${loc}')">
+      <label for="loc_${normalizar(loc)}" style="cursor: pointer; flex: 1;">${loc}</label>
+    `;
+    localidadesLista.appendChild(item);
+  });
+}
+
+// FILTRAR LOCALIDADES NA BUSCA - DO INDEX II
+function filtrarLocalidades() {
+  const termo = normalizar(document.getElementById('filtroLocalidadeInput').value);
+  const items = document.querySelectorAll('.localidade-checkbox-item');
+  
+  items.forEach(item => {
+    const label = item.querySelector('label').textContent;
+    if (normalizar(label).includes(termo)) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// MOSTRAR DROPDOWN DE LOCALIDADES - DO INDEX II
+function mostrarLocalidades() {
+  document.getElementById('localidadesContainer').style.display = 'block';
+}
+
+// ESCONDER DROPDOWN AO CLICAR FORA - DO INDEX II
+document.addEventListener('click', function(e) {
+  const container = document.getElementById('localidadesContainer');
+  const input = document.getElementById('filtroLocalidadeInput');
+  if (!container.contains(e.target) && e.target !== input) {
+    container.style.display = 'none';
+  }
+});
+
+// TOGGLE LOCALIDADE SELECIONADA - DO INDEX II
+function toggleLocalidade(loc) {
+  if (localidadesSelecionadasSet.has(loc)) {
+    localidadesSelecionadasSet.delete(loc);
+  } else {
+    localidadesSelecionadasSet.add(loc);
+  }
+  atualizarTagsLocalidades();
+}
+
+// ATUALIZAR TAGS DE LOCALIDADES SELECIONADAS - DO INDEX II
+function atualizarTagsLocalidades() {
+  const container = document.getElementById('localidadesSelecionadas');
+  container.innerHTML = '';
+  
+  localidadesSelecionadasSet.forEach(loc => {
+    const tag = document.createElement('div');
+    tag.className = 'localidade-tag';
+    tag.innerHTML = `
+      ${loc}
+      <button onclick="removerLocalidade('${loc}')">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    container.appendChild(tag);
+  });
+  
+  // Atualizar também o filtrosAtivos para compatibilidade com código do index I
+  filtrosAtivos.localidades = Array.from(localidadesSelecionadasSet);
+}
+
+// REMOVER LOCALIDADE SELECIONADA - DO INDEX II
+function removerLocalidade(loc) {
+  localidadesSelecionadasSet.delete(loc);
+  const checkbox = document.getElementById(`loc_${normalizar(loc)}`);
+  if (checkbox) checkbox.checked = false;
+  atualizarTagsLocalidades();
+}
+
+// SELECIONAR TODAS AS LOCALIDADES - DO INDEX II
+function selecionarTodasLocalidades() {
+  const checkboxes = document.querySelectorAll('.localidade-checkbox-item input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    if (cb.parentElement.style.display !== 'none') {
+      cb.checked = true;
+      localidadesSelecionadasSet.add(cb.value);
+    }
+  });
+  atualizarTagsLocalidades();
+}
+
+// LIMPAR TODAS AS LOCALIDADES - DO INDEX II
+function limparTodasLocalidades() {
+  localidadesSelecionadasSet.clear();
+  const checkboxes = document.querySelectorAll('.localidade-checkbox-item input[type="checkbox"]');
+  checkboxes.forEach(cb => cb.checked = false);
+  atualizarTagsLocalidades();
+}
+
+// ATUALIZAR STATUS DOS FILTROS - ADAPTADA PARA INTEGRAR INDEX I E II
 function atualizarStatusFiltros() {
   const statusElement = document.getElementById('statusFiltros');
   const filtrosAplicados = [];
-  
-
   
   if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
   if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
   if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
   if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
   
-  // Localidades (nova funcionalidade)
-  if (filtrosAtivos.localidades.length > 0) {
-    if (filtrosAtivos.localidades.length === 1) {
-      filtrosAplicados.push(`Localidade: ${filtrosAtivos.localidades[0]}`);
+  // Localidades do sistema do index II
+  if (localidadesSelecionadasSet.size > 0) {
+    if (localidadesSelecionadasSet.size === 1) {
+      filtrosAplicados.push(`Localidade: ${Array.from(localidadesSelecionadasSet)[0]}`);
     } else {
-      filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.length} selecionadas`);
+      filtrosAplicados.push(`Localidades: ${localidadesSelecionadasSet.size} selecionadas`);
     }
   }
   
@@ -1524,219 +1663,52 @@ function atualizarStatusFiltros() {
   }
 }
 
-// Inicializar filtros com dados reais
-function inicializarFiltros(dados) {
-  const filtroComandante = document.getElementById('filtroComandante');
-  const filtroMunicipio = document.getElementById('filtroMunicipio');
-  
-  // Limpar opções existentes
-  filtroComandante.innerHTML = '<option value="todos">Todos os Comandantes</option>';
-  filtroMunicipio.innerHTML = '<option value="todos">Todos os Municípios</option>';
-  
-  // Comandantes únicos
-  const comandantes = [...new Set(Object.values(cpaComandantes))];
-  comandantes.forEach(cmd => {
-    const option = document.createElement('option');
-    option.value = cmd;
-    option.textContent = cmd;
-    filtroComandante.appendChild(option);
-  });
-  
-  // Municípios únicos da planilha
-  const municipiosPadrao = ['RIO', 'D. CAXIAS', 'N. IGUAÇU', 'SG', 'JAPERI', 'MESQUITA', 'SÃO JOÃO', 'SJM'];
-  municipiosPadrao.forEach(municipio => {
-    const option = document.createElement('option');
-    option.value = municipio;
-    option.textContent = municipiosMap[municipio] || municipio;
-    filtroMunicipio.appendChild(option);
-  });
+// APLICAR FILTROS - FUNÇÃO UNIFICADA QUE USA O SISTEMA DO INDEX II
+function aplicarFiltros() {
+  // Atualizar filtrosAtivos com valores dos selects
+  filtrosAtivos = {
+    cpa: document.getElementById('filtroCPA').value,
+    comandante: document.getElementById('filtroComandante').value,
+    bpm: document.getElementById('filtroBPM').value,
+    municipio: document.getElementById('filtroMunicipio').value,
+    localidades: Array.from(localidadesSelecionadasSet), // Usar o sistema do index II
+    dataInicio: filtrosAtivos.dataInicio, // Manter datas se existirem
+    dataFim: filtrosAtivos.dataFim
+  };
   
   atualizarStatusFiltros();
-}
-
-// Função para inicializar o filtro de localidades
-function inicializarFiltroLocalidades(dados) {
-  if (!dados || !dados.registros) return;
   
-  // Extrair todas as localidades únicas dos dados
-  const localidadesSet = new Set();
-  dados.registros.forEach(registro => {
-    if (registro.localidade && registro.localidade.trim() !== '') {
-      localidadesSet.add(registro.localidade.trim());
-    }
-    if (registro.bairro && registro.bairro.trim() !== '') {
-      localidadesSet.add(registro.bairro.trim());
-    }
-  });
-  
-  todasLocalidades = Array.from(localidadesSet).sort();
-  
-  // Atualizar a lista de localidades no filtro
-  const localidadesLista = document.getElementById('localidadesLista');
-  localidadesLista.innerHTML = '';
-  
-  todasLocalidades.forEach(localidade => {
-    const div = document.createElement('div');
-    div.className = 'localidade-checkbox-item';
-    div.style.padding = '8px 12px';
-    div.style.borderBottom = '1px solid var(--gray-200)';
-    div.style.display = 'flex';
-    div.style.alignItems = 'center';
-    div.style.gap = '10px';
-    div.style.cursor = 'pointer';
-    div.style.transition = 'background 0.2s';
-    
-    div.innerHTML = `
-      <input type="checkbox" id="localidade_${localidade.replace(/[^a-zA-Z0-9]/g, '_')}" 
-             value="${localidade}" onchange="atualizarLocalidadesSelecionadas()" style="cursor: pointer;">
-      <label for="localidade_${localidade.replace(/[^a-zA-Z0-9]/g, '_')}" 
-             style="cursor: pointer; font-size: 13px; flex: 1;">${localidade}</label>
-    `;
-    
-    div.onmouseover = function() { this.style.background = 'var(--gray-100)'; };
-    div.onmouseout = function() { this.style.background = ''; };
-    
-    localidadesLista.appendChild(div);
-  });
-}
-
-// Função para filtrar localidades na lista
-function filtrarLocalidades() {
-  const input = document.getElementById('filtroLocalidadeInput');
-  const filtro = input.value.toLowerCase();
-  const container = document.getElementById('localidadesContainer');
-  const itens = document.querySelectorAll('.localidade-checkbox-item');
-  
-  // Mostrar container se houver texto
-  if (filtro.length > 0) {
-    container.style.display = 'block';
+  if (dadosGlobais) {
+    // Usar a função de filtragem original do index I, mas com os filtros corrigidos
+    atualizarDashboardComFiltros();
+    mostrarMensagem('Filtros aplicados com sucesso!', 'success');
   } else {
-    container.style.display = 'none';
-  }
-  
-  // Filtrar itens
-  itens.forEach(item => {
-    const label = item.querySelector('label');
-    const texto = label.textContent.toLowerCase();
-    item.style.display = texto.includes(filtro) ? 'flex' : 'none';
-  });
-}
-
-// Função para atualizar as localidades selecionadas
-function atualizarLocalidadesSelecionadas() {
-  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]:checked');
-  const container = document.getElementById('localidadesSelecionadas');
-  container.innerHTML = '';
-  
-  const localidadesSelecionadas = [];
-  
-  checkboxes.forEach(checkbox => {
-    localidadesSelecionadas.push(checkbox.value);
-    
-    const tag = document.createElement('div');
-    tag.style.background = 'var(--primary-light)';
-    tag.style.color = 'white';
-    tag.style.padding = '4px 8px';
-    tag.style.borderRadius = '12px';
-    tag.style.fontSize = '12px';
-    tag.style.display = 'flex';
-    tag.style.alignItems = 'center';
-    tag.style.gap = '5px';
-    
-    tag.innerHTML = `
-      ${checkbox.value}
-      <button onclick="removerLocalidade('${checkbox.value.replace(/'/g, "\\'")}')" 
-              style="background: none; border: none; color: white; cursor: pointer; font-size: 14px; padding: 0; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;">
-        ×
-      </button>
-    `;
-    
-    container.appendChild(tag);
-  });
-  
-  // Atualizar filtros ativos
-  filtrosAtivos.localidades = localidadesSelecionadas;
-  
-  // Esconder container de lista se não estiver digitando
-  const input = document.getElementById('filtroLocalidadeInput');
-  if (input.value === '') {
-    document.getElementById('localidadesContainer').style.display = 'none';
+    mostrarMensagem('Carregue os dados primeiro!', 'warning');
   }
 }
 
-// Função para remover uma localidade específica
-function removerLocalidade(localidade) {
-  const checkbox = document.querySelector(`#localidadesLista input[value="${localidade.replace(/"/g, '\\"')}"]`);
-  if (checkbox) {
-    checkbox.checked = false;
-    atualizarLocalidadesSelecionadas();
-  }
-}
-
-// Função para selecionar todas as localidades
-function selecionarTodasLocalidades() {
-  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]');
-  const todasSelecionadas = Array.from(checkboxes).every(cb => cb.checked);
-  
-  checkboxes.forEach(checkbox => {
-    checkbox.checked = !todasSelecionadas;
-  });
-  
-  atualizarLocalidadesSelecionadas();
-}
-
-// Fechar lista de localidades ao clicar fora
-document.addEventListener('click', function(event) {
-  const container = document.getElementById('localidadesContainer');
-  const input = document.getElementById('filtroLocalidadeInput');
-  
-  if (container && !container.contains(event.target) && event.target !== input) {
-    container.style.display = 'none';
-  }
-});
-
-// Função para alternar tabs
-function switchTab(index) {
-  document.querySelectorAll('.tab').forEach((tab, i) => {
-    tab.classList.toggle('active', i === index);
-  });
-  document.querySelectorAll('.tab-content').forEach((content, i) => {
-    content.classList.toggle('active', i === index);
-  });
-}
-
-// Função para abrir modal
-function abrirModal(modalId) {
-  document.getElementById(modalId).style.display = 'block';
-}
-
-// Função para fechar modal
-function fecharModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-}
-
-// Função para limpar filtros
+// LIMPAR FILTROS - FUNÇÃO UNIFICADA
 function limparFiltros() {
+  // Limpar selects
   document.getElementById('filtroCPA').value = 'todos';
   document.getElementById('filtroComandante').value = 'todos';
   document.getElementById('filtroBPM').value = 'todos';
   document.getElementById('filtroMunicipio').value = 'todos';
   document.getElementById('filtroLocalidadeInput').value = '';
 
-  
-  // Limpar checkboxes de localidades
-  const checkboxes = document.querySelectorAll('#localidadesLista input[type="checkbox"]');
-  checkboxes.forEach(checkbox => checkbox.checked = false);
+  // Limpar sistema de localidades do index II
+  limparTodasLocalidades();
   
   document.getElementById('localidadesSelecionadas').innerHTML = '';
   document.getElementById('localidadesContainer').style.display = 'none';
   
+  // Resetar filtros ativos
   filtrosAtivos = {
     cpa: 'todos',
     comandante: 'todos',
     bpm: 'todos',
     municipio: 'todos',
-    localidades: [], // Limpar localidades
+    localidades: [],
     dataInicio: null,
     dataFim: null
   };
@@ -1755,7 +1727,79 @@ function limparFiltros() {
   }
 }
 
-// Função para mostrar mensagens
+// ============================================================================
+// FUNÇÕES ORIGINAIS DO INDEX I - MANTIDAS INTACTAS (com pequenas adaptações)
+// ============================================================================
+
+// PREENCHER FILTROS COM DADOS ÚNICOS - MODIFICADA PARA USAR O SISTEMA DO INDEX II
+function preencherFiltros(dados) {
+  // CPA - usando sistema do index II (dinâmico)
+  const cpas = [...new Set(dados.map(d => d['CPA']).filter(v => v))].sort();
+  const filtroCPA = document.getElementById('filtroCPA');
+  filtroCPA.innerHTML = '<option value="todos">Todas as CPAs</option>';
+  cpas.forEach(cpa => {
+    filtroCPA.innerHTML += `<option value="${cpa}">${cpa}ª CPA</option>`;
+  });
+
+  // Comandante - usando sistema do index II (dinâmico)
+  const comandantes = [...new Set(dados.map(d => d['CMTE']).filter(v => v))].sort();
+  const filtroComandante = document.getElementById('filtroComandante');
+  filtroComandante.innerHTML = '<option value="todos">Todos os Comandantes</option>';
+  comandantes.forEach(cmte => {
+    filtroComandante.innerHTML += `<option value="${cmte}">${cmte}</option>`;
+  });
+
+  // BPM - usando sistema do index II (dinâmico)
+  const bpms = [...new Set(dados.map(d => d['BPM']).filter(v => v))].sort();
+  const filtroBPM = document.getElementById('filtroBPM');
+  filtroBPM.innerHTML = '<option value="todos">Todos os Batalhões</option>';
+  bpms.forEach(bpm => {
+    filtroBPM.innerHTML += `<option value="${bpm}">${bpm} BPM</option>`;
+  });
+
+  // Município - usando sistema do index II (dinâmico)
+  const municipios = [...new Set(dados.map(d => d['MUNICÍPIO']).filter(v => v))].sort();
+  const filtroMunicipio = document.getElementById('filtroMunicipio');
+  filtroMunicipio.innerHTML = '<option value="todos">Todos os Municípios</option>';
+  municipios.forEach(mun => {
+    filtroMunicipio.innerHTML += `<option value="${mun}">${mun}</option>`;
+  });
+
+  // Localidades (checkboxes) - usando sistema do index II
+  carregarLocalidades();
+}
+
+// FUNÇÃO PARA DESTRUIR GRÁFICOS EXISTENTES
+function destruirGraficos() {
+  for (const [id, grafico] of Object.entries(graficosInstancias)) {
+    if (grafico) {
+      grafico.destroy();
+      graficosInstancias[id] = null;
+    }
+  }
+}
+
+// FUNÇÃO PARA ALTERNAR TABS
+function switchTab(index) {
+  document.querySelectorAll('.tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.tab-content').forEach((content, i) => {
+    content.classList.toggle('active', i === index);
+  });
+}
+
+// FUNÇÃO PARA ABRIR MODAL
+function abrirModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// FUNÇÃO PARA FECHAR MODAL
+function fecharModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// FUNÇÃO PARA MOSTRAR MENSAGENS
 function mostrarMensagem(mensagem, tipo = 'info') {
   const cores = {
     success: 'var(--success)',
@@ -1793,7 +1837,7 @@ function mostrarMensagem(mensagem, tipo = 'info') {
   }, 5000);
 }
 
-// Adicionar animação CSS para a mensagem
+// ADICIONAR ANIMAÇÃO CSS PARA A MENSAGEM
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideInRight {
@@ -1803,49 +1847,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Função para aplicar filtros
-function aplicarFiltros() {
-	  filtrosAtivos = {
-	    cpa: document.getElementById('filtroCPA').value,
-	    comandante: document.getElementById('filtroComandante').value,
-	    bpm: document.getElementById('filtroBPM').value,
-	    municipio: document.getElementById('filtroMunicipio').value,
-	    localidades: filtrosAtivos.localidades // Manter as localidades já selecionadas
-	  };
-  
-  atualizarStatusFiltros();
-  
-  if (dadosGlobais) {
-    atualizarDashboardComFiltros();
-    mostrarMensagem('Filtros aplicados com sucesso!', 'success');
-  } else {
-    mostrarMensagem('Carregue os dados primeiro!', 'warning');
-  }
-}
-
-// Função principal para atualizar dashboard com filtros
-function atualizarDashboardComFiltros() {
-  if (!dadosGlobais) return;
-  
-  // Filtrar dados com base nos filtros ativos
-  dadosFiltrados = filtrarDados(dadosGlobais);
-  
-  // Atualizar todos os componentes do dashboard
-  atualizarHeader(dadosFiltrados);
-  atualizarKPIs(dadosFiltrados);
-  atualizarMetricasAvancadas(dadosFiltrados);
-  atualizarAreasGrid(dadosFiltrados);
-  atualizarCPAsGrid(dadosFiltrados);
-  atualizarComandantesGrid(dadosFiltrados);
-  
-  destruirGraficos();
-  criarGraficos(dadosFiltrados);
-  
-  atualizarInsights(dadosFiltrados);
-  criarTabelaComparativa(dadosFiltrados);
-}
-
-// Função para converter string de data da planilha para objeto Date
+// FUNÇÃO PARA CONVERTER STRING DE DATA DA PLANILHA PARA OBJETO DATE
 function parseDataPlanilha(dataStr) {
   // Formato: "2025-11-24 00:00:00"
   if (!dataStr) return null;
@@ -1877,55 +1879,84 @@ function parseDataPlanilha(dataStr) {
   return null;
 }
 
-// Função para filtrar dados com supremacia do filtro de data
-function filtrarDados(dados) {
+// FUNÇÃO PRINCIPAL PARA ATUALIZAR DASHBOARD COM FILTROS - MODIFICADA PARA USAR SISTEMA DO INDEX II
+function atualizarDashboardComFiltros() {
+  if (!dadosGlobais) return;
+  
+  // Filtrar dados com base nos filtros ativos
+  dadosFiltrados = filtrarDadosComSistemaIndexII(dadosGlobais);
+  
+  // Atualizar todos os componentes do dashboard
+  atualizarHeader(dadosFiltrados);
+  atualizarKPIs(dadosFiltrados);
+  atualizarMetricasAvancadas(dadosFiltrados);
+  atualizarAreasGrid(dadosFiltrados);
+  atualizarCPAsGrid(dadosFiltrados);
+  atualizarComandantesGrid(dadosFiltrados);
+  
+  destruirGraficos();
+  criarGraficos(dadosFiltrados);
+  
+  atualizarInsights(dadosFiltrados);
+  criarTabelaComparativa(dadosFiltrados);
+}
+
+// NOVA FUNÇÃO DE FILTRAGEM QUE USA O SISTEMA DO INDEX II
+function filtrarDadosComSistemaIndexII(dados) {
   if (!dados || !dados.registros || !Array.isArray(dados.registros)) {
     console.error('Dados inválidos para filtragem');
     return null;
   }
   
-	  // Aplicar filtros
-	  let registrosFiltrados = [...dados.registros];
+  // Aplicar filtros usando o sistema do index II
+  let registrosFiltrados = [...dados.registros];
+  
   registrosFiltrados = registrosFiltrados.filter(registro => {
     let incluir = true;
     
-    // Filtro de CPA
-    if (filtrosAtivos.cpa !== 'todos' && registro.area !== filtrosAtivos.cpa) {
-      incluir = false;
+    // Filtro de CPA - usando normalização do index II
+    if (filtrosAtivos.cpa !== 'todos') {
+      if (normalizar(registro.area) !== normalizar(filtrosAtivos.cpa)) {
+        incluir = false;
+      }
     }
     
-    // Filtro de Comandante
-    if (filtrosAtivos.comandante !== 'todos' && registro.cmte !== filtrosAtivos.comandante) {
-      incluir = false;
+    // Filtro de Comandante - usando normalização do index II
+    if (filtrosAtivos.comandante !== 'todos') {
+      if (normalizar(registro.cmte) !== normalizar(filtrosAtivos.comandante)) {
+        incluir = false;
+      }
     }
     
-    // Filtro de BPM
+    // Filtro de BPM - usando normalização do index II
     if (filtrosAtivos.bpm !== 'todos') {
-      const registroBpm = registro.bpm ? registro.bpm.replace('º', '') : '';
-      const filtroBpm = filtrosAtivos.bpm.replace('º', '');
+      const registroBpm = registro.bpm ? normalizar(registro.bpm) : '';
+      const filtroBpm = normalizar(filtrosAtivos.bpm);
       if (registroBpm !== filtroBpm) {
         incluir = false;
       }
     }
     
-    // Filtro de Município
-    if (filtrosAtivos.municipio !== 'todos' && registro.municipio !== filtrosAtivos.municipio) {
-      incluir = false;
+    // Filtro de Município - usando normalização do index II
+    if (filtrosAtivos.municipio !== 'todos') {
+      if (normalizar(registro.municipio) !== normalizar(filtrosAtivos.municipio)) {
+        incluir = false;
+      }
     }
     
-    // NOVO: Filtro de Localidades (múltipla seleção)
-    if (filtrosAtivos.localidades.length > 0) {
-      const localidadeRegistro = (registro.localidade || '').trim();
-      const bairroRegistro = (registro.bairro || '').trim();
+    // Filtro de Localidades - usando sistema do index II (seleção múltipla)
+    if (localidadesSelecionadasSet.size > 0) {
+      const registroLocalidade = normalizar(registro.localidade);
+      let encontrou = false;
       
-      const correspondeLocalidade = filtrosAtivos.localidades.some(loc => 
-        localidadeRegistro.includes(loc) || 
-        bairroRegistro.includes(loc) ||
-        loc.includes(localidadeRegistro) ||
-        loc.includes(bairroRegistro)
-      );
+      for (let loc of localidadesSelecionadasSet) {
+        if (registroLocalidade === normalizar(loc)) {
+          encontrou = true;
+          break;
+        }
+      }
       
-      if (!correspondeLocalidade) {
+      if (!encontrou) {
         incluir = false;
       }
     }
@@ -1933,6 +1964,7 @@ function filtrarDados(dados) {
     return incluir;
   });
   
+  // Processar dados filtrados (mantendo estrutura do index I)
   const dadosFiltrados = {
     totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
     areas: {},
@@ -1940,10 +1972,10 @@ function filtrarDados(dados) {
     diasOperacao: [],
     comandantes: {},
     municipios: {},
-    registros: registrosFiltrados  // Usar os registros filtrados
+    registros: registrosFiltrados
   };
   
-  // Processar dados filtrados
+  // Processar dados filtrados (código original do index I)
   const areasMap = {};
   const comandantesMap = {};
   const municipiosData = {};
@@ -2063,7 +2095,7 @@ function filtrarDados(dados) {
   return dadosFiltrados;
 }
 
-// Função para atualizar grid de CPAs
+// FUNÇÃO PARA ATUALIZAR GRID DE CPAS - ORIGINAL DO INDEX I
 function atualizarCPAsGrid(dados) {
   const grid = document.getElementById('cpaGrid');
   grid.innerHTML = '';
@@ -2123,7 +2155,7 @@ function atualizarCPAsGrid(dados) {
   }
 }
 
-// Função para abrir modal de CPA
+// FUNÇÃO PARA ABRIR MODAL DE CPA - ORIGINAL DO INDEX I
 function abrirModalCPA(area) {
   const comandante = cpaComandantes[area] || 'Não especificado';
   const bpmList = cpaBPMs[area] || [];
@@ -2203,7 +2235,7 @@ function abrirModalCPA(area) {
   abrirModal('modalCPA');
 }
 
-// Função para atualizar grid de comandantes
+// FUNÇÃO PARA ATUALIZAR GRID DE COMANDANTES - ORIGINAL DO INDEX I
 function atualizarComandantesGrid(dados) {
   const grid = document.getElementById('comandantesGrid');
   grid.innerHTML = '';
@@ -2260,7 +2292,7 @@ function atualizarComandantesGrid(dados) {
   }
 }
 
-// Função para abrir modal de comandante
+// FUNÇÃO PARA ABRIR MODAL DE COMANDANTE - ORIGINAL DO INDEX I
 function abrirModalComandante(comandante) {
   const dadosCmd = dadosFiltrados ? dadosFiltrados.comandantes[comandante] : { barricadas: 0, vias: 0, peso: 0 };
   const areasArray = Array.from(dadosCmd.areas || []);
@@ -2346,7 +2378,7 @@ function abrirModalComandante(comandante) {
   abrirModal('modalComandante');
 }
 
-// Função principal de processamento da planilha
+// FUNÇÃO PRINCIPAL DE PROCESSAMENTO DA PLANILHA - ORIGINAL DO INDEX I (com adaptações)
 function processarPlanilha() {
   const file = document.getElementById("fileInput").files[0];
   if (!file) {
@@ -2381,14 +2413,28 @@ function processarPlanilha() {
         return;
       }
       
-      dadosOriginais = JSON.parse(JSON.stringify(dadosGlobais));
+      // Criar uma versão simples para o sistema de filtros do index II
+      dadosOriginais = [];
+      dadosGlobais.registros.forEach(registro => {
+        dadosOriginais.push({
+          'DATA': registro.data.toISOString().split('T')[0],
+          'ÁREA': registro.area,
+          'MUNICÍPIO': registro.municipio,
+          'BAIRRO': registro.bairro,
+          'LOCALIDADE': registro.localidade,
+          'REMOÇÕES': registro.remocoes,
+          'VIAS': registro.vias,
+          'PESO/TON': registro.peso,
+          'CPA': registro.area, // Usando área como CPA para compatibilidade
+          'CMTE': registro.cmte,
+          'BPM': registro.bpm
+        });
+      });
+      
       dadosFiltrados = JSON.parse(JSON.stringify(dadosGlobais));
       
-      // Inicializar filtros com dados reais
-      inicializarFiltros(dadosGlobais);
-      
-      // Inicializar filtro de localidades
-      inicializarFiltroLocalidades(dadosGlobais);
+      // Inicializar filtros com dados reais (usando sistema do index II)
+      preencherFiltros(dadosOriginais);
       
       atualizarDashboardComFiltros();
       
@@ -2409,7 +2455,7 @@ function processarPlanilha() {
   reader.readAsArrayBuffer(file);
 }
 
-// Função para processar os dados da planilha real
+// FUNÇÃO PARA PROCESSAR OS DADOS DA PLANILHA REAL - ORIGINAL DO INDEX I
 function processarDadosPlanilha(rows) {
   const dados = {
     totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
@@ -2606,7 +2652,7 @@ function processarDadosPlanilha(rows) {
   return dados;
 }
 
-// Atualizar header
+// FUNÇÃO PARA ATUALIZAR HEADER - ORIGINAL DO INDEX I
 function atualizarHeader(dados) {
   if (!dados) return;
   
@@ -2615,7 +2661,7 @@ function atualizarHeader(dados) {
   document.getElementById('headerPeso').textContent = Math.round(dados.totais.peso).toLocaleString('pt-BR');
 }
 
-// Atualizar KPIs principais
+// FUNÇÃO PARA ATUALIZAR KPIS PRINCIPAIS - ORIGINAL DO INDEX I
 function atualizarKPIs(dados) {
   if (!dados) return;
   
@@ -2640,7 +2686,7 @@ function atualizarKPIs(dados) {
     `<i class="fas fa-chart-line"></i><span>Média operacional atual: ${mediaDiaria} por dia</span>`;
 }
 
-// Atualizar métricas avançadas
+// FUNÇÃO PARA ATUALIZAR MÉTRICAS AVANÇADAS - ORIGINAL DO INDEX I
 function atualizarMetricasAvancadas(dados) {
   if (!dados) return;
   
@@ -2663,7 +2709,7 @@ function atualizarMetricasAvancadas(dados) {
     `<i class="fas fa-crown"></i><span>${areaMaiorVol ? Math.round(areaMaiorVol[1].peso) + ' toneladas (' + areaMaiorVol[1].percentualPeso.toFixed(1) + '%)' : '-'}</span>`;
 }
 
-// Atualizar grid de áreas
+// FUNÇÃO PARA ATUALIZAR GRID DE ÁREAS - ORIGINAL DO INDEX I
 function atualizarAreasGrid(dados) {
   const grid = document.getElementById('areasGrid');
   grid.innerHTML = '';
@@ -2726,7 +2772,7 @@ function atualizarAreasGrid(dados) {
   });
 }
 
-// Criar todos os gráficos
+// FUNÇÃO PARA CRIAR TODOS OS GRÁFICOS - ORIGINAL DO INDEX I
 function criarGraficos(dados) {
   destruirGraficos();
   
@@ -3078,7 +3124,7 @@ function criarGraficos(dados) {
   }
 }
 
-// Atualizar insights estratégicos
+// FUNÇÃO PARA ATUALIZAR INSIGHTS ESTRATÉGICOS - ORIGINAL DO INDEX I
 function atualizarInsights(dados) {
   const grid = document.getElementById('insightsGrid');
   
@@ -3145,7 +3191,7 @@ function atualizarInsights(dados) {
   `).join('');
 }
 
-// Criar tabela comparativa
+// FUNÇÃO PARA CRIAR TABELA COMPARATIVA - ORIGINAL DO INDEX I
 function criarTabelaComparativa(dados) {
   const tabela = document.getElementById('tabelaComparativa');
   
@@ -3210,7 +3256,7 @@ function criarTabelaComparativa(dados) {
   tabela.innerHTML = html;
 }
 
-// NOVA FUNÇÃO: Visualizar PDF - ALTERADA: Melhor distribuição das informações
+// FUNÇÃO PARA VISUALIZAR PDF - ORIGINAL DO INDEX I (PRESERVADA)
 async function visualizarPDF() {
   if (!dadosFiltrados) {
     mostrarMensagem('Carregue os dados primeiro antes de visualizar!', 'warning');
@@ -3255,7 +3301,7 @@ async function visualizarPDF() {
     if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
     if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
     
-    // NOVO: Adicionar localidades ao PDF
+    // Adicionar localidades
     if (filtrosAtivos.localidades.length > 0) {
       if (filtrosAtivos.localidades.length <= 3) {
         filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.join(', ')}`);
@@ -3704,7 +3750,7 @@ async function visualizarPDF() {
   }
 }
 
-// Função para baixar o PDF já gerado
+// FUNÇÃO PARA BAIXAR O PDF JÁ GERADO - ORIGINAL DO INDEX I
 function baixarPDF() {
   if (!window.pdfParaDownload) {
     mostrarMensagem('Gere o PDF primeiro!', 'warning');
@@ -3718,20 +3764,22 @@ function baixarPDF() {
   mostrarMensagem('PDF baixado com sucesso!', 'success');
 }
 
-// Inicializar quando a página carregar
+// ============================================================================
+// INICIALIZAÇÃO
+// ============================================================================
+
+// INICIALIZAR QUANDO A PÁGINA CARREGAR
 document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar filtros básicos
-  inicializarFiltros();
+  // Inicializar status dos filtros
   atualizarStatusFiltros();
 });
 
-// Fechar modal ao clicar fora
+// FECHAR MODAL AO CLICAR FORA
 window.onclick = function(event) {
   if (event.target.classList.contains('modal')) {
     event.target.style.display = 'none';
   }
 };
-
 </script>
 </body>
 </html>
