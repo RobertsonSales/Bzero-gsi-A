@@ -1443,8 +1443,8 @@ const colors = {
   GOLF: '#00796b'      // Verde-azulado
 };
 
-// Mapeamento de ÁREA para Comandantes (da aba CPA x BTL)
-const cpaComandantes = {
+// Mapeamento de ÁREA para Comandantes (da aba CPA x BTL) - AGORA DINÂMICO
+let cpaComandantes = {
   'ALPHA': 'Cel PM Luciano de Vasconcelos',
   'BRAVO': 'Cel PM Walter Teixeira da Silva Júnior',
   'CHARLIE': 'Cel PM Paulo Roberto das Neves Júnior',
@@ -1716,7 +1716,7 @@ function limparFiltros() {
   atualizarStatusFiltros();
   
   if (dadosOriginais) {
-    dadosFiltrados = JSON.parse(JSON.stringify(dadosOriginais));
+    dadosFiltrados = JSON.parse(JSON.stringify(dadosGlobais));
     atualizarDashboardComFiltros();
     mostrarMensagem('Filtros limpos! Dashboard restaurado aos dados originais.', 'success');
   } else if (dadosGlobais) {
@@ -2378,7 +2378,11 @@ function abrirModalComandante(comandante) {
   abrirModal('modalComandante');
 }
 
-// FUNÇÃO PRINCIPAL DE PROCESSAMENTO DA PLANILHA - ORIGINAL DO INDEX I (com adaptações)
+// ============================================================================
+// NOVO SISTEMA DE PROCESSAMENTO DA PLANILHA DO INDEX-TESTE
+// ============================================================================
+
+// FUNÇÃO PRINCIPAL DE PROCESSAMENTO DA PLANILHA - DO INDEX-TESTE (ADAPTADA)
 function processarPlanilha() {
   const file = document.getElementById("fileInput").files[0];
   if (!file) {
@@ -2389,24 +2393,78 @@ function processarPlanilha() {
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
-      const wb = XLSX.read(e.target.result, {type: "array"});
-      const ws = wb.Sheets["GLOBAL"];
+      const data = e.target.result;
+      const workbook = XLSX.read(data, {type: 'binary'});
       
-      if (!ws) {
-        mostrarMensagem("❌ Aba 'GLOBAL' não encontrada na planilha!", "danger");
+      // Verificar abas obrigatórias
+      if (!workbook.Sheets['GLOBAL'] || !workbook.Sheets['CPA x BTL']) {
+        mostrarMensagem('Planilha inválida: Abas GLOBAL ou CPA x BTL ausentes.', 'danger');
         return;
       }
       
-      // Converter para JSON mantendo os cabeçalhos
-      const rows = XLSX.utils.sheet_to_json(ws, {header: 1, defval: "", raw: false});
+      // Processar GLOBAL - usando a lógica do index-teste
+      let globalSheet = workbook.Sheets['GLOBAL'];
+      let globalData = XLSX.utils.sheet_to_json(globalSheet, {header: 1, defval: ''});
       
-      if (rows.length < 2) {
-        mostrarMensagem("❌ Planilha vazia ou com formato inválido!", "danger");
-        return;
+      // Cabeçalhos esperados
+      const headers = globalData[0].map(h => h.trim().replace(/\xa0/g, ' '));
+      
+      // Remover header
+      globalData = globalData.slice(1);
+      
+      // Limpar e normalizar dados - método do index-teste
+      let registros = globalData.map(row => {
+        let obj = {};
+        headers.forEach((header, idx) => {
+          let value = row[idx];
+          if (typeof value === 'string') {
+            value = value.trim().replace(/\xa0/g, ' ').replace(/ +/g, ' ');
+          } else if (typeof value === 'number' && header === 'DATA') {
+            // Converter data serial Excel para JS Date (método do index-teste)
+            // Correção para o problema de fuso horário (UTC) que causa o erro de um dia a menos
+            // A data do Excel é convertida para 00:00:00 UTC. Se o fuso horário local for negativo (ex: UTC-3),
+            // a data é exibida como o dia anterior. Adicionamos o offset do fuso horário local para compensar.
+            const excelDateMilliseconds = (value - 25569) * 86400 * 1000;
+            const date = new Date(excelDateMilliseconds);
+            const offsetMinutes = date.getTimezoneOffset();
+            value = new Date(date.getTime() + (offsetMinutes * 60 * 1000));
+          } else if (typeof value === 'number' && ['REMOÇÕES', 'VIAS', 'PESO/TON'].includes(header)) {
+            value = value || 0;
+          }
+          obj[header] = value;
+        });
+        return obj;
+      }).filter(row => row.DATA);  // Filtrar linhas vazias
+      
+      // Processar CPA x BTL para obter o mapeamento de comandantes por CPA
+      let cpaSheet = workbook.Sheets['CPA x BTL'];
+      let cpaData = XLSX.utils.sheet_to_json(cpaSheet, {header: 1, defval: ''});
+      
+      let cpaHeaders = cpaData[0].map(h => h.trim().replace(/\xa0/g, ' '));
+      const areasCol = cpaHeaders.findIndex(h => h === 'ÁREAS DE ATUAÇÃO' || h === 'BAIRROS / MUNICÍPIOS DE ATUAÇÃO');
+      if (areasCol !== -1) {
+        cpaHeaders[areasCol] = 'AREAS_ATUACAO';
       }
       
-      // Processar os dados da planilha
-      dadosGlobais = processarDadosPlanilha(rows);
+      cpaData = cpaData.slice(1);
+      
+      // Atualizar mapeamento de comandantes com dados da planilha
+      cpaData.forEach(row => {
+        let obj = {};
+        cpaHeaders.forEach((header, idx) => {
+          let value = row[idx];
+          if (typeof value === 'string') {
+            value = value.trim().replace(/\xa0/g, ' ').replace(/ +/g, ' ');
+          }
+          obj[header] = value;
+        });
+        if (obj.CPA && obj.CMTE) {
+          cpaComandantes[obj.ÁREA || obj.CPA] = obj.CMTE;
+        }
+      });
+      
+      // Processar os registros para a estrutura do index
+      dadosGlobais = processarDadosPlanilha2(registros);
       
       if (!dadosGlobais || !dadosGlobais.registros || dadosGlobais.registros.length === 0) {
         mostrarMensagem("❌ Nenhum dado válido encontrado na planilha!", "danger");
@@ -2425,7 +2483,7 @@ function processarPlanilha() {
           'REMOÇÕES': registro.remocoes,
           'VIAS': registro.vias,
           'PESO/TON': registro.peso,
-          'CPA': registro.area, // Usando área como CPA para compatibilidade
+          'CPA': registro.area,
           'CMTE': registro.cmte,
           'BPM': registro.bpm
         });
@@ -2452,11 +2510,11 @@ function processarPlanilha() {
       mostrarMensagem("❌ Erro ao processar planilha: " + error.message, "danger");
     }
   };
-  reader.readAsArrayBuffer(file);
+  reader.readAsBinaryString(file);
 }
 
-// FUNÇÃO PARA PROCESSAR OS DADOS DA PLANILHA REAL - ORIGINAL DO INDEX I
-function processarDadosPlanilha(rows) {
+// NOVA FUNÇÃO PARA PROCESSAR DADOS DA PLANILHA - ADAPTADA DO INDEX-TESTE
+function processarDadosPlanilha2(registros) {
   const dados = {
     totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
     areas: {},
@@ -2467,38 +2525,40 @@ function processarDadosPlanilha(rows) {
     registros: []
   };
   
-  // Pular cabeçalho (linha 0) e começar da linha 1
-  for (let i = 1; i < rows.length; i++) {
-    const row = rows[i];
-    if (!row || row.length < 11) continue;
+  // Processar cada registro
+  registros.forEach(registroObj => {
+    // Extrair dados do objeto
+    const dataStr = registroObj.DATA;
+    const area = registroObj.ÁREA || '';
+    const municipio = registroObj.MUNICÍPIO || '';
+    const bairro = registroObj.BAIRRO || '';
+    const localidade = registroObj.LOCALIDADE || '';
+    const remocoes = parseFloat(registroObj.REMOÇÕES) || 0;
+    const vias = parseFloat(registroObj.VIAS) || 0;
+    const peso = parseFloat(registroObj['PESO/TON']) || 0;
+    const cpa = registroObj.CPA || '';
+    const cmte = registroObj.CMTE || '';
+    const bpm = registroObj.BPM || '';
     
-    // Extrair dados da linha - baseado na estrutura da planilha
-    const dataStr = row[0] || ''; // Coluna A: DATA
-    const area = row[1] || ''; // Coluna B: ÁREA
-    const municipio = row[2] || ''; // Coluna C: MUNICÍPIO
-    const bairro = row[3] || ''; // Coluna D: BAIRRO
-    const localidade = row[4] || ''; // Coluna E: LOCALIDADE
-    const remocoes = parseFloat(row[5]) || 0; // Coluna F: REMOÇÕES
-    const vias = parseFloat(row[6]) || 0; // Coluna G: VIAS
-    const peso = parseFloat(row[7]) || 0; // Coluna H: PESO/TON
-    const cpa = row[8] || ''; // Coluna I: CPA
-    const cmte = row[9] || ''; // Coluna J: CMTE
-    const bpm = row[10] || ''; // Coluna K: BPM
-    
-    // Validar dados mínimos - agora aceitamos registros mesmo com remoções = 0
-    if (!dataStr || !area) continue;
+    // Validar dados mínimos
+    if (!dataStr || !area) return;
     
     // Converter data
-    const data = parseDataPlanilha(dataStr);
-    if (!data) {
-      console.warn('Data inválida na linha', i, ':', dataStr);
-      continue;
+    let data;
+    if (dataStr instanceof Date) {
+      data = dataStr;
+    } else {
+      data = parseDataPlanilha(dataStr);
+      if (!data) {
+        console.warn('Data inválida:', dataStr);
+        return;
+      }
     }
     
-    // Normalizar BPM (remover espaços extras)
+    // Normalizar BPM
     const bpmNormalizado = bpm ? bpm.toString().trim() : '';
     
-    // Criar registro
+    // Criar registro no formato do index
     const registro = {
       data: data,
       area: area.toString().trim(),
@@ -2519,7 +2579,7 @@ function processarDadosPlanilha(rows) {
     dados.totais.barricadas += remocoes;
     dados.totais.vias += vias;
     dados.totais.peso += peso;
-  }
+  });
   
   // Se não houver registros, retornar estrutura vazia
   if (dados.registros.length === 0) {
