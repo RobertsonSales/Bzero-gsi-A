@@ -1113,6 +1113,10 @@
           <p id="cpaComandante"></p>
         </div>
         <div class="modal-section">
+          <h4>Áreas/Equipes Vinculadas</h4>
+          <div id="cpaAreasList"></div>
+        </div>
+        <div class="modal-section">
           <h4>Batalhões e Áreas de Atuação</h4>
           <div id="cpaBPMList"></div>
         </div>
@@ -1147,6 +1151,7 @@
 
     let cpaComandantes = {};
     let cpaDetails = {}; // Para armazenar BPMs e áreas por CPA
+    let cpaAreas = {}; // Para armazenar áreas (Alpha, Bravo etc.) por CPA de GLOBAL
 
     // ============================================================================
     // FUNÇÕES AUXILIARES
@@ -1237,6 +1242,7 @@
           const data = parseFloat(row[0]) || null;
           let cpa = (row[8] || '').trim();
           cpa = cpa.replace('°', 'ª'); // Normalizar
+          const area = (row[1] || '').trim().toUpperCase(); // Coluna B: ÁREA
           const bpm = (row[10] || '').trim();
           const municipio = (row[2] || '').trim();
           const remocoes = parseFloat(row[5]) || 0;
@@ -1258,6 +1264,10 @@
             dadosBrutos.cpas[cpa].vias += vias;
             dadosBrutos.cpas[cpa].peso += peso;
             dadosBrutos.cpas[cpa].eficiencia = dadosBrutos.cpas[cpa].barricadas / (dadosBrutos.cpas[cpa].vias || 1);
+
+            // Áreas por CPA
+            if (!cpaAreas[cpa]) cpaAreas[cpa] = new Set();
+            if (area) cpaAreas[cpa].add(area);
 
             // Por BPM
             const bpmKey = `${cpa}-${bpm}`;
@@ -1506,7 +1516,10 @@
         html += `
           <div class="cpa-card" onclick="abrirModalCPA('${cpa}')">
             <div class="cpa-header">
-              <div class="cpa-icon">${cpa}</div>
+              <div class="cpa-icon">
+                <div style="position: absolute; top: 10px; font-size: 20px;">${cpa.split('ª')[0]}ª</div>
+                <div style="position: absolute; bottom: 10px; font-size: 16px;">CPA</div>
+              </div>
               <div class="cpa-info">
                 <h4>${cpa}</h4>
                 <p>${cpaComandantes[cpa] || 'Comandante não especificado'}</p>
@@ -1549,6 +1562,14 @@
       document.getElementById('modalCPATitle').textContent = `Detalhes da ${cpa}`;
       document.getElementById('cpaComandante').textContent = cpaComandantes[cpa] || 'Não especificado';
 
+      const areasList = document.getElementById('cpaAreasList');
+      let areasHtml = '<ul>';
+      (Array.from(cpaAreas[cpa] || [])).sort().forEach(area => {
+        areasHtml += `<li>${area}</li>`;
+      });
+      areasHtml += '</ul>';
+      areasList.innerHTML = areasHtml;
+
       const list = document.getElementById('cpaBPMList');
       let html = '<ul>';
       (cpaDetails[cpa] || []).forEach(detail => {
@@ -1578,25 +1599,69 @@
       const margin = 15;
       let yPos = margin;
 
-      pdf.setFontSize(20);
-      pdf.text(`Detalhes da ${cpa}`, pageWidth / 2, yPos, { align: 'center' });
-      yPos += 20;
+      // Cabeçalho colorido
+      pdf.setFillColor(13, 71, 161);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.text(`Detalhes da ${cpa}`, pageWidth / 2, 25, { align: 'center' });
 
-      pdf.setFontSize(14);
-      pdf.text(`Comandante: ${cpaComandantes[cpa] || 'Não especificado'}`, margin, yPos);
-      yPos += 15;
+      yPos = 50;
 
-      pdf.text('Batalhões e Áreas de Atuação:', margin, yPos);
-      yPos += 10;
-
+      // Card para Comandante
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(13, 71, 161);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(13, 71, 161);
+      pdf.setFontSize(16);
+      pdf.text('Comandante', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(12);
-      (cpaDetails[cpa] || []).forEach((detail, idx) => {
-        if (yPos > pageHeight - 20) {
+      pdf.text(cpaComandantes[cpa] || 'Não especificado', margin + 15, yPos + 20);
+
+      yPos += 40;
+
+      // Card para Áreas/Equipes
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(46, 125, 50);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(46, 125, 50);
+      pdf.setFontSize(16);
+      pdf.text('Áreas/Equipes Vinculadas', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      let areasY = yPos + 40;
+      (Array.from(cpaAreas[cpa] || [])).sort().forEach((area, idx) => {
+        if (areasY > pageHeight - 20) {
           pdf.addPage();
-          yPos = margin;
+          areasY = margin;
         }
-        pdf.text(`${detail.bpm}: ${detail.areasAtuacao}`, margin, yPos);
-        yPos += 10;
+        pdf.text(area, margin + 15, areasY);
+        areasY += 10;
+      });
+
+      yPos = areasY + 10;
+
+      // Card para Batalhões
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(249, 168, 37);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(249, 168, 37);
+      pdf.setFontSize(16);
+      pdf.text('Batalhões e Áreas de Atuação', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      let bpmY = yPos + 40;
+      (cpaDetails[cpa] || []).forEach((detail, idx) => {
+        if (bpmY > pageHeight - 20) {
+          pdf.addPage();
+          bpmY = margin;
+        }
+        pdf.text(`${detail.bpm}: ${detail.areasAtuacao}`, margin + 15, bpmY);
+        bpmY += 10;
       });
 
       const pdfBlob = pdf.output('blob');
@@ -1865,11 +1930,11 @@
         pdf.text('CPA', xPos, yPos + 5);
         xPos += 25;
         pdf.text('Comandante', xPos, yPos + 5);
-        xPos += 55;
+        xPos += 70;
         pdf.text('Remoções', xPos, yPos + 5, { align: 'center' });
-        xPos += 30;
+        xPos += 35;
         pdf.text('Vias', xPos, yPos + 5, { align: 'center' });
-        xPos += 25;
+        xPos += 30;
         pdf.text('Toneladas', xPos, yPos + 5, { align: 'center' });
         xPos += 35;
         pdf.text('Eficiência', xPos, yPos + 5, { align: 'center' });
@@ -1897,11 +1962,11 @@
           pdf.text(cpa, xPos, yPos + 5);
           xPos += 25;
           pdf.text(cpaComandantes[cpa] || 'N/A', xPos, yPos + 5);
-          xPos += 55;
+          xPos += 70;
           pdf.text(Math.round(data.barricadas).toString(), xPos, yPos + 5, { align: 'center' });
-          xPos += 30;
+          xPos += 35;
           pdf.text(Math.round(data.vias).toString(), xPos, yPos + 5, { align: 'center' });
-          xPos += 25;
+          xPos += 30;
           pdf.text(Math.round(data.peso).toString(), xPos, yPos + 5, { align: 'center' });
           xPos += 35;
           pdf.text(data.eficiencia.toFixed(2), xPos, yPos + 5, { align: 'center' });
