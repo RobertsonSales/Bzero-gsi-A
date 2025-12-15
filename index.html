@@ -230,18 +230,14 @@
       background: linear-gradient(135deg, var(--danger) 0%, #b71c1c 100%);
       color: white;
       border: none;
-      padding: 18px 40px;
-      border-radius: 16px;
-      font-size: 18px;
+      padding: 12px 25px;
+      border-radius: 12px;
       cursor: pointer;
-      font-weight: 700;
-      box-shadow: var(--shadow-md);
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      transition: all 0.3s ease;
     }
     
     .btn-limpar:hover {
@@ -930,2916 +926,1120 @@
       border-top: 1px solid var(--gray-200);
     }
     
-    /* UTILITIES */
-    .hidden { display: none !important; }
-    
-    .text-center { text-align: center; }
-    
-    .mt-1 { margin-top: 10px; }
-    .mt-2 { margin-top: 20px; }
-    .mt-3 { margin-top: 30px; }
-    
-    .mb-1 { margin-bottom: 10px; }
-    .mb-2 { margin-bottom: 20px; }
-    .mb-3 { margin-bottom: 30px; }
-    
-    /* LOADING */
-    .loading {
-      display: inline-block;
-      width: 50px;
-      height: 50px;
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    /* ANIMATIONS */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .fade-in {
-      animation: fadeIn 0.5s ease forwards;
-    }
-    
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      header h1 { font-size: 32px; }
-      .section-header h2 { font-size: 28px; }
-      .big { font-size: 48px; }
-      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-      .header-stats { flex-direction: column; gap: 20px; }
-      .modal-content { width: 95%; margin: 20px auto; }
-      .cpa-details { grid-template-columns: 1fr; }
-      .comandante-stats { grid-template-columns: repeat(2, 1fr); }
-      .filtros-header {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
-      }
-      .btn-filtro, .btn-limpar {
-        width: 100%;
-        justify-content: center;
-        margin-left: 0;
-        margin-bottom: 10px;
-      }
-      .action-buttons {
-        flex-direction: column;
-      }
-      .btn, .btn-limpar, .btn-pdf {
-        width: 100%;
-        justify-content: center;
-      }
-      .pdf-actions {
-        flex-direction: column;
-      }
-    }
-
-    /* ESTILOS PARA O NOVO FILTRO DE LOCALIDADES DO INDEX II */
-    .localidade-checkbox-item {
-      padding: 8px 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-    
-    .localidade-checkbox-item:hover {
-      background: var(--gray-100);
-    }
-
-    #localidadesContainer::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    #localidadesContainer::-webkit-scrollbar-track {
-      background: var(--gray-200);
-      border-radius: 3px;
-    }
-
-    #localidadesContainer::-webkit-scrollbar-thumb {
-      background: var(--gray-400);
-      border-radius: 3px;
-    }
-
-    #localidadesContainer::-webkit-scrollbar-thumb:hover {
-      background: var(--gray-500);
-    }
-
-    #localidadesSelecionadas::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
-    }
-
-    #localidadesSelecionadas::-webkit-scrollbar-track {
-      background: var(--gray-200);
-      border-radius: 2px;
-    }
-
-    #localidadesSelecionadas::-webkit-scrollbar-thumb {
-      background: var(--gray-400);
-      border-radius: 2px;
-    }
-    
-    .localidade-tag {
-      background: var(--primary);
-      color: white;
-      padding: 4px 10px;
+    /* MENSAGENS */
+    .mensagem {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 30px;
       border-radius: 12px;
-      font-size: 12px;
+      color: white;
+      font-weight: 600;
+      box-shadow: var(--shadow-md);
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
+      animation: slideIn 0.3s ease;
+      z-index: 9999;
     }
     
-    .localidade-tag button {
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-      padding: 0;
-      display: flex;
-      align-items: center;
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    .mensagem.success { background: var(--success); }
+    .mensagem.warning { background: #f57c00; }
+    .mensagem.danger { background: var(--danger); }
+    .mensagem.info { background: var(--info); }
+    
+    /* ESTILOS PARA FILTROS */
+    #statusFiltros {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-top: 10px;
+      padding: 10px;
+      background: var(--gray-100);
+      border-radius: 8px;
+      display: none;
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-
-<header>
-  <h1><i class="fas fa-shield-alt"></i> Operação Barricada Zero</h1>
-  <p>Dashboard Estratégico Avançado • Atualização Diária</p>
-  <div class="header-stats">
-    <div class="header-stat">
-      <span class="header-stat-value" id="headerBarricadas">-</span>
-      <span class="header-stat-label">Removidas</span>
-    </div>
-    <div class="header-stat">
-      <span class="header-stat-value" id="headerVias">-</span>
-      <span class="header-stat-label">Vias Liberadas</span>
-    </div>
-    <div class="header-stat">
-      <span class="header-stat-value" id="headerPeso">-</span>
-      <span class="header-stat-label">Toneladas</span>
-    </div>
-  </div>
-</header>
-
-<div class="upload">
-  <h2><i class="fas fa-cloud-upload-alt"></i> Carregar Dados Operacionais</h2>
-  <p style="color: var(--gray-600); margin-bottom: 25px; font-size: 18px;">Selecione a planilha Excel (.xlsx) para atualizar todas as métricas</p>
-  <input type="file" id="fileInput" accept=".xlsx" style="margin: 20px 0; font-size: 18px;">
-  <br><br>
-  
-  <div class="action-buttons">
-    <button class="btn" onclick="processarPlanilha()"><i class="fas fa-sync-alt"></i> Processar e Atualizar</button>
-    <button class="btn-limpar" onclick="limparFiltros()"><i class="fas fa-times"></i> Limpar Filtros</button>
-    <button class="btn btn-pdf" onclick="visualizarPDF()"><i class="fas fa-eye"></i> Visualizar PDF</button>
-  </div>
-</div>
-
-<!-- SEÇÃO DE FILTROS - SUBSTITUÍDA PELA VERSÃO DO INDEX II -->
-<div class="filtros-container">
-  <div class="filtros-header">
-    <div class="filtros-title">
-      <i class="fas fa-filter"></i> Filtros Avançados
-      <span id="statusFiltros" style="font-size: 14px; background: var(--primary-light); color: white; padding: 4px 12px; border-radius: 20px; margin-left: 10px;">
-        Nenhum filtro ativo
-      </span>
-    </div>
-    <div>
-      <button class="btn-filtro" onclick="aplicarFiltros()">
-        <i class="fas fa-search"></i> Aplicar Filtros
-      </button>
-    </div>
-  </div>
-  
-  <div class="filtros-grid">
-    <div class="filtro-group">
-      <label class="filtro-label">CPA</label>
-      <select class="filtro-select" id="filtroCPA">
-        <option value="todos">Todas as CPAs</option>
-      </select>
-    </div>
-    
-    <div class="filtro-group">
-      <label class="filtro-label">Comandante</label>
-      <select class="filtro-select" id="filtroComandante">
-        <option value="todos">Todos os Comandantes</option>
-      </select>
-    </div>
-    
-    <div class="filtro-group">
-      <label class="filtro-label">Batalhão (BPM)</label>
-      <select class="filtro-select" id="filtroBPM">
-        <option value="todos">Todos os Batalhões</option>
-      </select>
-    </div>
-    
-    <div class="filtro-group">
-      <label class="filtro-label">Município</label>
-      <select class="filtro-select" id="filtroMunicipio">
-        <option value="todos">Todos os Municípios</option>
-      </select>
-    </div>
-    
-    <div class="filtro-group" style="grid-column: span 2;">
-      <label class="filtro-label">Localidade(s)</label>
-      <div style="position: relative;">
-        <input type="text" class="filtro-input" id="filtroLocalidadeInput" placeholder="Digite para buscar..." onkeyup="filtrarLocalidades()" onfocus="mostrarLocalidades()">
-        <div id="localidadesContainer" style="display: none; position: absolute; z-index: 1000; background: white; border: 1px solid var(--gray-300); border-radius: 8px; max-height: 300px; overflow-y: auto; width: 100%; box-shadow: var(--shadow-lg); margin-top: 5px;">
-          <div style="padding: 10px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 12px; font-weight: 600;">Selecionar localidades</span>
-            <div style="display: flex; gap: 5px;">
-              <button onclick="selecionarTodasLocalidades()" style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Todas</button>
-              <button onclick="limparTodasLocalidades()" style="background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer;">Limpar</button>
-            </div>
-          </div>
-          <div id="localidadesLista" style="max-height: 250px; overflow-y: auto;">
-            <!-- As localidades serão carregadas dinamicamente -->
-          </div>
+  <div class="container">
+    <header>
+      <h1>Operação Barricada Zero</h1>
+      <p>Dashboard Estratégico Avançado para Análise Operacional</p>
+      <div class="header-stats">
+        <div class="header-stat">
+          <span class="header-stat-value" id="totalRemocoes">0</span>
+          <span class="header-stat-label">Remoções</span>
+        </div>
+        <div class="header-stat">
+          <span class="header-stat-value" id="totalVias">0</span>
+          <span class="header-stat-label">Vias Liberadas</span>
+        </div>
+        <div class="header-stat">
+          <span class="header-stat-value" id="totalPeso">0</span>
+          <span class="header-stat-label">Toneladas</span>
+        </div>
+        <div class="header-stat">
+          <span class="header-stat-value" id="totalDias">0</span>
+          <span class="header-stat-label">Dias</span>
         </div>
       </div>
-      <div id="localidadesSelecionadas" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; max-height: 80px; overflow-y: auto;"></div>
-    </div>
-  </div>
-</div>
+    </header>
 
-<div id="dashboard" class="hidden">
-
-  <div class="section-header">
-    <h2><i class="fas fa-map-marked-alt"></i> CPAs e Batalhões</h2>
-  </div>
-  
-  <div class="grid grid-3" id="cpaGrid"></div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-users"></i> Comandantes</h2>
-  </div>
-  
-  <div class="grid grid-3" id="comandantesGrid"></div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-chart-line"></i> Indicadores Principais</h2>
-  </div>
-  
-  <div class="grid grid-4">
-    <div class="card">
-      <i class="fas fa-road card-icon"></i>
-      <h3>Barricadas Removidas</h3>
-      <div class="big" id="totalBarricadas">0</div>
-      <div class="insight success" id="insightBarricadas">
-        <i class="fas fa-check-circle"></i>
-        <span>Carregando...</span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-map-marked-alt card-icon"></i>
-      <h3>Vias Liberadas</h3>
-      <div class="big" id="totalVias">0</div>
-      <div class="insight info" id="insightVias">
-        <i class="fas fa-info-circle"></i>
-        <span>Carregando...</span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-dumpster card-icon"></i>
-      <h3>Entulho Removido</h3>
-      <div class="big" id="totalToneladas">0<small style="font-size:24px; font-weight:500;"> ton</small></div>
-      <div class="insight warning" id="insightToneladas">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span>Carregando...</span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-calendar-day card-icon"></i>
-      <h3>Média Diária</h3>
-      <div class="big" id="mediaDiaria">0</div>
-      <div class="insight success" id="insightMedia">
-        <i class="fas fa-trophy"></i>
-        <span>Carregando...</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-chart-bar"></i> Análise de Performance</h2>
-  </div>
-  
-  <div class="grid grid-4">
-    <div class="card">
-      <i class="fas fa-balance-scale card-icon"></i>
-      <h3>Eficiência Média</h3>
-      <div class="medium" id="eficienciaMedia">0</div>
-      <p style="color: var(--gray-600); margin: 10px 0 0 0;">ton/barricada</p>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-star card-icon"></i>
-      <h3>Melhor Dia</h3>
-      <div class="medium" id="melhorDiaValor">0</div>
-      <div class="insight info" id="melhorDiaData">
-        <i class="fas fa-calendar-check"></i>
-        <span>-</span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-tachometer-alt card-icon"></i>
-      <h3>ÁREA Mais Eficiente</h3>
-      <div class="medium" id="areaMaisEficiente">-</div>
-      <div class="insight success" id="eficienciaAreaValor">
-        <i class="fas fa-award"></i>
-        <span>-</span>
-      </div>
-    </div>
-    
-    <div class="card">
-      <i class="fas fa-weight-hanging card-icon"></i>
-      <h3>Maior Volume</h3>
-      <div class="medium" id="areaMaiorVolume">-</div>
-      <div class="insight warning" id="volumeAreaValor">
-        <i class="fas fa-crown"></i>
-        <span>-</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-tasks"></i> Progresso por CPA</h2>
-  </div>
-  
-  <div class="grid grid-2" id="areasGrid"></div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-chart-pie"></i> Visualizações Estratégicas</h2>
-  </div>
-  
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab(0)"><i class="fas fa-chart-line"></i> Evolução Temporal</button>
-    <button class="tab" onclick="switchTab(1)"><i class="fas fa-chart-bar"></i> Rankings</button>
-    <button class="tab" onclick="switchTab(2)"><i class="fas fa-chart-area"></i> Distribuição</button>
-  </div>
-  
-  <div class="tab-content active" id="tab0">
-    <div class="grid grid-2">
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-calendar-alt"></i> Evolução Diária de Remoções</div>
-        <canvas id="chartEvolucaoDiaria"></canvas>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-weight"></i> Evolução Diária de Toneladas</div>
-        <canvas id="chartEvolucaoPeso"></canvas>
-      </div>
-    </div>
-  </div>
-  
-  <div class="tab-content" id="tab1">
-    <div class="grid grid-2">
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-trophy"></i> Ranking por Barricadas Removidas</div>
-        <canvas id="chartRankingBarricadas"></canvas>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-truck-loading"></i> Ranking por Toneladas Removidas</div>
-        <canvas id="chartRankingPeso"></canvas>
-      </div>
-    </div>
-    <div class="grid grid-2 mt-3">
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-tachometer-alt"></i> Ranking por Eficiência</div>
-        <canvas id="chartRankingEficiencia"></canvas>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-road"></i> Ranking por Vias Liberadas</div>
-        <canvas id="chartRankingVias"></canvas>
-      </div>
-    </div>
-  </div>
-  
-  <div class="tab-content" id="tab2">
-    <div class="grid grid-2">
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-pie-chart"></i> Distribuição de Barricadas por CPA</div>
-        <canvas id="chartPizzaBarricadas"></canvas>
-      </div>
-      <div class="chart-container">
-        <div class="chart-title"><i class="fas fa-chart-pie"></i> Distribuição de Peso por CPA</div>
-        <canvas id="chartPizzaPeso"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-lightbulb"></i> Insights Estratégicos</h2>
-  </div>
-  
-  <div class="grid grid-3" id="insightsGrid"></div>
-
-  <div class="section-header">
-    <h2><i class="fas fa-table"></i> Comparativo Detalhado</h2>
-  </div>
-  
-  <div class="chart-container">
-    <table class="ranking-table" id="tabelaComparativa"></table>
-  </div>
-
-</div>
-
-<!-- MODAIS ORIGINAIS DO INDEX I MANTIDOS -->
-<div id="modalCPA" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalCPATitle"></h3>
-      <button class="modal-close" onclick="fecharModal('modalCPA')">×</button>
-    </div>
-    <div class="modal-body" id="modalCPABody"></div>
-  </div>
-</div>
-
-<div id="modalComandante" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalComandanteTitle"></h3>
-      <button class="modal-close" onclick="fecharModal('modalComandante')">×</button>
-    </div>
-    <div class="modal-body" id="modalComandanteBody"></div>
-  </div>
-</div>
-
-<div id="modalMapa" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modalMapaTitle"></h3>
-      <button class="modal-close" onclick="fecharModal('modalMapa')">×</button>
-    </div>
-    <div class="modal-body" id="modalMapaBody"></div>
-  </div>
-</div>
-
-<!-- MODAL PDF ORIGINAL DO INDEX I MANTIDO -->
-<div id="modalPDF" class="modal">
-  <div class="modal-content" style="max-width: 1000px;">
-    <div class="modal-header">
-      <h3 class="modal-title"><i class="fas fa-file-pdf"></i> Visualização do Relatório PDF</h3>
-      <button class="modal-close" onclick="fecharModal('modalPDF')">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="pdf-preview-container">
-        <iframe class="pdf-preview-iframe" id="pdfPreview"></iframe>
-      </div>
-      <div class="pdf-actions">
-        <button class="btn" onclick="baixarPDF()">
-          <i class="fas fa-download"></i> Baixar PDF
+    <div class="upload">
+      <h2>Carregar Planilha Excel</h2>
+      <div class="action-buttons">
+        <input type="file" id="uploadExcel" accept=".xlsx, .xls" style="display: none;">
+        <button class="btn" onclick="document.getElementById('uploadExcel').click();">
+          <i class="fas fa-upload"></i> Carregar Excel
         </button>
-        <button class="btn-limpar" onclick="fecharModal('modalPDF')">
-          <i class="fas fa-times"></i> Fechar
+        <button class="btn btn-pdf" onclick="visualizarPDF()">
+          <i class="fas fa-file-pdf"></i> Gerar PDF
         </button>
       </div>
     </div>
+
+    <div class="filtros-container">
+      <div class="filtros-header">
+        <div class="filtros-title">
+          <i class="fas fa-filter"></i> Filtros Avançados
+        </div>
+        <button class="btn-filtro" onclick="aplicarFiltros()">
+          <i class="fas fa-check"></i> Aplicar
+        </button>
+        <button class="btn-limpar" onclick="limparFiltros()">
+          <i class="fas fa-times"></i> Limpar Filtros
+        </button>
+      </div>
+      <div class="filtros-grid">
+        <div class="filtro-group">
+          <label class="filtro-label">CPA</label>
+          <select id="filtroCPA" class="filtro-select">
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-group">
+          <label class="filtro-label">BPM</label>
+          <select id="filtroBPM" class="filtro-select">
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+        <div class="filtro-group">
+          <label class="filtro-label">Município</label>
+          <select id="filtroMunicipio" class="filtro-select">
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+      </div>
+      <div id="statusFiltros"></div>
+    </div>
+
+    <div class="section-header">
+      <h2>KPIs Principais</h2>
+    </div>
+    <div class="grid grid-4" id="cardsTotais"></div>
+
+    <div class="section-header">
+      <h2>Insights Relevantes</h2>
+    </div>
+    <div class="grid grid-1" id="insightsCard"></div>
+
+    <div class="section-header">
+      <h2>Desempenho por CPA</h2>
+    </div>
+    <div class="grid grid-3" id="cardsCPAs"></div>
+
+    <div class="section-header">
+      <h2>Desempenho por BPM</h2>
+    </div>
+    <div class="grid grid-3" id="cardsBPMs"></div>
+
+    <div class="section-header">
+      <h2>Análise Comparativa</h2>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="tab-cpa">Rank CPAs</button>
+      <button class="tab" data-tab="tab-bpm">Rank BPMs</button>
+    </div>
+    <div class="tab-content active" id="tab-cpa">
+      <table class="ranking-table" id="tabelaComparativaCPA"></table>
+    </div>
+    <div class="tab-content" id="tab-bpm">
+      <table class="ranking-table" id="tabelaComparativaBPM"></table>
+    </div>
+
+    <footer>
+      Desenvolvido com <strong>IA Avançada</strong> para Operações Estratégicas
+    </footer>
   </div>
-</div>
 
-<footer>
-  <strong><i class="fas fa-shield-alt"></i> Operação Barricada Zero</strong><br>
-  Dashboard Estratégico Avançado v6.0 • Dezembro 2025<br>
-  <small style="opacity: 0.8; margin-top: 10px; display: block;">
-    Desenvolvido com foco em inteligência operacional e análise de dados
-  </small>
-</footer>
-
-</div>
-
-<script>
-// ============================================================================
-// CONFIGURAÇÕES GLOBAIS DO INDEX I - MANTIDAS INTACTAS
-// ============================================================================
-
-// Configuração global dos gráficos
-Chart.defaults.font.family = 'Inter';
-Chart.defaults.font.size = 13;
-Chart.defaults.color = '#6c757d';
-
-// Paleta de cores atualizada para as CPAs da planilha
-const colors = {
-  ALPHA: '#d32f2f',   // Vermelho
-  BRAVO: '#1976d2',    // Azul
-  CHARLIE: '#388e3c',  // Verde
-  DELTA: '#f57c00',    // Laranja
-  ECHO: '#7b1fa2',     // Roxo
-  FOX: '#c2185b',      // Rosa
-  GOLF: '#00796b'      // Verde-azulado
-};
-
-// Mapeamento de ÁREA para Comandantes (da aba CPA x BTL) - AGORA DINÂMICO
-let cpaComandantes = {
-  'ALPHA': 'Cel PM Luciano de Vasconcelos',
-  'BRAVO': 'Cel PM Walter Teixeira da Silva Júnior',
-  'CHARLIE': 'Cel PM Paulo Roberto das Neves Júnior',
-  'DELTA': 'Cel PM Paulo Roberto das Neves Júnior',
-  'ECHO': 'Cel PM Paulo Roberto das Neves Júnior',
-  'FOX': 'Cel PM Paulo Roberto das Neves Júnior',
-  'GOLF': 'Cel PM Paulo Roberto das Neves Júnior'
-};
-
-// Mapeamento de CPAs para BPMs
-const cpaBPMs = {
-  'ALPHA': ['16º', '22º'],
-  'BRAVO': ['18º', '41º'],
-  'CHARLIE': ['15º'],
-  'DELTA': ['20º'],
-  'ECHO': ['24º'],
-  'FOX': ['7º'],
-  'GOLF': ['21º']
-};
-
-// ============================================================================
-// VARIÁVEIS GLOBAIS DO INDEX I - MANTIDAS
-// ============================================================================
-
-// Configuração de filtros - MODIFICADA PARA USAR O SISTEMA DO INDEX II
-let filtrosAtivos = {
-  cpa: 'todos',
-  comandante: 'todos',
-  bpm: 'todos',
-  municipio: 'todos',
-  localidades: [], // MODIFICADO: agora é array vazio, será preenchido pelo sistema do index II
-  dataInicio: null,
-  dataFim: null
-};
-
-// Variáveis globais do index I
-let dadosGlobais = null;
-let dadosOriginais = null;
-let dadosFiltrados = null;
-
-// Armazenar instâncias dos gráficos
-let graficosInstancias = {
-  chartEvolucaoDiaria: null,
-  chartEvolucaoPeso: null,
-  chartRankingBarricadas: null,
-  chartRankingPeso: null,
-  chartRankingEficiencia: null,
-  chartRankingVias: null,
-  chartPizzaBarricadas: null,
-  chartPizzaPeso: null
-};
-
-// Mapa de municípios abreviados
-const municipiosMap = {
-  'RIO': 'Rio de Janeiro',
-  'D. CAXIAS': 'Duque de Caxias',
-  'N. IGUAÇU': 'Nova Iguaçu',
-  'SG': 'São Gonçalo',
-  'JAPERI': 'Japeri',
-  'MESQUITA': 'Mesquita',
-  'SÃO JOÃO': 'São João de Meriti',
-  'SJM': 'São João de Meriti'
-};
-
-// ============================================================================
-// SISTEMA DE FILTROS DO INDEX II - INTEGRADO
-// ============================================================================
-
-// VARIÁVEIS ESPECÍFICAS DO SISTEMA DE FILTROS DO INDEX II
-let localidadesSelecionadasSet = new Set(); // Sistema de seleção múltipla do index II
-
-// NORMALIZAR STRING PARA COMPARAÇÃO (remove espaços, acentos, case-insensitive) - DO INDEX II
-function normalizar(str) {
-  if (!str) return '';
-  return str.toString()
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '');
-}
-
-// FUNÇÕES DE FILTROS DO INDEX II - INTEGRADAS
-
-// CARREGAR LOCALIDADES NO DROPDOWN - DO INDEX II
-function carregarLocalidades() {
-  if (!dadosOriginais || dadosOriginais.length === 0) return;
-  
-  const localidades = [...new Set(dadosOriginais.map(d => d['LOCALIDADE']).filter(v => v))].sort();
-  const localidadesLista = document.getElementById('localidadesLista');
-  localidadesLista.innerHTML = '';
-  
-  localidades.forEach(loc => {
-    const item = document.createElement('div');
-    item.className = 'localidade-checkbox-item';
-    item.innerHTML = `
-      <input type="checkbox" id="loc_${normalizar(loc)}" value="${loc}" onchange="toggleLocalidade('${loc}')">
-      <label for="loc_${normalizar(loc)}" style="cursor: pointer; flex: 1;">${loc}</label>
-    `;
-    localidadesLista.appendChild(item);
-  });
-}
-
-// FILTRAR LOCALIDADES NA BUSCA - DO INDEX II
-function filtrarLocalidades() {
-  const termo = normalizar(document.getElementById('filtroLocalidadeInput').value);
-  const items = document.querySelectorAll('.localidade-checkbox-item');
-  
-  items.forEach(item => {
-    const label = item.querySelector('label').textContent;
-    if (normalizar(label).includes(termo)) {
-      item.style.display = 'flex';
-    } else {
-      item.style.display = 'none';
-    }
-  });
-}
-
-// MOSTRAR DROPDOWN DE LOCALIDADES - DO INDEX II
-function mostrarLocalidades() {
-  document.getElementById('localidadesContainer').style.display = 'block';
-}
-
-// ESCONDER DROPDOWN AO CLICAR FORA - DO INDEX II
-document.addEventListener('click', function(e) {
-  const container = document.getElementById('localidadesContainer');
-  const input = document.getElementById('filtroLocalidadeInput');
-  if (!container.contains(e.target) && e.target !== input) {
-    container.style.display = 'none';
-  }
-});
-
-// TOGGLE LOCALIDADE SELECIONADA - DO INDEX II
-function toggleLocalidade(loc) {
-  if (localidadesSelecionadasSet.has(loc)) {
-    localidadesSelecionadasSet.delete(loc);
-  } else {
-    localidadesSelecionadasSet.add(loc);
-  }
-  atualizarTagsLocalidades();
-}
-
-// ATUALIZAR TAGS DE LOCALIDADES SELECIONADAS - DO INDEX II
-function atualizarTagsLocalidades() {
-  const container = document.getElementById('localidadesSelecionadas');
-  container.innerHTML = '';
-  
-  localidadesSelecionadasSet.forEach(loc => {
-    const tag = document.createElement('div');
-    tag.className = 'localidade-tag';
-    tag.innerHTML = `
-      ${loc}
-      <button onclick="removerLocalidade('${loc}')">
-        <i class="fas fa-times"></i>
-      </button>
-    `;
-    container.appendChild(tag);
-  });
-  
-  // Atualizar também o filtrosAtivos para compatibilidade com código do index I
-  filtrosAtivos.localidades = Array.from(localidadesSelecionadasSet);
-}
-
-// REMOVER LOCALIDADE SELECIONADA - DO INDEX II
-function removerLocalidade(loc) {
-  localidadesSelecionadasSet.delete(loc);
-  const checkbox = document.getElementById(`loc_${normalizar(loc)}`);
-  if (checkbox) checkbox.checked = false;
-  atualizarTagsLocalidades();
-}
-
-// SELECIONAR TODAS AS LOCALIDADES - DO INDEX II
-function selecionarTodasLocalidades() {
-  const checkboxes = document.querySelectorAll('.localidade-checkbox-item input[type="checkbox"]');
-  checkboxes.forEach(cb => {
-    if (cb.parentElement.style.display !== 'none') {
-      cb.checked = true;
-      localidadesSelecionadasSet.add(cb.value);
-    }
-  });
-  atualizarTagsLocalidades();
-}
-
-// LIMPAR TODAS AS LOCALIDADES - DO INDEX II
-function limparTodasLocalidades() {
-  localidadesSelecionadasSet.clear();
-  const checkboxes = document.querySelectorAll('.localidade-checkbox-item input[type="checkbox"]');
-  checkboxes.forEach(cb => cb.checked = false);
-  atualizarTagsLocalidades();
-}
-
-// ATUALIZAR STATUS DOS FILTROS - ADAPTADA PARA INTEGRAR INDEX I E II
-function atualizarStatusFiltros() {
-  const statusElement = document.getElementById('statusFiltros');
-  const filtrosAplicados = [];
-  
-  if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
-  if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
-  if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
-  if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
-  
-  // Localidades do sistema do index II
-  if (localidadesSelecionadasSet.size > 0) {
-    if (localidadesSelecionadasSet.size === 1) {
-      filtrosAplicados.push(`Localidade: ${Array.from(localidadesSelecionadasSet)[0]}`);
-    } else {
-      filtrosAplicados.push(`Localidades: ${localidadesSelecionadasSet.size} selecionadas`);
-    }
-  }
-  
-  if (filtrosAplicados.length > 0) {
-    statusElement.textContent = `${filtrosAplicados.length} filtro(s) ativo(s)`;
-    statusElement.style.background = 'linear-gradient(135deg, var(--warning) 0%, #f57c00 100%)';
-  } else {
-    statusElement.textContent = 'Nenhum filtro ativo';
-    statusElement.style.background = 'var(--primary-light)';
-  }
-}
-
-// APLICAR FILTROS - FUNÇÃO UNIFICADA QUE USA O SISTEMA DO INDEX II
-function aplicarFiltros() {
-  // Atualizar filtrosAtivos com valores dos selects
-  filtrosAtivos = {
-    cpa: document.getElementById('filtroCPA').value,
-    comandante: document.getElementById('filtroComandante').value,
-    bpm: document.getElementById('filtroBPM').value,
-    municipio: document.getElementById('filtroMunicipio').value,
-    localidades: Array.from(localidadesSelecionadasSet), // Usar o sistema do index II
-    dataInicio: filtrosAtivos.dataInicio, // Manter datas se existirem
-    dataFim: filtrosAtivos.dataFim
-  };
-  
-  atualizarStatusFiltros();
-  
-  if (dadosGlobais) {
-    // Usar a função de filtragem original do index I, mas com os filtros corrigidos
-    atualizarDashboardComFiltros();
-    mostrarMensagem('Filtros aplicados com sucesso!', 'success');
-  } else {
-    mostrarMensagem('Carregue os dados primeiro!', 'warning');
-  }
-}
-
-// LIMPAR FILTROS - FUNÇÃO UNIFICADA
-function limparFiltros() {
-  // Limpar selects
-  document.getElementById('filtroCPA').value = 'todos';
-  document.getElementById('filtroComandante').value = 'todos';
-  document.getElementById('filtroBPM').value = 'todos';
-  document.getElementById('filtroMunicipio').value = 'todos';
-  document.getElementById('filtroLocalidadeInput').value = '';
-
-  // Limpar sistema de localidades do index II
-  limparTodasLocalidades();
-  
-  document.getElementById('localidadesSelecionadas').innerHTML = '';
-  document.getElementById('localidadesContainer').style.display = 'none';
-  
-  // Resetar filtros ativos
-  filtrosAtivos = {
-    cpa: 'todos',
-    comandante: 'todos',
-    bpm: 'todos',
-    municipio: 'todos',
-    localidades: [],
-    dataInicio: null,
-    dataFim: null
-  };
-  
-  atualizarStatusFiltros();
-  
-  if (dadosOriginais) {
-    dadosFiltrados = JSON.parse(JSON.stringify(dadosGlobais));
-    atualizarDashboardComFiltros();
-    mostrarMensagem('Filtros limpos! Dashboard restaurado aos dados originais.', 'success');
-  } else if (dadosGlobais) {
-    atualizarDashboardComFiltros();
-    mostrarMensagem('Filtros limpos!', 'info');
-  } else {
-    mostrarMensagem('Nenhum dado carregado para limpar filtros.', 'warning');
-  }
-}
-
-// ============================================================================
-// FUNÇÕES ORIGINAIS DO INDEX I - MANTIDAS INTACTAS (com pequenas adaptações)
-// ============================================================================
-
-// PREENCHER FILTROS COM DADOS ÚNICOS - MODIFICADA PARA USAR O SISTEMA DO INDEX II
-function preencherFiltros(dados) {
-  // CPA - usando sistema do index II (dinâmico)
-  const cpas = [...new Set(dados.map(d => d['CPA']).filter(v => v))].sort();
-  const filtroCPA = document.getElementById('filtroCPA');
-  filtroCPA.innerHTML = '<option value="todos">Todas as CPAs</option>';
-  cpas.forEach(cpa => {
-    filtroCPA.innerHTML += `<option value="${cpa}">${cpa}ª CPA</option>`;
-  });
-
-  // Comandante - usando sistema do index II (dinâmico)
-  const comandantes = [...new Set(dados.map(d => d['CMTE']).filter(v => v))].sort();
-  const filtroComandante = document.getElementById('filtroComandante');
-  filtroComandante.innerHTML = '<option value="todos">Todos os Comandantes</option>';
-  comandantes.forEach(cmte => {
-    filtroComandante.innerHTML += `<option value="${cmte}">${cmte}</option>`;
-  });
-
-  // BPM - usando sistema do index II (dinâmico)
-  const bpms = [...new Set(dados.map(d => d['BPM']).filter(v => v))].sort();
-  const filtroBPM = document.getElementById('filtroBPM');
-  filtroBPM.innerHTML = '<option value="todos">Todos os Batalhões</option>';
-  bpms.forEach(bpm => {
-    filtroBPM.innerHTML += `<option value="${bpm}">${bpm} BPM</option>`;
-  });
-
-  // Município - usando sistema do index II (dinâmico)
-  const municipios = [...new Set(dados.map(d => d['MUNICÍPIO']).filter(v => v))].sort();
-  const filtroMunicipio = document.getElementById('filtroMunicipio');
-  filtroMunicipio.innerHTML = '<option value="todos">Todos os Municípios</option>';
-  municipios.forEach(mun => {
-    filtroMunicipio.innerHTML += `<option value="${mun}">${mun}</option>`;
-  });
-
-  // Localidades (checkboxes) - usando sistema do index II
-  carregarLocalidades();
-}
-
-// FUNÇÃO PARA DESTRUIR GRÁFICOS EXISTENTES
-function destruirGraficos() {
-  for (const [id, grafico] of Object.entries(graficosInstancias)) {
-    if (grafico) {
-      grafico.destroy();
-      graficosInstancias[id] = null;
-    }
-  }
-}
-
-// FUNÇÃO PARA ALTERNAR TABS
-function switchTab(index) {
-  document.querySelectorAll('.tab').forEach((tab, i) => {
-    tab.classList.toggle('active', i === index);
-  });
-  document.querySelectorAll('.tab-content').forEach((content, i) => {
-    content.classList.toggle('active', i === index);
-  });
-}
-
-// FUNÇÃO PARA ABRIR MODAL
-function abrirModal(modalId) {
-  document.getElementById(modalId).style.display = 'block';
-}
-
-// FUNÇÃO PARA FECHAR MODAL
-function fecharModal(modalId) {
-  document.getElementById(modalId).style.display = 'none';
-}
-
-// FUNÇÃO PARA MOSTRAR MENSAGENS
-function mostrarMensagem(mensagem, tipo = 'info') {
-  const cores = {
-    success: 'var(--success)',
-    warning: 'var(--warning)',
-    danger: 'var(--danger)',
-    info: 'var(--info)'
-  };
-  
-  const iconos = {
-    success: 'fa-check-circle',
-    warning: 'fa-exclamation-triangle',
-    danger: 'fa-times-circle',
-    info: 'fa-info-circle'
-  };
-  
-  const mensagensAnteriores = document.querySelectorAll('.mensagem-flutuante');
-  mensagensAnteriores.forEach(msg => msg.remove());
-  
-  const mensagemDiv = document.createElement('div');
-  mensagemDiv.className = 'mensagem-flutuante';
-  mensagemDiv.innerHTML = `
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 9999; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: var(--shadow-lg); border-left: 4px solid ${cores[tipo]}; display: flex; align-items: center; gap: 12px; min-width: 300px; max-width: 400px; animation: slideInRight 0.3s ease;">
-      <i class="fas ${iconos[tipo]}" style="color: ${cores[tipo]}; font-size: 20px;"></i>
-      <span style="flex: 1; font-weight: 600;">${mensagem}</span>
-      <button onclick="this.parentElement.remove()" style="background: none; border: none; color: var(--gray-600); cursor: pointer; font-size: 18px; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">×</button>
-    </div>
-  `;
-  
-  document.body.appendChild(mensagemDiv);
-  
-  setTimeout(() => {
-    if (mensagemDiv.parentElement) {
-      mensagemDiv.remove();
-    }
-  }, 5000);
-}
-
-// ADICIONAR ANIMAÇÃO CSS PARA A MENSAGEM
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideInRight {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-`;
-document.head.appendChild(style);
-
-// FUNÇÃO PARA CONVERTER STRING DE DATA DA PLANILHA PARA OBJETO DATE
-function parseDataPlanilha(dataStr) {
-  // Formato: "2025-11-24 00:00:00"
-  if (!dataStr) return null;
-  
-  // Remover a parte do tempo se existir
-  const datePart = dataStr.toString().split(' ')[0];
-  const parts = datePart.split('-');
-  
-  if (parts.length === 3) {
-    const ano = parseInt(parts[0]);
-    const mes = parseInt(parts[1]) - 1; // Meses são 0-indexados
-    const dia = parseInt(parts[2]);
-    
-    if (!isNaN(ano) && !isNaN(mes) && !isNaN(dia)) {
-      return new Date(ano, mes, dia);
-    }
-  }
-  
-  // Tentar outros formatos
-  try {
-    const date = new Date(dataStr);
-    if (!isNaN(date.getTime())) {
-      return date;
-    }
-  } catch (e) {
-    console.warn('Não foi possível converter a data:', dataStr, e);
-  }
-  
-  return null;
-}
-
-// FUNÇÃO PRINCIPAL PARA ATUALIZAR DASHBOARD COM FILTROS - MODIFICADA PARA USAR SISTEMA DO INDEX II
-function atualizarDashboardComFiltros() {
-  if (!dadosGlobais) return;
-  
-  // Filtrar dados com base nos filtros ativos
-  dadosFiltrados = filtrarDadosComSistemaIndexII(dadosGlobais);
-  
-  // Atualizar todos os componentes do dashboard
-  atualizarHeader(dadosFiltrados);
-  atualizarKPIs(dadosFiltrados);
-  atualizarMetricasAvancadas(dadosFiltrados);
-  atualizarAreasGrid(dadosFiltrados);
-  atualizarCPAsGrid(dadosFiltrados);
-  atualizarComandantesGrid(dadosFiltrados);
-  
-  destruirGraficos();
-  criarGraficos(dadosFiltrados);
-  
-  atualizarInsights(dadosFiltrados);
-  criarTabelaComparativa(dadosFiltrados);
-}
-
-// NOVA FUNÇÃO DE FILTRAGEM QUE USA O SISTEMA DO INDEX II
-function filtrarDadosComSistemaIndexII(dados) {
-  if (!dados || !dados.registros || !Array.isArray(dados.registros)) {
-    console.error('Dados inválidos para filtragem');
-    return null;
-  }
-  
-  // Aplicar filtros usando o sistema do index II
-  let registrosFiltrados = [...dados.registros];
-  
-  registrosFiltrados = registrosFiltrados.filter(registro => {
-    let incluir = true;
-    
-    // Filtro de CPA - usando normalização do index II
-    if (filtrosAtivos.cpa !== 'todos') {
-      if (normalizar(registro.area) !== normalizar(filtrosAtivos.cpa)) {
-        incluir = false;
-      }
-    }
-    
-    // Filtro de Comandante - usando normalização do index II
-    if (filtrosAtivos.comandante !== 'todos') {
-      if (normalizar(registro.cmte) !== normalizar(filtrosAtivos.comandante)) {
-        incluir = false;
-      }
-    }
-    
-    // Filtro de BPM - usando normalização do index II
-    if (filtrosAtivos.bpm !== 'todos') {
-      const registroBpm = registro.bpm ? normalizar(registro.bpm) : '';
-      const filtroBpm = normalizar(filtrosAtivos.bpm);
-      if (registroBpm !== filtroBpm) {
-        incluir = false;
-      }
-    }
-    
-    // Filtro de Município - usando normalização do index II
-    if (filtrosAtivos.municipio !== 'todos') {
-      if (normalizar(registro.municipio) !== normalizar(filtrosAtivos.municipio)) {
-        incluir = false;
-      }
-    }
-    
-    // Filtro de Localidades - usando sistema do index II (seleção múltipla)
-    if (localidadesSelecionadasSet.size > 0) {
-      const registroLocalidade = normalizar(registro.localidade);
-      let encontrou = false;
-      
-      for (let loc of localidadesSelecionadasSet) {
-        if (registroLocalidade === normalizar(loc)) {
-          encontrou = true;
-          break;
-        }
-      }
-      
-      if (!encontrou) {
-        incluir = false;
-      }
-    }
-    
-    return incluir;
-  });
-  
-  // Processar dados filtrados (mantendo estrutura do index I)
-  const dadosFiltrados = {
-    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
-    areas: {},
-    evolucao: [],
-    diasOperacao: [],
-    comandantes: {},
-    municipios: {},
-    registros: registrosFiltrados
-  };
-  
-  // Processar dados filtrados (código original do index I)
-  const areasMap = {};
-  const comandantesMap = {};
-  const municipiosData = {};
-  const evolucaoMap = {};
-  
-  registrosFiltrados.forEach(registro => {
-    const area = registro.area;
-    const comandante = registro.cmte;
-    const municipio = registro.municipio;
-    const dataKey = registro.data.toISOString().split('T')[0];
-    
-    // Inicializar área
-    if (!areasMap[area]) {
-      areasMap[area] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0,
-        diasAtivos: new Set(),
-        municipios: new Set(),
-        comandantes: new Set()
-      };
-    }
-    
-    // Inicializar comandante
-    if (!comandantesMap[comandante]) {
-      comandantesMap[comandante] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0,
-        areas: new Set(),
-        bpm: registro.bpm
-      };
-    }
-    
-    // Inicializar município
-    if (!municipiosData[municipio]) {
-      municipiosData[municipio] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0
-      };
-    }
-    
-    // Inicializar evolução diária
-    if (!evolucaoMap[dataKey]) {
-      evolucaoMap[dataKey] = {
-        data: registro.data,
-        barricadas: 0,
-        vias: 0,
-        peso: 0
-      };
-    }
-    
-    // Adicionar valores
-    areasMap[area].barricadas += registro.remocoes;
-    areasMap[area].vias += registro.vias;
-    areasMap[area].peso += registro.peso;
-    areasMap[area].diasAtivos.add(dataKey);
-    areasMap[area].municipios.add(municipio);
-    areasMap[area].comandantes.add(comandante);
-    
-    comandantesMap[comandante].barricadas += registro.remocoes;
-    comandantesMap[comandante].vias += registro.vias;
-    comandantesMap[comandante].peso += registro.peso;
-    comandantesMap[comandante].areas.add(area);
-    
-    municipiosData[municipio].barricadas += registro.remocoes;
-    municipiosData[municipio].vias += registro.vias;
-    municipiosData[municipio].peso += registro.peso;
-    
-    evolucaoMap[dataKey].barricadas += registro.remocoes;
-    evolucaoMap[dataKey].vias += registro.vias;
-    evolucaoMap[dataKey].peso += registro.peso;
-  });
-  
-  // Converter maps para arrays/objetos
-  dadosFiltrados.areas = areasMap;
-  dadosFiltrados.comandantes = comandantesMap;
-  dadosFiltrados.municipios = municipiosData;
-  
-  // Ordenar evolução por data
-  dadosFiltrados.evolucao = Object.values(evolucaoMap)
-    .sort((a, b) => a.data - b.data)
-    .map(item => ({
-      data: item.data.toLocaleDateString('pt-BR'),
-      barricadas: item.barricadas,
-      vias: item.vias,
-      peso: item.peso
-    }));
-  
-  // Dias únicos de operação
-  dadosFiltrados.diasOperacao = [...new Set(dadosFiltrados.evolucao.map(d => d.data))];
-  
-  // Calcular totais
-  dadosFiltrados.totais.barricadas = Object.values(areasMap).reduce((sum, a) => sum + a.barricadas, 0);
-  dadosFiltrados.totais.vias = Object.values(areasMap).reduce((sum, a) => sum + a.vias, 0);
-  dadosFiltrados.totais.peso = Object.values(areasMap).reduce((sum, a) => sum + a.peso, 0);
-  dadosFiltrados.totais.dias = dadosFiltrados.diasOperacao.length;
-  
-  // Calcular métricas adicionais para cada área
-  for (let area in areasMap) {
-    const a = areasMap[area];
-    a.eficiencia = a.barricadas > 0 ? a.peso / a.barricadas : 0;
-    a.percentualPeso = dadosFiltrados.totais.peso > 0 ? (a.peso / dadosFiltrados.totais.peso * 100) : 0;
-    a.percentualBarricadas = dadosFiltrados.totais.barricadas > 0 ? (a.barricadas / dadosFiltrados.totais.barricadas * 100) : 0;
-    a.mediaDiaria = a.diasAtivos.size > 0 ? a.barricadas / a.diasAtivos.size : 0;
-  }
-  
-  // Calcular métricas para comandantes
-  for (let comandante in comandantesMap) {
-    const c = comandantesMap[comandante];
-    c.eficiencia = c.barricadas > 0 ? c.peso / c.barricadas : 0;
-    c.percentualPeso = dadosFiltrados.totais.peso > 0 ? (c.peso / dadosFiltrados.totais.peso * 100) : 0;
-    c.percentualBarricadas = dadosFiltrados.totais.barricadas > 0 ? (c.barricadas / dadosFiltrados.totais.barricadas * 100) : 0;
-  }
-  
-  return dadosFiltrados;
-}
-
-// FUNÇÃO PARA ATUALIZAR GRID DE CPAS - ORIGINAL DO INDEX I
-function atualizarCPAsGrid(dados) {
-  const grid = document.getElementById('cpaGrid');
-  grid.innerHTML = '';
-  
-  if (!dados || !dados.areas) {
-    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado encontrado</div>';
-    return;
-  }
-  
-  for (const [area, dadosArea] of Object.entries(dados.areas)) {
-    const bpmList = cpaBPMs[area] || [];
-    
-    const card = `
-      <div class="cpa-card" onclick="abrirModalCPA('${area}')">
-        <div class="cpa-header">
-          <div class="cpa-icon" style="background: linear-gradient(135deg, ${colors[area]} 0%, ${colors[area]}dd 100%);">
-            ${area.charAt(0)}
-          </div>
-          <div class="cpa-info">
-            <h4>ÁREA ${area}</h4>
-            <p>${cpaComandantes[area] || 'Comandante não especificado'}</p>
-            <small>BPMs: ${bpmList.join(', ')}</small>
-          </div>
-        </div>
-        
-        <div class="cpa-details">
-          <div class="cpa-detail">
-            <span class="cpa-detail-value">${Math.round(dadosArea.barricadas)}</span>
-            <span class="cpa-detail-label">Remoções</span>
-          </div>
-          <div class="cpa-detail">
-            <span class="cpa-detail-value">${Math.round(dadosArea.vias)}</span>
-            <span class="cpa-detail-label">Vias</span>
-          </div>
-          <div class="cpa-detail">
-            <span class="cpa-detail-value">${Math.round(dadosArea.peso)}</span>
-            <span class="cpa-detail-label">Toneladas</span>
-          </div>
-          <div class="cpa-detail">
-            <span class="cpa-detail-value">${dadosArea.eficiencia.toFixed(1)}</span>
-            <span class="cpa-detail-label">ton/rem</span>
-          </div>
-        </div>
-        
-        <div class="insight info mt-2">
-          <i class="fas fa-chart-line"></i>
-          <span>${dadosArea.diasAtivos.size} dias de operação</span>
-        </div>
+  <!-- MODAL PDF -->
+  <div id="modalPDF" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title">Pré-visualização do PDF</span>
+        <button class="modal-close" onclick="fecharModal('modalPDF')">&times;</button>
       </div>
-    `;
-    
-    grid.innerHTML += card;
-  }
-  
-  if (grid.innerHTML === '') {
-     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado encontrado para os filtros selecionados.</div>';
-  }
-}
-
-// FUNÇÃO PARA ABRIR MODAL DE CPA - ORIGINAL DO INDEX I
-function abrirModalCPA(area) {
-  const comandante = cpaComandantes[area] || 'Não especificado';
-  const bpmList = cpaBPMs[area] || [];
-  const dadosArea = dadosFiltrados ? dadosFiltrados.areas[area] : { barricadas: 0, vias: 0, peso: 0 };
-  
-  document.getElementById('modalCPATitle').textContent = `ÁREA ${area}`;
-  
-  // Coletar informações dos registros desta CPA
-  const registrosCPA = dadosFiltrados ? dadosFiltrados.registros.filter(r => r.area === area) : [];
-  const municipios = [...new Set(registrosCPA.map(r => municipiosMap[r.municipio] || r.municipio))];
-  
-  // Ordenar registros por data (mais recente primeiro)
-  registrosCPA.sort((a, b) => b.data - a.data);
-  
-  document.getElementById('modalCPABody').innerHTML = `
-    <div class="modal-section">
-      <h4><i class="fas fa-user"></i> Informações da CPA</h4>
-      <p><strong>Comandante:</strong> ${comandante}</p>
-      <p><strong>Batalhões:</strong> ${bpmList.join(', ')}</p>
-      <p><strong>Municípios de atuação:</strong> ${municipios.join(', ')}</p>
-      <p><strong>Dias de operação:</strong> ${dadosArea.diasAtivos ? dadosArea.diasAtivos.size : 0} dias</p>
-    </div>
-    
-    <div class="modal-section">
-      <h4><i class="fas fa-chart-bar"></i> Estatísticas</h4>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 15px;">
-        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.barricadas)}</div>
-          <div style="font-size: 12px; color: var(--gray-600);">Barricadas Removidas</div>
+      <div class="modal-body">
+        <div class="pdf-preview-container">
+          <iframe id="pdfPreview" class="pdf-preview-iframe"></iframe>
         </div>
-        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.peso)}</div>
-          <div style="font-size: 12px; color: var(--gray-600);">Toneladas</div>
-        </div>
-        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${Math.round(dadosArea.vias)}</div>
-          <div style="font-size: 12px; color: var(--gray-600);">Vias Liberadas</div>
-        </div>
-        <div style="background: var(--gray-100); padding: 15px; border-radius: 10px; text-align: center;">
-          <div style="font-size: 24px; font-weight: 700; color: ${colors[area]};">${dadosArea.eficiencia.toFixed(2)}</div>
-          <div style="font-size: 12px; color: var(--gray-600);">Eficiência (ton/rem)</div>
+        <div class="pdf-actions">
+          <button class="btn" onclick="baixarPDF()">
+            <i class="fas fa-download"></i> Baixar PDF
+          </button>
+          <button class="btn btn-limpar" onclick="fecharModal('modalPDF')">
+            <i class="fas fa-times"></i> Fechar
+          </button>
         </div>
       </div>
     </div>
-    
-    <div class="modal-section">
-      <h4><i class="fas fa-map"></i> Localidades Atendidas (${registrosCPA.length} registros)</h4>
-      <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background: var(--gray-100);">
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Data</th>
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Município</th>
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Localidade</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Remoções</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Peso</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Vias</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${registrosCPA.map(registro => `
-              <tr style="border-bottom: 1px solid var(--gray-200);">
-                <td style="padding: 10px; font-size: 12px;">${registro.data.toLocaleDateString('pt-BR')}</td>
-                <td style="padding: 10px; font-size: 12px;">${municipiosMap[registro.municipio] || registro.municipio}</td>
-                <td style="padding: 10px; font-size: 12px;">${registro.bairro || registro.localidade || 'Não especificado'}</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px; font-weight: 700;">${registro.remocoes}</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.peso || 0} ton</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.vias || 0}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  `;
-  
-  abrirModal('modalCPA');
-}
+  </div>
 
-// FUNÇÃO PARA ATUALIZAR GRID DE COMANDANTES - ORIGINAL DO INDEX I
-function atualizarComandantesGrid(dados) {
-  const grid = document.getElementById('comandantesGrid');
-  grid.innerHTML = '';
-  
-  if (!dados || !dados.comandantes) {
-    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum comandante encontrado</div>';
-    return;
-  }
-  
-  for (const [comandante, dadosCmd] of Object.entries(dados.comandantes)) {
-    const areasArray = Array.from(dadosCmd.areas || []);
-    const areaCor = areasArray.length > 0 ? colors[areasArray[0]] : colors.ALPHA;
-    
-    const card = `
-      <div class="comandante-card" onclick="abrirModalComandante('${comandante}')" style="border-left-color: ${areaCor};">
-        <div class="comandante-header">
-          <div class="comandante-name">${comandante.split('Cel PM ')[1] || comandante}</div>
-          <div class="comandante-cpa">${areasArray.length > 0 ? areasArray.join(', ') : 'N/A'}</div>
-        </div>
-        
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-          <div style="width: 50px; height: 50px; background: ${areaCor}; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
-            ${comandante.charAt(0)}
-          </div>
-          <div>
-            <p style="margin: 0; font-weight: 600;">${dadosCmd.bpm || 'BPM não especificado'}</p>
-            <p style="margin: 5px 0 0; font-size: 14px; color: var(--gray-600);">Batalhão</p>
-          </div>
-        </div>
-        
-        <div class="comandante-stats">
-          <div class="comandante-stat">
-            <span class="comandante-stat-value">${Math.round(dadosCmd.barricadas)}</span>
-            <span class="comandante-stat-label">Remoções</span>
-          </div>
-          <div class="comandante-stat">
-             <span class="comandante-stat-value">${Math.round(dadosCmd.peso)}</span>
-             <span class="comandante-stat-label">Toneladas</span>
-          </div>
-        </div>
-        
-        <div class="insight info mt-2">
-          <i class="fas fa-chart-line"></i>
-          <span>Eficiência: ${dadosCmd.eficiencia.toFixed(2)} ton/rem</span>
-        </div>
+  <!-- MODAL CPA DETAILS -->
+  <div id="modalCPA" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalCPATitle"></span>
+        <button class="modal-close" onclick="fecharModal('modalCPA')">&times;</button>
       </div>
-    `;
-    
-    grid.innerHTML += card;
-  }
-  
-  if (grid.innerHTML === '') {
-     grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum comandante correspondente aos filtros.</div>';
-  }
-}
-
-// FUNÇÃO PARA ABRIR MODAL DE COMANDANTE - ORIGINAL DO INDEX I
-function abrirModalComandante(comandante) {
-  const dadosCmd = dadosFiltrados ? dadosFiltrados.comandantes[comandante] : { barricadas: 0, vias: 0, peso: 0 };
-  const areasArray = Array.from(dadosCmd.areas || []);
-  const areaCor = areasArray.length > 0 ? colors[areasArray[0]] : colors.ALPHA;
-  
-  document.getElementById('modalComandanteTitle').textContent = comandante;
-  
-  // Coletar registros deste comandante
-  const registrosCmd = dadosFiltrados ? dadosFiltrados.registros.filter(r => r.cmte === comandante) : [];
-  const municipios = [...new Set(registrosCmd.map(r => municipiosMap[r.municipio] || r.municipio))];
-  
-  // Ordenar registros por data (mais recente primeiro)
-  registrosCmd.sort((a, b) => b.data - a.data);
-  
-  document.getElementById('modalComandanteBody').innerHTML = `
-    <div class="modal-section">
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-        <div>
-          <h4><i class="fas fa-info-circle"></i> Informações</h4>
-          <p><strong>Batalhão:</strong> ${dadosCmd.bpm || 'Não especificado'}</p>
-          <p><strong>CPAs sob comando:</strong> ${areasArray.join(', ')}</p>
-          <p><strong>Municípios de atuação:</strong> ${municipios.join(', ')}</p>
-          <p><strong>Total de operações:</strong> ${registrosCmd.length}</p>
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4>Comandante</h4>
+          <p id="cpaComandante"></p>
         </div>
-        
-        <div>
-          <h4><i class="fas fa-chart-line"></i> Estatísticas</h4>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
-            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.barricadas)}</div>
-              <div style="font-size: 11px; color: var(--gray-600);">Remoções</div>
-            </div>
-            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.peso)}</div>
-              <div style="font-size: 11px; color: var(--gray-600);">Toneladas</div>
-            </div>
-            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${Math.round(dadosCmd.vias)}</div>
-              <div style="font-size: 11px; color: var(--gray-600);">Vias</div>
-            </div>
-            <div style="background: var(--gray-100); padding: 10px; border-radius: 8px; text-align: center;">
-              <div style="font-size: 20px; font-weight: 700; color: ${areaCor};">${dadosCmd.eficiencia.toFixed(2)}</div>
-              <div style="font-size: 11px; color: var(--gray-600);">Eficiência</div>
-            </div>
-          </div>
+        <div class="modal-section">
+          <h4>Batalhões e Áreas de Atuação</h4>
+          <div id="cpaBPMList"></div>
+        </div>
+        <div class="pdf-actions">
+          <button class="btn btn-pdf" onclick="gerarPDFCPA()">
+            <i class="fas fa-file-pdf"></i> Gerar PDF
+          </button>
         </div>
       </div>
     </div>
-    
-    <div class="modal-section">
-      <h4><i class="fas fa-map-marked-alt"></i> Todas as Operações (${registrosCmd.length} registros)</h4>
-      <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background: var(--gray-100);">
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Data</th>
-              <th style="padding: 10px; text-align: left; font-size: 12px;">CPA</th>
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Município</th>
-              <th style="padding: 10px; text-align: left; font-size: 12px;">Localidade</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Remoções</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Peso</th>
-              <th style="padding: 10px; text-align: center; font-size: 12px;">Vias</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${registrosCmd.map(registro => `
-              <tr style="border-bottom: 1px solid var(--gray-200);">
-                <td style="padding: 10px; font-size: 12px;">${registro.data.toLocaleDateString('pt-BR')}</td>
-                <td style="padding: 10px; font-size: 12px;">${registro.area}</td>
-                <td style="padding: 10px; font-size: 12px;">${municipiosMap[registro.municipio] || registro.municipio}</td>
-                <td style="padding: 10px; font-size: 12px;">${registro.bairro || registro.localidade || 'Não especificado'}</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px; font-weight: 700;">${registro.remocoes}</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.peso || 0} ton</td>
-                <td style="padding: 10px; text-align: center; font-size: 12px;">${registro.vias || 0}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  `;
-  
-  abrirModal('modalComandante');
-}
+  </div>
 
-// ============================================================================
-// NOVO SISTEMA DE PROCESSAMENTO DA PLANILHA DO INDEX-TESTE
-// ============================================================================
+  <script>
+    // ============================================================================
+    // VARIÁVEIS GLOBAIS
+    // ============================================================================
 
-// FUNÇÃO PRINCIPAL DE PROCESSAMENTO DA PLANILHA - DO INDEX-TESTE (ADAPTADA)
-function processarPlanilha() {
-  const file = document.getElementById("fileInput").files[0];
-  if (!file) {
-    mostrarMensagem("⚠️ Por favor, selecione a planilha Excel!", "warning");
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, {type: 'binary'});
-      
-      // Verificar abas obrigatórias
-      if (!workbook.Sheets['GLOBAL'] || !workbook.Sheets['CPA x BTL']) {
-        mostrarMensagem('Planilha inválida: Abas GLOBAL ou CPA x BTL ausentes.', 'danger');
-        return;
-      }
-      
-      // Processar GLOBAL - usando a lógica do index-teste
-      let globalSheet = workbook.Sheets['GLOBAL'];
-      let globalData = XLSX.utils.sheet_to_json(globalSheet, {header: 1, defval: ''});
-      
-      // Cabeçalhos esperados
-      const headers = globalData[0].map(h => h.trim().replace(/\xa0/g, ' '));
-      
-      // Remover header
-      globalData = globalData.slice(1);
-      
-      // Limpar e normalizar dados - método do index-teste
-      let registros = globalData.map(row => {
-        let obj = {};
-        headers.forEach((header, idx) => {
-          let value = row[idx];
-          if (typeof value === 'string') {
-            value = value.trim().replace(/\xa0/g, ' ').replace(/ +/g, ' ');
-          } else if (typeof value === 'number' && header === 'DATA') {
-            // Converter data serial Excel para JS Date (método do index-teste)
-            // Correção para o problema de fuso horário (UTC) que causa o erro de um dia a menos
-            // A data do Excel é convertida para 00:00:00 UTC. Se o fuso horário local for negativo (ex: UTC-3),
-            // a data é exibida como o dia anterior. Adicionamos o offset do fuso horário local para compensar.
-            const excelDateMilliseconds = (value - 25569) * 86400 * 1000;
-            const date = new Date(excelDateMilliseconds);
-            const offsetMinutes = date.getTimezoneOffset();
-            value = new Date(date.getTime() + (offsetMinutes * 60 * 1000));
-          } else if (typeof value === 'number' && ['REMOÇÕES', 'VIAS', 'PESO/TON'].includes(header)) {
-            value = value || 0;
-          }
-          obj[header] = value;
-        });
-        return obj;
-      }).filter(row => row.DATA);  // Filtrar linhas vazias
-      
-      // Processar CPA x BTL para obter o mapeamento de comandantes por CPA
-      let cpaSheet = workbook.Sheets['CPA x BTL'];
-      let cpaData = XLSX.utils.sheet_to_json(cpaSheet, {header: 1, defval: ''});
-      
-      let cpaHeaders = cpaData[0].map(h => h.trim().replace(/\xa0/g, ' '));
-      const areasCol = cpaHeaders.findIndex(h => h === 'ÁREAS DE ATUAÇÃO' || h === 'BAIRROS / MUNICÍPIOS DE ATUAÇÃO');
-      if (areasCol !== -1) {
-        cpaHeaders[areasCol] = 'AREAS_ATUACAO';
-      }
-      
-      cpaData = cpaData.slice(1);
-      
-      // Atualizar mapeamento de comandantes com dados da planilha
-      cpaData.forEach(row => {
-        let obj = {};
-        cpaHeaders.forEach((header, idx) => {
-          let value = row[idx];
-          if (typeof value === 'string') {
-            value = value.trim().replace(/\xa0/g, ' ').replace(/ +/g, ' ');
-          }
-          obj[header] = value;
-        });
-        if (obj.CPA && obj.CMTE) {
-          cpaComandantes[obj.ÁREA || obj.CPA] = obj.CMTE;
-        }
-      });
-      
-      // Processar os registros para a estrutura do index
-      dadosGlobais = processarDadosPlanilha2(registros);
-      
-      if (!dadosGlobais || !dadosGlobais.registros || dadosGlobais.registros.length === 0) {
-        mostrarMensagem("❌ Nenhum dado válido encontrado na planilha!", "danger");
-        return;
-      }
-      
-      // Criar uma versão simples para o sistema de filtros do index II
-      dadosOriginais = [];
-      dadosGlobais.registros.forEach(registro => {
-        dadosOriginais.push({
-          'DATA': registro.data.toISOString().split('T')[0],
-          'ÁREA': registro.area,
-          'MUNICÍPIO': registro.municipio,
-          'BAIRRO': registro.bairro,
-          'LOCALIDADE': registro.localidade,
-          'REMOÇÕES': registro.remocoes,
-          'VIAS': registro.vias,
-          'PESO/TON': registro.peso,
-          'CPA': registro.area,
-          'CMTE': registro.cmte,
-          'BPM': registro.bpm
-        });
-      });
-      
-      dadosFiltrados = JSON.parse(JSON.stringify(dadosGlobais));
-      
-      // Inicializar filtros com dados reais (usando sistema do index II)
-      preencherFiltros(dadosOriginais);
-      
-      atualizarDashboardComFiltros();
-      
-      document.getElementById("dashboard").classList.remove("hidden");
-      document.getElementById("dashboard").style.animation = "fadeIn 0.5s ease";
-      
-      setTimeout(() => {
-        document.getElementById("dashboard").scrollIntoView({ behavior: 'smooth' });
-      }, 200);
-      
-      mostrarMensagem("✅ Dashboard atualizado com sucesso! " + dadosGlobais.registros.length + " registros processados.", "success");
-      
-    } catch (error) {
-      console.error(error);
-      mostrarMensagem("❌ Erro ao processar planilha: " + error.message, "danger");
-    }
-  };
-  reader.readAsBinaryString(file);
-}
-
-// NOVA FUNÇÃO PARA PROCESSAR DADOS DA PLANILHA - ADAPTADA DO INDEX-TESTE
-function processarDadosPlanilha2(registros) {
-  const dados = {
-    totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
-    areas: {},
-    evolucao: [],
-    diasOperacao: [],
-    comandantes: {},
-    municipios: {},
-    registros: []
-  };
-  
-  // Processar cada registro
-  registros.forEach(registroObj => {
-    // Extrair dados do objeto
-    const dataStr = registroObj.DATA;
-    const area = registroObj.ÁREA || '';
-    const municipio = registroObj.MUNICÍPIO || '';
-    const bairro = registroObj.BAIRRO || '';
-    const localidade = registroObj.LOCALIDADE || '';
-    const remocoes = parseFloat(registroObj.REMOÇÕES) || 0;
-    const vias = parseFloat(registroObj.VIAS) || 0;
-    const peso = parseFloat(registroObj['PESO/TON']) || 0;
-    const cpa = registroObj.CPA || '';
-    const cmte = registroObj.CMTE || '';
-    const bpm = registroObj.BPM || '';
-    
-    // Validar dados mínimos
-    if (!dataStr || !area) return;
-    
-    // Converter data
-    let data;
-    if (dataStr instanceof Date) {
-      data = dataStr;
-    } else {
-      data = parseDataPlanilha(dataStr);
-      if (!data) {
-        console.warn('Data inválida:', dataStr);
-        return;
-      }
-    }
-    
-    // Normalizar BPM
-    const bpmNormalizado = bpm ? bpm.toString().trim() : '';
-    
-    // Criar registro no formato do index
-    const registro = {
-      data: data,
-      area: area.toString().trim(),
-      municipio: municipio.toString().trim(),
-      bairro: bairro.toString().trim(),
-      localidade: localidade.toString().trim(),
-      remocoes: remocoes,
-      vias: vias,
-      peso: peso,
-      cpa: cpa.toString().trim(),
-      cmte: cmte.toString().trim(),
-      bpm: bpmNormalizado
+    let dadosBrutos = null;
+    let dadosFiltrados = null;
+    let filtrosAtivos = {
+      cpa: 'todos',
+      bpm: 'todos',
+      municipio: 'todos'
     };
-    
-    dados.registros.push(registro);
-    
-    // Atualizar totais
-    dados.totais.barricadas += remocoes;
-    dados.totais.vias += vias;
-    dados.totais.peso += peso;
-  });
-  
-  // Se não houver registros, retornar estrutura vazia
-  if (dados.registros.length === 0) {
-    console.warn('Nenhum registro válido encontrado na planilha');
-    return dados;
-  }
-  
-  // Calcular dias únicos
-  const datasUnicas = [...new Set(dados.registros.map(r => r.data.toISOString().split('T')[0]))];
-  dados.totais.dias = datasUnicas.length;
-  dados.diasOperacao = datasUnicas.sort().map(d => new Date(d).toLocaleDateString('pt-BR'));
-  
-  // Agrupar por área (CPA)
-  dados.registros.forEach(registro => {
-    const area = registro.area;
-    
-    if (!dados.areas[area]) {
-      dados.areas[area] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0,
-        diasAtivos: new Set(),
+
+    const colors = {
+      '1ª': '#2196f3',
+      '2ª': '#f44336',
+      '3ª': '#4caf50',
+      '4ª': '#ff9800'
+    };
+
+    let cpaComandantes = {};
+    let cpaDetails = {}; // Para armazenar BPMs e áreas por CPA
+
+    // ============================================================================
+    // FUNÇÕES AUXILIARES
+    // ============================================================================
+
+    function mostrarMensagem(texto, classe) {
+      const msg = document.createElement('div');
+      msg.className = `mensagem ${classe}`;
+      msg.innerHTML = `<i class="fas fa-${classe === 'success' ? 'check-circle' : classe === 'warning' ? 'exclamation-triangle' : classe === 'danger' ? 'times-circle' : 'info-circle'}"></i> ${texto}`;
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 5000);
+    }
+
+    function abrirModal(id) {
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function fecharModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
+
+    function atualizarStatusFiltros() {
+      const status = document.getElementById('statusFiltros');
+      const ativos = Object.entries(filtrosAtivos).filter(([k, v]) => v !== 'todos').map(([k, v]) => `${k}: ${v}`).join(', ');
+      status.textContent = ativos ? `Filtros ativos: ${ativos}` : 'Nenhum filtro aplicado';
+      status.style.display = 'block';
+    }
+
+    function limparFiltros() {
+      document.getElementById('filtroCPA').value = 'todos';
+      document.getElementById('filtroBPM').value = 'todos';
+      document.getElementById('filtroMunicipio').value = 'todos';
+      aplicarFiltros();
+    }
+
+    // ============================================================================
+    // PROCESSAMENTO DE DADOS
+    // ============================================================================
+
+    async function processarExcel(file) {
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+        // Processar sheet GLOBAL
+        const globalSheet = workbook.Sheets['GLOBAL'];
+        const globalData = XLSX.utils.sheet_to_json(globalSheet, { header: 1 });
+
+        // Headers
+        const headers = globalData[0];
+        const dataRows = globalData.slice(1).filter(row => row.some(cell => cell));
+
+        dadosBrutos = {
+          rows: dataRows, // Armazenar rows para filtragem
+          totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
+          cpas: {},
+          bpms: {},
+          municipios: new Set(),
+          evolucao: {}
+        };
+
+        // Mapear CPAs, Comandantes, BPMs e Áreas da sheet CPA x BTL
+        const cpaBtlSheet = workbook.Sheets['CPA x BTL'];
+        if (cpaBtlSheet) {
+          const cpaBtlData = XLSX.utils.sheet_to_json(cpaBtlSheet, { header: ['CPA', 'CMT', 'TEL', 'BPM', 'AREA', 'AREAS'] }).slice(1);
+          let currentCPA = null;
+          let currentComandante = null;
+          cpaBtlData.forEach(row => {
+            if (row.CPA) {
+              currentCPA = row.CPA.trim().replace('°', 'ª');
+              currentComandante = row.CMT ? row.CMT.trim() : currentComandante;
+              cpaComandantes[currentCPA] = currentComandante;
+              if (!cpaDetails[currentCPA]) cpaDetails[currentCPA] = [];
+            }
+            if (currentCPA && row.BPM) {
+              cpaDetails[currentCPA].push({
+                bpm: row.BPM.trim(),
+                area: row.AREA ? row.AREA.trim() : '',
+                areasAtuacao: row.AREAS ? row.AREAS.trim() : ''
+              });
+            }
+          });
+        }
+
+        const dateSet = new Set();
+
+        dataRows.forEach(row => {
+          const data = parseFloat(row[0]) || null;
+          let cpa = (row[8] || '').trim();
+          cpa = cpa.replace('°', 'ª'); // Normalizar
+          const bpm = (row[10] || '').trim();
+          const municipio = (row[2] || '').trim();
+          const remocoes = parseFloat(row[5]) || 0;
+          const vias = parseFloat(row[6]) || 0;
+          const peso = parseFloat(row[7]) || 0;
+
+          if (cpa && remocoes > 0) {
+            // Atualizar totais
+            dadosBrutos.totais.barricadas += remocoes;
+            dadosBrutos.totais.vias += vias;
+            dadosBrutos.totais.peso += peso;
+
+            // Dias
+            if (data) dateSet.add(data);
+
+            // Por CPA
+            if (!dadosBrutos.cpas[cpa]) dadosBrutos.cpas[cpa] = { barricadas: 0, vias: 0, peso: 0, bpms: new Set(), eficiencia: 0 };
+            dadosBrutos.cpas[cpa].barricadas += remocoes;
+            dadosBrutos.cpas[cpa].vias += vias;
+            dadosBrutos.cpas[cpa].peso += peso;
+            dadosBrutos.cpas[cpa].eficiencia = dadosBrutos.cpas[cpa].barricadas / (dadosBrutos.cpas[cpa].vias || 1);
+
+            // Por BPM
+            const bpmKey = `${cpa}-${bpm}`;
+            if (!dadosBrutos.bpms[bpmKey]) dadosBrutos.bpms[bpmKey] = { cpa, bpm, barricadas: 0, vias: 0, peso: 0, eficiencia: 0 };
+            dadosBrutos.bpms[bpmKey].barricadas += remocoes;
+            dadosBrutos.bpms[bpmKey].vias += vias;
+            dadosBrutos.bpms[bpmKey].peso += peso;
+            dadosBrutos.bpms[bpmKey].eficiencia = dadosBrutos.bpms[bpmKey].barricadas / (dadosBrutos.bpms[bpmKey].vias || 1);
+
+            dadosBrutos.cpas[cpa].bpms.add(bpm);
+
+            // Municípios
+            if (municipio) dadosBrutos.municipios.add(municipio);
+
+            // Evolução
+            if (data) {
+              const dateStr = new Date(Math.round((data - 25569) * 86400 * 1000)).toLocaleDateString('pt-BR');
+              if (!dadosBrutos.evolucao[dateStr]) dadosBrutos.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
+              dadosBrutos.evolucao[dateStr].barricadas += remocoes;
+              dadosBrutos.evolucao[dateStr].vias += vias;
+              dadosBrutos.evolucao[dateStr].peso += peso;
+            }
+          }
+        });
+
+        dadosBrutos.totais.dias = dateSet.size;
+
+        // Calcular percentuais para CPAs
+        Object.entries(dadosBrutos.cpas).forEach(([cpa, data]) => {
+          data.percentualBarricadas = (data.barricadas / dadosBrutos.totais.barricadas) * 100 || 0;
+        });
+
+        // Ordenar evolução
+        dadosBrutos.evolucao = Object.entries(dadosBrutos.evolucao)
+          .sort((a, b) => new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-')))
+          .map(([data, vals]) => ({ data, ...vals }));
+
+        // Preencher selects de filtros
+        const selectCPA = document.getElementById('filtroCPA');
+        selectCPA.innerHTML = '<option value="todos">Todos</option>' + Object.keys(dadosBrutos.cpas).map(cpa => `<option value="${cpa}">${cpa}</option>`).join('');
+
+        const selectBPM = document.getElementById('filtroBPM');
+        const allBPMs = new Set(Object.values(dadosBrutos.bpms).map(b => b.bpm));
+        selectBPM.innerHTML = '<option value="todos">Todos</option>' + Array.from(allBPMs).map(bpm => `<option value="${bpm}">${bpm}</option>`).join('');
+
+        const selectMunicipio = document.getElementById('filtroMunicipio');
+        selectMunicipio.innerHTML = '<option value="todos">Todos</option>' + Array.from(dadosBrutos.municipios).map(mun => `<option value="${mun}">${mun}</option>`).join('');
+
+        // Aplicar filtros iniciais
+        aplicarFiltros();
+
+        mostrarMensagem('Planilha processada com sucesso!', 'success');
+
+      } catch (error) {
+        console.error('Erro ao processar Excel:', error);
+        mostrarMensagem('Erro ao processar planilha: ' + error.message, 'danger');
+      }
+    }
+
+    function aplicarFiltros() {
+      filtrosAtivos.cpa = document.getElementById('filtroCPA').value;
+      filtrosAtivos.bpm = document.getElementById('filtroBPM').value;
+      filtrosAtivos.municipio = document.getElementById('filtroMunicipio').value;
+
+      // Filtrar rows
+      let filteredRows = dadosBrutos.rows.filter(row => {
+        let rowCPA = (row[8] || '').trim();
+        rowCPA = rowCPA.replace('°', 'ª');
+        const rowBPM = (row[10] || '').trim();
+        const rowMunicipio = (row[2] || '').trim();
+
+        return (filtrosAtivos.cpa === 'todos' || rowCPA === filtrosAtivos.cpa) &&
+               (filtrosAtivos.bpm === 'todos' || rowBPM === filtrosAtivos.bpm) &&
+               (filtrosAtivos.municipio === 'todos' || rowMunicipio.toLowerCase() === filtrosAtivos.municipio.toLowerCase());
+      });
+
+      // Recalcular agregações baseadas em filteredRows
+      dadosFiltrados = {
+        totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
+        cpas: {},
+        bpms: {},
         municipios: new Set(),
-        comandantes: new Set()
+        evolucao: {}
       };
-    }
-    
-    dados.areas[area].barricadas += registro.remocoes;
-    dados.areas[area].vias += registro.vias;
-    dados.areas[area].peso += registro.peso;
-    dados.areas[area].diasAtivos.add(registro.data.toISOString().split('T')[0]);
-    dados.areas[area].municipios.add(registro.municipio);
-    dados.areas[area].comandantes.add(registro.cmte);
-  });
-  
-  // Agrupar por comandante
-  dados.registros.forEach(registro => {
-    const comandante = registro.cmte;
-    if (!comandante || comandante.trim() === '') return;
-    
-    if (!dados.comandantes[comandante]) {
-      dados.comandantes[comandante] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0,
-        areas: new Set(),
-        bpm: registro.bpm
-      };
-    }
-    
-    dados.comandantes[comandante].barricadas += registro.remocoes;
-    dados.comandantes[comandante].vias += registro.vias;
-    dados.comandantes[comandante].peso += registro.peso;
-    dados.comandantes[comandante].areas.add(registro.area);
-  });
-  
-  // Agrupar por município
-  dados.registros.forEach(registro => {
-    const municipio = registro.municipio;
-    if (!municipio || municipio.trim() === '') return;
-    
-    if (!dados.municipios[municipio]) {
-      dados.municipios[municipio] = {
-        barricadas: 0,
-        vias: 0,
-        peso: 0,
-        areas: new Set()
-      };
-    }
-    
-    dados.municipios[municipio].barricadas += registro.remocoes;
-    dados.municipios[municipio].vias += registro.vias;
-    dados.municipios[municipio].peso += registro.peso;
-    dados.municipios[municipio].areas.add(registro.area);
-  });
-  
-  // Criar evolução temporal
-  const evolucaoMap = {};
-  dados.registros.forEach(registro => {
-    const dataKey = registro.data.toISOString().split('T')[0];
-    
-    if (!evolucaoMap[dataKey]) {
-      evolucaoMap[dataKey] = {
-        data: registro.data,
-        barricadas: 0,
-        vias: 0,
-        peso: 0
-      };
-    }
-    
-    evolucaoMap[dataKey].barricadas += registro.remocoes;
-    evolucaoMap[dataKey].vias += registro.vias;
-    evolucaoMap[dataKey].peso += registro.peso;
-  });
-  
-  // Ordenar evolução por data
-  dados.evolucao = Object.values(evolucaoMap)
-    .sort((a, b) => a.data - b.data)
-    .map(item => ({
-      data: item.data.toLocaleDateString('pt-BR'),
-      barricadas: item.barricadas,
-      vias: item.vias,
-      peso: item.peso
-    }));
-  
-  // Calcular métricas adicionais para cada área
-  for (let area in dados.areas) {
-    const a = dados.areas[area];
-    a.eficiencia = a.barricadas > 0 ? a.peso / a.barricadas : 0;
-    a.percentualPeso = dados.totais.peso > 0 ? (a.peso / dados.totais.peso * 100) : 0;
-    a.percentualBarricadas = dados.totais.barricadas > 0 ? (a.barricadas / dados.totais.barricadas * 100) : 0;
-    a.mediaDiaria = a.diasAtivos.size > 0 ? a.barricadas / a.diasAtivos.size : 0;
-  }
-  
-  // Calcular métricas para comandantes
-  for (let comandante in dados.comandantes) {
-    const c = dados.comandantes[comandante];
-    c.eficiencia = c.barricadas > 0 ? c.peso / c.barricadas : 0;
-    c.percentualPeso = dados.totais.peso > 0 ? (c.peso / dados.totais.peso * 100) : 0;
-    c.percentualBarricadas = dados.totais.barricadas > 0 ? (c.barricadas / dados.totais.barricadas * 100) : 0;
-  }
-  
-  console.log('Dados processados:', {
-    totalRegistros: dados.registros.length,
-    areas: Object.keys(dados.areas),
-    comandantes: Object.keys(dados.comandantes),
-    totais: dados.totais
-  });
-  
-  return dados;
-}
 
-// FUNÇÃO PARA ATUALIZAR HEADER - ORIGINAL DO INDEX I
-function atualizarHeader(dados) {
-  if (!dados) return;
-  
-  document.getElementById('headerBarricadas').textContent = Math.round(dados.totais.barricadas).toLocaleString('pt-BR');
-  document.getElementById('headerVias').textContent = Math.round(dados.totais.vias).toLocaleString('pt-BR');
-  document.getElementById('headerPeso').textContent = Math.round(dados.totais.peso).toLocaleString('pt-BR');
-}
+      const dateSet = new Set();
 
-// FUNÇÃO PARA ATUALIZAR KPIS PRINCIPAIS - ORIGINAL DO INDEX I
-function atualizarKPIs(dados) {
-  if (!dados) return;
-  
-  document.getElementById('totalBarricadas').textContent = Math.round(dados.totais.barricadas).toLocaleString('pt-BR');
-  document.getElementById('totalVias').textContent = Math.round(dados.totais.vias).toLocaleString('pt-BR');
-  document.getElementById('totalToneladas').innerHTML = Math.round(dados.totais.peso).toLocaleString('pt-BR') + '<small style="font-size:24px; font-weight:500;"> ton</small>';
-  
-  const mediaDiaria = dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0;
-  document.getElementById('mediaDiaria').textContent = mediaDiaria.toLocaleString('pt-BR');
-  
-  document.getElementById('insightBarricadas').innerHTML = 
-    `<i class="fas fa-check-circle"></i><span>${Math.round(dados.totais.barricadas)} remoções em ${dados.totais.dias} dias</span>`;
-  
-  document.getElementById('insightVias').innerHTML =
-    `<i class="fas fa-info-circle"></i><span>${Math.round(dados.totais.vias)} vias liberadas para circulação</span>`;
-  
-  const areaMaiorPeso = Object.entries(dados.areas).sort((a, b) => b[1].peso - a[1].peso)[0];
-  document.getElementById('insightToneladas').innerHTML =
-    `<i class="fas fa-exclamation-triangle"></i><span>${areaMaiorPeso ? areaMaiorPeso[0] + ': ' + areaMaiorPeso[1].percentualPeso.toFixed(1) + '% do total' : 'Nenhum dado'}</span>`;
-  
-  document.getElementById('insightMedia').innerHTML =
-    `<i class="fas fa-chart-line"></i><span>Média operacional atual: ${mediaDiaria} por dia</span>`;
-}
+      filteredRows.forEach(row => {
+        const data = parseFloat(row[0]) || null;
+        let cpa = (row[8] || '').trim();
+        cpa = cpa.replace('°', 'ª');
+        const bpm = (row[10] || '').trim();
+        const municipio = (row[2] || '').trim();
+        const remocoes = parseFloat(row[5]) || 0;
+        const vias = parseFloat(row[6]) || 0;
+        const peso = parseFloat(row[7]) || 0;
 
-// FUNÇÃO PARA ATUALIZAR MÉTRICAS AVANÇADAS - ORIGINAL DO INDEX I
-function atualizarMetricasAvancadas(dados) {
-  if (!dados) return;
-  
-  const eficienciaMedia = dados.totais.barricadas > 0 ? dados.totais.peso / dados.totais.barricadas : 0;
-  document.getElementById('eficienciaMedia').textContent = eficienciaMedia.toFixed(2);
-  
-  const melhorDia = dados.evolucao.length > 0 ? dados.evolucao.reduce((max, dia) => dia.barricadas > max.barricadas ? dia : max, dados.evolucao[0]) : { barricadas: 0, data: '-' };
-  document.getElementById('melhorDiaValor').textContent = Math.round(melhorDia.barricadas);
-  document.getElementById('melhorDiaData').innerHTML = 
-    `<i class="fas fa-calendar-check"></i><span>${melhorDia.data}</span>`;
-  
-  const areaMaisEfic = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0];
-  document.getElementById('areaMaisEficiente').textContent = areaMaisEfic ? areaMaisEfic[0] : '-';
-  document.getElementById('eficienciaAreaValor').innerHTML =
-    `<i class="fas fa-award"></i><span>${areaMaisEfic ? areaMaisEfic[1].eficiencia.toFixed(2) + ' ton/remoção' : '-'}</span>`;
-  
-  const areaMaiorVol = Object.entries(dados.areas).sort((a, b) => b[1].peso - a[1].peso)[0];
-  document.getElementById('areaMaiorVolume').textContent = areaMaiorVol ? areaMaiorVol[0] : '-';
-  document.getElementById('volumeAreaValor').innerHTML =
-    `<i class="fas fa-crown"></i><span>${areaMaiorVol ? Math.round(areaMaiorVol[1].peso) + ' toneladas (' + areaMaiorVol[1].percentualPeso.toFixed(1) + '%)' : '-'}</span>`;
-}
+        if (cpa && remocoes > 0) {
+          dadosFiltrados.totais.barricadas += remocoes;
+          dadosFiltrados.totais.vias += vias;
+          dadosFiltrados.totais.peso += peso;
 
-// FUNÇÃO PARA ATUALIZAR GRID DE ÁREAS - ORIGINAL DO INDEX I
-function atualizarAreasGrid(dados) {
-  const grid = document.getElementById('areasGrid');
-  grid.innerHTML = '';
-  
-  if (!dados || !dados.areas) {
-    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhuma área encontrada</div>';
-    return;
-  }
-  
-  const areasOrdenadas = Object.entries(dados.areas).sort((a, b) => b[1].barricadas - a[1].barricadas);
-  
-  if (areasOrdenadas.length === 0) {
-    grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--gray-600); padding: 20px;">Nenhum dado disponível</div>';
-    return;
-  }
-  
-  areasOrdenadas.forEach(([area, dadosArea]) => {
-    const progresso = dados.totais.barricadas > 0 ? (dadosArea.barricadas / dados.totais.barricadas * 100) : 0;
-    
-    const card = `
-      <div class="area-card">
-        <div class="area-header">
-          <div class="area-name">ÁREA ${area}</div>
-          <div class="area-badge" style="background: ${colors[area]}; color: white;">
-            ${dadosArea.diasAtivos.size} DIAS
+          if (data) dateSet.add(data);
+
+          if (!dadosFiltrados.cpas[cpa]) dadosFiltrados.cpas[cpa] = { barricadas: 0, vias: 0, peso: 0, bpms: new Set(), eficiencia: 0 };
+          dadosFiltrados.cpas[cpa].barricadas += remocoes;
+          dadosFiltrados.cpas[cpa].vias += vias;
+          dadosFiltrados.cpas[cpa].peso += peso;
+          dadosFiltrados.cpas[cpa].eficiencia = dadosFiltrados.cpas[cpa].barricadas / (dadosFiltrados.cpas[cpa].vias || 1);
+
+          const bpmKey = `${cpa}-${bpm}`;
+          if (!dadosFiltrados.bpms[bpmKey]) dadosFiltrados.bpms[bpmKey] = { cpa, bpm, barricadas: 0, vias: 0, peso: 0, eficiencia: 0 };
+          dadosFiltrados.bpms[bpmKey].barricadas += remocoes;
+          dadosFiltrados.bpms[bpmKey].vias += vias;
+          dadosFiltrados.bpms[bpmKey].peso += peso;
+          dadosFiltrados.bpms[bpmKey].eficiencia = dadosFiltrados.bpms[bpmKey].barricadas / (dadosFiltrados.bpms[bpmKey].vias || 1);
+
+          dadosFiltrados.cpas[cpa].bpms.add(bpm);
+
+          if (municipio) dadosFiltrados.municipios.add(municipio);
+
+          if (data) {
+            const dateStr = new Date(Math.round((data - 25569) * 86400 * 1000)).toLocaleDateString('pt-BR');
+            if (!dadosFiltrados.evolucao[dateStr]) dadosFiltrados.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
+            dadosFiltrados.evolucao[dateStr].barricadas += remocoes;
+            dadosFiltrados.evolucao[dateStr].vias += vias;
+            dadosFiltrados.evolucao[dateStr].peso += peso;
+          }
+        }
+      });
+
+      dadosFiltrados.totais.dias = dateSet.size;
+
+      Object.entries(dadosFiltrados.cpas).forEach(([cpa, data]) => {
+        data.percentualBarricadas = (data.barricadas / dadosFiltrados.totais.barricadas) * 100 || 0;
+      });
+
+      dadosFiltrados.evolucao = Object.entries(dadosFiltrados.evolucao)
+        .sort((a, b) => new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-')))
+        .map(([data, vals]) => ({ data, ...vals }));
+
+      atualizarDashboard();
+      atualizarStatusFiltros();
+      mostrarMensagem('Filtros aplicados com sucesso!', 'success');
+    }
+
+    // ============================================================================
+    // ATUALIZAÇÃO DO DASHBOARD
+    // ============================================================================
+
+    function atualizarDashboard() {
+      atualizarHeaderStats();
+      criarCardsTotais(dadosFiltrados);
+      criarInsightsCard(dadosFiltrados);
+      criarCardsCPAs(dadosFiltrados);
+      criarCardsBPMs(dadosFiltrados);
+      criarTabelaComparativaCPA(dadosFiltrados);
+      criarTabelaComparativaBPM(dadosFiltrados);
+    }
+
+    function atualizarHeaderStats() {
+      document.getElementById('totalRemocoes').textContent = Math.round(dadosFiltrados.totais.barricadas);
+      document.getElementById('totalVias').textContent = Math.round(dadosFiltrados.totais.vias);
+      document.getElementById('totalPeso').textContent = Math.round(dadosFiltrados.totais.peso);
+      document.getElementById('totalDias').textContent = dadosFiltrados.totais.dias;
+    }
+
+    function criarCardsTotais(dados) {
+      const grid = document.getElementById('cardsTotais');
+      const insights = [
+        {
+          icone: 'fa-shield-alt',
+          titulo: 'Remoções Totais',
+          valor: Math.round(dados.totais.barricadas),
+          descricao: 'Barricadas removidas',
+          classe: 'info'
+        },
+        {
+          icone: 'fa-road',
+          titulo: 'Vias Liberadas',
+          valor: Math.round(dados.totais.vias),
+          descricao: 'Vias desobstruídas',
+          classe: 'success'
+        },
+        {
+          icone: 'fa-chart-line',
+          titulo: 'Média Diária',
+          valor: dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0,
+          descricao: 'Média de remoções por dia',
+          classe: 'success'
+        },
+        {
+          icone: 'fa-weight-hanging',
+          titulo: 'Total Acumulado',
+          valor: Math.round(dados.totais.peso).toLocaleString('pt-BR'),
+          descricao: 'Toneladas de entulho removidas',
+          classe: 'warning'
+        }
+      ];
+      
+      grid.innerHTML = insights.map(insight => `
+        <div class="card">
+          <i class="fas ${insight.icone} card-icon"></i>
+          <h3>${insight.titulo}</h3>
+          <div class="medium">${insight.valor}</div>
+          <div class="insight ${insight.classe}">
+            <i class="fas fa-info-circle"></i>
+            <span>${insight.descricao}</span>
           </div>
         </div>
-        <div class="progress-container">
-          <div class="progress-label">
-            <span>Participação no Total</span>
-            <span>${progresso.toFixed(1)}%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: ${progresso}%; background: linear-gradient(90deg, ${colors[area]} 0%, ${colors[area]}aa 100%);">
-            </div>
-          </div>
-        </div>
-        <div class="area-stats">
-          <div class="area-stat">
-            <div class="area-stat-value">${Math.round(dadosArea.barricadas)}</div>
-            <div class="area-stat-label">Remoções</div>
-          </div>
-          <div class="area-stat">
-            <div class="area-stat-value">${Math.round(dadosArea.vias)}</div>
-            <div class="area-stat-label">Vias</div>
-          </div>
-          <div class="area-stat">
-            <div class="area-stat-value">${Math.round(dadosArea.peso)}</div>
-            <div class="area-stat-label">Toneladas</div>
-          </div>
-        </div>
-        <div class="insight info">
-          <i class="fas fa-info-circle"></i>
-          <span>Comandante: ${cpaComandantes[area] || 'Não especificado'} • Eficiência: ${dadosArea.eficiencia.toFixed(2)} ton/rem</span>
-        </div>
-      </div>
-    `;
-    
-    grid.innerHTML += card;
-  });
-}
-
-// FUNÇÃO PARA CRIAR TODOS OS GRÁFICOS - ORIGINAL DO INDEX I
-function criarGraficos(dados) {
-  destruirGraficos();
-  
-  if (!dados) return;
-  
-  // Gráfico de evolução diária de barricadas
-  if (document.getElementById('chartEvolucaoDiaria') && dados.evolucao.length > 0) {
-    const ctx = document.getElementById('chartEvolucaoDiaria').getContext('2d');
-    graficosInstancias.chartEvolucaoDiaria = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: dados.evolucao.map(d => d.data),
-        datasets: [{
-          label: 'Remoções Realizadas',
-          data: dados.evolucao.map(d => d.barricadas),
-          borderColor: '#0d47a1',
-          backgroundColor: 'rgba(13, 71, 161, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true,
-          pointRadius: 6,
-          pointHoverRadius: 8,
-          pointBackgroundColor: '#0d47a1',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            padding: 12,
-            titleFont: { size: 14, weight: 'bold' },
-            bodyFont: { size: 13 }
-          }
-        },
-        scales: {
-          y: { 
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Número de Remoções'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' }
-          },
-          x: {
-            grid: { display: false }
-          }
-        }
-      }
-    });
-  }
-  
-  // Gráfico de evolução diária de peso
-  if (document.getElementById('chartEvolucaoPeso') && dados.evolucao.length > 0) {
-    const ctx = document.getElementById('chartEvolucaoPeso').getContext('2d');
-    graficosInstancias.chartEvolucaoPeso = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: dados.evolucao.map(d => d.data),
-        datasets: [{
-          label: 'Toneladas Removidas',
-          data: dados.evolucao.map(d => d.peso),
-          backgroundColor: 'rgba(249, 168, 37, 0.8)',
-          borderColor: '#f9a825',
-          borderWidth: 2,
-          borderRadius: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            padding: 12
-          }
-        },
-        scales: {
-          y: { 
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Toneladas'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' }
-          },
-          x: {
-            grid: { display: false }
-          }
-        }
-      }
-    });
-  }
-  
-  // Criar outros gráficos de ranking
-  const areasComDados = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0);
-  
-  // Ranking por barricadas
-  if (document.getElementById('chartRankingBarricadas') && areasComDados.length > 0) {
-    const rankingBarric = areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas);
-    const ctx = document.getElementById('chartRankingBarricadas').getContext('2d');
-    graficosInstancias.chartRankingBarricadas = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: rankingBarric.map(a => a[0]),
-        datasets: [{
-          label: 'Remoções',
-          data: rankingBarric.map(a => a[1].barricadas),
-          backgroundColor: rankingBarric.map(a => colors[a[0]]),
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { 
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'CPAs com Maior Número de Remoções'
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true, 
-            title: {
-              display: true,
-              text: 'Número de Remoções'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
-          },
-          y: { grid: { display: false } }
-        }
-      }
-    });
-  }
-  
-  // Ranking por peso
-  if (document.getElementById('chartRankingPeso') && areasComDados.length > 0) {
-    const rankingPeso = areasComDados.sort((a, b) => b[1].peso - a[1].peso);
-    const ctx = document.getElementById('chartRankingPeso').getContext('2d');
-    graficosInstancias.chartRankingPeso = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: rankingPeso.map(a => a[0]),
-        datasets: [{
-          label: 'Toneladas',
-          data: rankingPeso.map(a => a[1].peso),
-          backgroundColor: rankingPeso.map(a => colors[a[0]]),
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { 
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'CPAs com Maior Volume de Entulho'
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Toneladas'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
-          },
-          y: { grid: { display: false } }
-        }
-      }
-    });
-  }
-  
-  // Ranking por eficiência
-  if (document.getElementById('chartRankingEficiencia') && areasComDados.length > 0) {
-    const rankingEfic = areasComDados.sort((a, b) => b[1].eficiencia - a[1].eficiencia);
-    const ctx = document.getElementById('chartRankingEficiencia').getContext('2d');
-    graficosInstancias.chartRankingEficiencia = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: rankingEfic.map(a => a[0]),
-        datasets: [{
-          label: 'Eficiência (ton/remoção)',
-          data: rankingEfic.map(a => a[1].eficiencia),
-          backgroundColor: rankingEfic.map(a => colors[a[0]]),
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { 
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'CPAs Mais Eficientes'
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Toneladas por Remoção'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
-          },
-          y: { grid: { display: false } }
-        }
-      }
-    });
-  }
-  
-  // Ranking por vias
-  if (document.getElementById('chartRankingVias') && areasComDados.length > 0) {
-    const rankingVias = areasComDados.sort((a, b) => b[1].vias - a[1].vias);
-    const ctx = document.getElementById('chartRankingVias').getContext('2d');
-    graficosInstancias.chartRankingVias = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: rankingVias.map(a => a[0]),
-        datasets: [{
-          label: 'Vias Liberadas',
-          data: rankingVias.map(a => a[1].vias),
-          backgroundColor: rankingVias.map(a => colors[a[0]]),
-          borderRadius: 8
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { 
-          legend: { display: false },
-          title: {
-            display: true,
-            text: 'CPAs que Mais Liberaram Vias'
-          }
-        },
-        scales: {
-          x: { 
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Vias Liberadas'
-            },
-            grid: { color: 'rgba(0, 0, 0, 0.05)' } 
-          },
-          y: { grid: { display: false } }
-        }
-      }
-    });
-  }
-  
-  // Gráficos de Pizza
-  const areasComDadosArray = Object.keys(dados.areas).filter(area => dados.areas[area].barricadas > 0);
-  const coresAreas = areasComDadosArray.map(a => colors[a]);
-  
-  // Pizza de barricadas
-  if (document.getElementById('chartPizzaBarricadas') && areasComDadosArray.length > 0) {
-    const ctx = document.getElementById('chartPizzaBarricadas').getContext('2d');
-    graficosInstancias.chartPizzaBarricadas = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: areasComDadosArray,
-        datasets: [{
-          data: areasComDadosArray.map(a => dados.areas[a].barricadas),
-          backgroundColor: coresAreas,
-          borderWidth: 3,
-          borderColor: '#fff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: { padding: 15, font: { size: 14 } }
-          },
-          title: {
-            display: true,
-            text: 'Distribuição de Remoções por CPA'
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percent = total > 0 ? (context.parsed / total * 100).toFixed(1) : 0;
-                return context.label + ': ' + context.parsed.toFixed(0) + ' (' + percent + '%)';
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-  
-  // Pizza de peso
-  if (document.getElementById('chartPizzaPeso') && areasComDadosArray.length > 0) {
-    const ctx = document.getElementById('chartPizzaPeso').getContext('2d');
-    graficosInstancias.chartPizzaPeso = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: areasComDadosArray,
-        datasets: [{
-          data: areasComDadosArray.map(a => dados.areas[a].peso),
-          backgroundColor: coresAreas,
-          borderWidth: 3,
-          borderColor: '#fff'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'right',
-            labels: { padding: 15, font: { size: 14 } }
-          },
-          title: {
-            display: true,
-            text: 'Distribuição de Entulho por CPA'
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const percent = total > 0 ? (context.parsed / total * 100).toFixed(1) : 0;
-                return context.label + ': ' + context.parsed.toFixed(0) + ' ton (' + percent + '%)';
-              }
-            }
-          }
-        }
-      }
-    });
-  }
-}
-
-// FUNÇÃO PARA ATUALIZAR INSIGHTS ESTRATÉGICOS - ORIGINAL DO INDEX I
-function atualizarInsights(dados) {
-  const grid = document.getElementById('insightsGrid');
-  
-  if (!dados) return;
-  
-  const areasComDados = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0);
-  const comandantesComDados = Object.entries(dados.comandantes).filter(([_, c]) => c.barricadas > 0);
-  
-  const insights = [
-    {
-      icone: 'fa-trophy',
-      titulo: 'ÁREA Campeã',
-      valor: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0] : '-',
-      descricao: areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? `${Math.round(areasComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][1].barricadas)} remoções` : 'Nenhum dado',
-      classe: 'warning'
-    },
-    {
-      icone: 'fa-bolt',
-      titulo: 'ÁREA Mais Eficiente',
-      valor: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][0] : '-',
-      descricao: areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0] ? `${areasComDados.filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].eficiencia - a[1].eficiencia)[0][1].eficiencia.toFixed(2)} ton/rem` : 'Nenhum dado',
-      classe: 'success'
-    },
-    {
-      icone: 'fa-user-shield',
-      titulo: 'Comandante Destaque',
-      valor: comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0].split('Cel PM ')[1] || comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][0] : '-',
-      descricao: comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0] ? `${Math.round(comandantesComDados.sort((a, b) => b[1].barricadas - a[1].barricadas)[0][1].barricadas)} remoções` : 'Nenhum dado',
-      classe: 'info'
-    },
-    {
-      icone: 'fa-calendar-check',
-      titulo: 'Melhor Dia',
-      valor: dados.evolucao.length > 0 ? dados.evolucao.reduce((max, d) => d.barricadas > max.barricadas ? d : max, dados.evolucao[0]).data : '-',
-      descricao: dados.evolucao.length > 0 ? `${Math.round(dados.evolucao.reduce((max, d) => d.barricadas > max.barricadas ? d : max, dados.evolucao[0]).barricadas)} remoções` : 'Nenhum dado',
-      classe: 'info'
-    },
-    {
-      icone: 'fa-chart-line',
-      titulo: 'Ritmo Operacional',
-      valor: dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0,
-      descricao: 'Média de remoções por dia',
-      classe: 'success'
-    },
-    {
-      icone: 'fa-weight-hanging',
-      titulo: 'Total Acumulado',
-      valor: Math.round(dados.totais.peso).toLocaleString('pt-BR'),
-      descricao: 'Toneladas de entulho removidas',
-      classe: 'warning'
+      `).join('');
     }
-  ];
-  
-  grid.innerHTML = insights.map(insight => `
-    <div class="card">
-      <i class="fas ${insight.icone} card-icon"></i>
-      <h3>${insight.titulo}</h3>
-      <div class="medium">${insight.valor}</div>
-      <div class="insight ${insight.classe}">
-        <i class="fas fa-info-circle"></i>
-        <span>${insight.descricao}</span>
-      </div>
-    </div>
-  `).join('');
-}
 
-// FUNÇÃO PARA CRIAR TABELA COMPARATIVA - ORIGINAL DO INDEX I
-function criarTabelaComparativa(dados) {
-  const tabela = document.getElementById('tabelaComparativa');
-  
-  if (!dados) return;
-  
-  const areasOrdenadas = Object.entries(dados.areas).filter(([_, a]) => a.barricadas > 0).sort((a, b) => b[1].barricadas - a[1].barricadas);
-  
-  const medalhas = ['🥇', '🥈', '🥉'];
-  
-  let html = `
-    <thead>
-      <tr>
-        <th style="width: 80px;">Posição</th>
-        <th>CPA</th>
-        <th style="text-align: center;">Comandante</th>
-        <th style="text-align: center;">Remoções</th>
-        <th style="text-align: center;">Vias</th>
-        <th style="text-align: center;">Peso (ton)</th>
-        <th style="text-align: center;">Eficiência</th>
-        <th style="text-align: center;">% do Total</th>
-      </tr>
-    </thead>
-    <tbody>
-  `;
-  
-  if (areasOrdenadas.length === 0) {
-    html += `
-      <tr>
-        <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-600);">
-          <i class="fas fa-database" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px; display: block;"></i>
-          Nenhum dado disponível para exibir
-        </td>
-      </tr>
-    `;
-  } else {
-    areasOrdenadas.forEach(([area, dadosArea], index) => {
-      html += `
-        <tr>
-          <td class="ranking-position">
-            ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
-          </td>
-          <td><strong style="color: ${colors[area]};">${area}</strong></td>
-          <td style="text-align: center;"><small>${cpaComandantes[area] || 'Não especificado'}</small></td>
-          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.barricadas)}</td>
-          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.vias)}</td>
-          <td style="text-align: center; font-weight: 600;">${Math.round(dadosArea.peso)}</td>
-          <td style="text-align: center; font-weight: 600;">${dadosArea.eficiencia.toFixed(2)}</td>
-          <td style="text-align: center;">
-            <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
-              <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
-                <div style="width: ${dadosArea.percentualBarricadas}%; height: 100%; background: ${colors[area]};"></div>
-              </div>
-              <span style="font-weight: 600;">${dadosArea.percentualBarricadas.toFixed(1)}%</span>
-            </div>
-          </td>
-        </tr>
+    function criarInsightsCard(dados) {
+      const container = document.getElementById('insightsCard');
+      let html = `
+        <div class="card">
+          <h3>Insights Relevantes</h3>
+          <ul style="list-style-type: none; padding: 0;">
       `;
-    });
-  }
-  
-  html += '</tbody>';
-  tabela.innerHTML = html;
-}
 
-// FUNÇÃO PARA VISUALIZAR PDF - ORIGINAL DO INDEX I (PRESERVADA)
-async function visualizarPDF() {
-  if (!dadosFiltrados) {
-    mostrarMensagem('Carregue os dados primeiro antes de visualizar!', 'warning');
-    return;
-  }
-  
-  mostrarMensagem('Gerando visualização do PDF... Por favor, aguarde.', 'info');
-  
-  try {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
-    
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const margin = 15;
-    let yPos = margin;
-    
-    // PÁGINA 1: Cabeçalho e KPIs
-    pdf.setFillColor(13, 71, 161);
-    pdf.rect(0, 0, pageWidth, 35, 'F');
-    
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(24);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Operação Barricada Zero - Relatório Operacional', pageWidth / 2, 15, { align: 'center' });
-    
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'normal');
-    const dataAtual = new Date().toLocaleDateString('pt-BR');
-    pdf.text(`Período analisado: ${dadosFiltrados.diasOperacao[0] || ''} a ${dadosFiltrados.diasOperacao[dadosFiltrados.diasOperacao.length - 1] || ''}`, pageWidth / 2, 25, { align: 'center' });
-    
-    // Adicionar informações dos filtros
-    pdf.setFontSize(10);
-    const filtrosAplicados = [];
+      // Insight 1: CPA mais produtiva
+      const cpasOrdenadas = Object.entries(dados.cpas).sort((a, b) => b[1].barricadas - a[1].barricadas);
+      const topCPA = cpasOrdenadas[0] ? cpasOrdenadas[0][0] : 'N/A';
+      html += `<li class="insight info"><i class="fas fa-star"></i> CPA mais produtiva: ${topCPA} com ${Math.round(cpasOrdenadas[0] ? cpasOrdenadas[0][1].barricadas : 0)} remoções</li>`;
 
-    if (filtrosAtivos.cpa !== 'todos') filtrosAplicados.push(`CPA: ${filtrosAtivos.cpa}`);
-    if (filtrosAtivos.comandante !== 'todos') filtrosAplicados.push(`Comandante: ${filtrosAtivos.comandante}`);
-    if (filtrosAtivos.bpm !== 'todos') filtrosAplicados.push(`BPM: ${filtrosAtivos.bpm}`);
-    if (filtrosAtivos.municipio !== 'todos') filtrosAplicados.push(`Município: ${filtrosAtivos.municipio}`);
-    
-    // Adicionar localidades
-    if (filtrosAtivos.localidades.length > 0) {
-      if (filtrosAtivos.localidades.length <= 3) {
-        filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.join(', ')}`);
-      } else {
-        filtrosAplicados.push(`Localidades: ${filtrosAtivos.localidades.length} selecionadas`);
-      }
+      // Insight 2: Média de peso por remoção
+      const mediaPeso = dados.totais.barricadas > 0 ? (dados.totais.peso / dados.totais.barricadas).toFixed(2) : 0;
+      html += `<li class="insight success"><i class="fas fa-balance-scale"></i> Média de peso por remoção: ${mediaPeso} toneladas</li>`;
+
+      // Insight 3: Número de municípios atendidos
+      html += `<li class="insight warning"><i class="fas fa-map-marker-alt"></i> Municípios atendidos: ${dados.municipios.size}</li>`;
+
+      // Insight 4: Dia com mais remoções
+      const maxDia = dados.evolucao.reduce((max, dia) => dia.barricadas > max.barricadas ? dia : max, {barricadas: 0});
+      html += `<li class="insight danger"><i class="fas fa-calendar-day"></i> Dia com mais remoções: ${maxDia.data || 'N/A'} (${Math.round(maxDia.barricadas)})</li>`;
+
+      html += '</ul></div>';
+      container.innerHTML = html;
     }
-    
-    let filtrosTexto = 'Filtros aplicados: ';
-    if (filtrosAplicados.length > 0) {
-      filtrosTexto += filtrosAplicados.join(', ');
-    } else {
-      filtrosTexto += 'Nenhum filtro aplicado';
+
+    function criarCardsCPAs(dados) {
+      const grid = document.getElementById('cardsCPAs');
+      let html = '';
+      Object.entries(dados.cpas).sort((a, b) => b[1].barricadas - a[1].barricadas).forEach(([cpa, data]) => {
+        html += `
+          <div class="cpa-card" onclick="abrirModalCPA('${cpa}')">
+            <div class="cpa-header">
+              <div class="cpa-icon">${cpa}</div>
+              <div class="cpa-info">
+                <h4>${cpa}</h4>
+                <p>${cpaComandantes[cpa] || 'Comandante não especificado'}</p>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-label">
+                <span>Progresso</span>
+                <span>${data.percentualBarricadas.toFixed(1)}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: ${data.percentualBarricadas}%; background: ${colors[cpa] || '#2196f3'};"></div>
+              </div>
+            </div>
+            <div class="cpa-details">
+              <div class="cpa-detail">
+                <span class="cpa-detail-value">${Math.round(data.barricadas)}</span>
+                <span class="cpa-detail-label">Remoções</span>
+              </div>
+              <div class="cpa-detail">
+                <span class="cpa-detail-value">${Math.round(data.vias)}</span>
+                <span class="cpa-detail-label">Vias</span>
+              </div>
+              <div class="cpa-detail">
+                <span class="cpa-detail-value">${Math.round(data.peso)}</span>
+                <span class="cpa-detail-label">Toneladas</span>
+              </div>
+              <div class="cpa-detail">
+                <span class="cpa-detail-value">${data.eficiencia.toFixed(2)}</span>
+                <span class="cpa-detail-label">Eficiência</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
     }
-    
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(filtrosTexto, margin, 42, { maxWidth: pageWidth - 2 * margin });
-    
-    yPos = 52;
-    
-    // Cards de KPIs
-    const kpis = [
-      { label: 'Remoções Realizadas', valor: Math.round(dadosFiltrados.totais.barricadas), cor: [13, 71, 161] },
-      { label: 'Vias Liberadas', valor: Math.round(dadosFiltrados.totais.vias), cor: [2, 136, 209] },
-      { label: 'Toneladas Removidas', valor: Math.round(dadosFiltrados.totais.peso), cor: [249, 168, 37] },
-      { label: 'Média Diária', valor: Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias), cor: [46, 125, 50] }
-    ];
-    
-    const cardWidth = (pageWidth - margin * 2 - 15) / 4;
-    const cardHeight = 28;
-    
-    kpis.forEach((kpi, idx) => {
-      const xPos = margin + idx * (cardWidth + 5);
-      
-      pdf.setFillColor(245, 247, 250);
-      pdf.roundedRect(xPos, yPos, cardWidth, cardHeight, 3, 3, 'F');
-      
-      pdf.setFillColor(...kpi.cor);
-      pdf.rect(xPos, yPos, 4, cardHeight, 'F');
-      
-      pdf.setFontSize(10);
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(kpi.label, xPos + cardWidth / 2, yPos + 8, { align: 'center' });
-      
+
+    function abrirModalCPA(cpa) {
+      document.getElementById('modalCPATitle').textContent = `Detalhes da ${cpa}`;
+      document.getElementById('cpaComandante').textContent = cpaComandantes[cpa] || 'Não especificado';
+
+      const list = document.getElementById('cpaBPMList');
+      let html = '<ul>';
+      (cpaDetails[cpa] || []).forEach(detail => {
+        html += `<li><strong>${detail.bpm}</strong>: ${detail.areasAtuacao}</li>`;
+      });
+      html += '</ul>';
+      list.innerHTML = html;
+
+      window.currentCPA = cpa; // Para gerar PDF
+
+      abrirModal('modalCPA');
+    }
+
+    async function gerarPDFCPA() {
+      const cpa = window.currentCPA;
+      if (!cpa) return;
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      let yPos = margin;
+
       pdf.setFontSize(20);
-      pdf.setTextColor(...kpi.cor);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(kpi.valor.toString(), xPos + cardWidth / 2, yPos + 20, { align: 'center' });
-    });
-    
-    yPos += cardHeight + 25;
-    
-    // Tabela de CPAs
-    pdf.setFontSize(16);
-    pdf.setTextColor(13, 71, 161);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Desempenho por ÁREA (Dados Filtrados)', margin, yPos);
-    
-    yPos += 10;
-    
-    // Cabeçalho da tabela - COLUNAS OTIMIZADAS
-    pdf.setFillColor(13, 71, 161);
-    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
-    
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold');
-    
-    // Distribuição otimizada das colunas
-    const colWidths = {
-      cpa: 25,
-      comandante: 55,
-      remocoes: 30,
-      vias: 25,
-      peso: 35,
-      eficiencia: 35,
-      percentual: 25
-    };
-    
-    let currentX = margin + 5;
-    pdf.text('CPA', currentX, yPos + 5);
-    currentX += colWidths.cpa;
-    
-    pdf.text('Comandante', currentX, yPos + 5);
-    currentX += colWidths.comandante;
-    
-    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
-    currentX += colWidths.remocoes;
-    
-    pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
-    currentX += colWidths.vias;
-    
-    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
-    currentX += colWidths.peso;
-    
-    pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
-    currentX += colWidths.eficiencia;
-    
-    pdf.text('% Total', currentX, yPos + 5, { align: 'center' });
-    
-    yPos += 8;
-    
-    const areasOrdenadas = Object.entries(dadosFiltrados.areas)
-      .filter(([_, a]) => a.barricadas > 0)
-      .sort((a, b) => b[1].barricadas - a[1].barricadas);
-    
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    
-    areasOrdenadas.forEach(([area, dadosArea], idx) => {
-      if (yPos > pageHeight - 30) {
-        pdf.addPage();
-        yPos = margin;
+      pdf.text(`Detalhes da ${cpa}`, pageWidth / 2, yPos, { align: 'center' });
+      yPos += 20;
+
+      pdf.setFontSize(14);
+      pdf.text(`Comandante: ${cpaComandantes[cpa] || 'Não especificado'}`, margin, yPos);
+      yPos += 15;
+
+      pdf.text('Batalhões e Áreas de Atuação:', margin, yPos);
+      yPos += 10;
+
+      pdf.setFontSize(12);
+      (cpaDetails[cpa] || []).forEach((detail, idx) => {
+        if (yPos > pageHeight - 20) {
+          pdf.addPage();
+          yPos = margin;
+        }
+        pdf.text(`${detail.bpm}: ${detail.areasAtuacao}`, margin, yPos);
+        yPos += 10;
+      });
+
+      const pdfBlob = pdf.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      document.getElementById('pdfPreview').src = pdfUrl;
+      abrirModal('modalPDF');
+
+      window.pdfParaDownload = pdf;
+    }
+
+    function criarCardsBPMs(dados) {
+      const grid = document.getElementById('cardsBPMs');
+      let html = '';
+      Object.entries(dados.bpms).sort((a, b) => b[1].barricadas - a[1].barricadas).forEach(([key, data]) => {
+        html += `
+          <div class="area-card">
+            <div class="area-header">
+              <span class="area-name">${data.bpm} (${data.cpa})</span>
+              <span class="area-badge" style="background: ${colors[data.cpa] || '#2196f3'}; color: white;">${((data.barricadas / dados.totais.barricadas) * 100 || 0).toFixed(1)}%</span>
+            </div>
+            <div class="area-stats">
+              <div class="area-stat">
+                <span class="area-stat-value">${Math.round(data.barricadas)}</span>
+                <span class="area-stat-label">Remoções</span>
+              </div>
+              <div class="area-stat">
+                <span class="area-stat-value">${Math.round(data.vias)}</span>
+                <span class="area-stat-label">Vias</span>
+              </div>
+              <div class="area-stat">
+                <span class="area-stat-value">${Math.round(data.peso)}</span>
+                <span class="area-stat-label">Toneladas</span>
+              </div>
+            </div>
+            <div class="progress-container">
+              <div class="progress-label">
+                <span>Eficiência</span>
+                <span>${data.eficiencia.toFixed(2)}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress" style="width: ${Math.min(data.eficiencia * 20, 100)}%; background: linear-gradient(90deg, #4caf50, #ffeb3b);"></div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    }
+
+    function criarTabelaComparativaCPA(dados) {
+      const tabela = document.getElementById('tabelaComparativaCPA');
+      const cpasOrdenadas = Object.entries(dados.cpas).filter(([_, c]) => c.barricadas > 0).sort((a, b) => b[1].barricadas - a[1].barricadas);
+      const medalhas = ['🥇', '🥈', '🥉'];
+      
+      let html = `
+        <thead>
+          <tr>
+            <th style="width: 80px;">Posição</th>
+            <th>CPA</th>
+            <th style="text-align: center;">Comandante</th>
+            <th style="text-align: center;">Remoções</th>
+            <th style="text-align: center;">Vias</th>
+            <th style="text-align: center;">Peso (ton)</th>
+            <th style="text-align: center;">Eficiência</th>
+            <th style="text-align: center;">% do Total</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      
+      if (cpasOrdenadas.length === 0) {
+        html += `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-600);">
+              <i class="fas fa-database" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px; display: block;"></i>
+              Nenhum dado disponível para exibir
+            </td>
+          </tr>
+        `;
+      } else {
+        cpasOrdenadas.forEach(([cpa, data], index) => {
+          html += `
+            <tr>
+              <td class="ranking-position">
+                ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
+              </td>
+              <td><strong style="color: ${colors[cpa]};">${cpa}</strong></td>
+              <td style="text-align: center;"><small>${cpaComandantes[cpa] || 'Não especificado'}</small></td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.barricadas)}</td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.vias)}</td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.peso)}</td>
+              <td style="text-align: center; font-weight: 600;">${data.eficiencia.toFixed(2)}</td>
+              <td style="text-align: center;">
+                <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                  <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                    <div style="width: ${data.percentualBarricadas}%; height: 100%; background: ${colors[cpa]};"></div>
+                  </div>
+                  <span style="font-weight: 600;">${data.percentualBarricadas.toFixed(1)}%</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+      }
+      
+      html += '</tbody>';
+      tabela.innerHTML = html;
+    }
+
+    function criarTabelaComparativaBPM(dados) {
+      const tabela = document.getElementById('tabelaComparativaBPM');
+      const bpmsOrdenadas = Object.entries(dados.bpms).filter(([_, b]) => b.barricadas > 0).sort((a, b) => b[1].barricadas - a[1].barricadas);
+      const medalhas = ['🥇', '🥈', '🥉'];
+      
+      let html = `
+        <thead>
+          <tr>
+            <th style="width: 80px;">Posição</th>
+            <th>BPM</th>
+            <th style="text-align: center;">CPA</th>
+            <th style="text-align: center;">Remoções</th>
+            <th style="text-align: center;">Vias</th>
+            <th style="text-align: center;">Peso (ton)</th>
+            <th style="text-align: center;">Eficiência</th>
+            <th style="text-align: center;">% do Total</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      
+      if (bpmsOrdenadas.length === 0) {
+        html += `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 40px; color: var(--gray-600);">
+              <i class="fas fa-database" style="font-size: 32px; opacity: 0.3; margin-bottom: 10px; display: block;"></i>
+              Nenhum dado disponível para exibir
+            </td>
+          </tr>
+        `;
+      } else {
+        bpmsOrdenadas.forEach(([key, data], index) => {
+          const percentualTotal = (data.barricadas / dados.totais.barricadas) * 100 || 0;
+          html += `
+            <tr>
+              <td class="ranking-position">
+                ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
+              </td>
+              <td><strong style="color: ${colors[data.cpa]};">${data.bpm}</strong></td>
+              <td style="text-align: center;"><small>${data.cpa}</small></td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.barricadas)}</td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.vias)}</td>
+              <td style="text-align: center; font-weight: 600;">${Math.round(data.peso)}</td>
+              <td style="text-align: center; font-weight: 600;">${data.eficiencia.toFixed(2)}</td>
+              <td style="text-align: center;">
+                <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                  <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
+                    <div style="width: ${percentualTotal}%; height: 100%; background: ${colors[data.cpa]};"></div>
+                  </div>
+                  <span style="font-weight: 600;">${percentualTotal.toFixed(1)}%</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+      }
+      
+      html += '</tbody>';
+      tabela.innerHTML = html;
+    }
+
+    // ============================================================================
+    // PDF GENERATION - ADAPTADO PARA CPA E BPM
+    // ============================================================================
+
+    async function visualizarPDF() {
+      if (!dadosFiltrados) {
+        mostrarMensagem('Carregue os dados primeiro antes de visualizar!', 'warning');
+        return;
+      }
+      
+      mostrarMensagem('Gerando visualização do PDF... Por favor, aguarde.', 'info');
+      
+      try {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: 'a4'
+        });
         
-        // Recriar cabeçalho na nova página
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const margin = 15;
+        let yPos = margin;
+        
+        // PÁGINA 1: Cabeçalho e KPIs
         pdf.setFillColor(13, 71, 161);
-        pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+        pdf.rect(0, 0, pageWidth, 35, 'F');
+        
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFontSize(24);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Operação Barricada Zero - Relatório Operacional', pageWidth / 2, 15, { align: 'center' });
+        
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'normal');
+        const dataAtual = new Date().toLocaleDateString('pt-BR');
+        pdf.text(`Período analisado: ${dadosFiltrados.evolucao[0]?.data || ''} a ${dadosFiltrados.evolucao[dadosFiltrados.evolucao.length - 1]?.data || ''}`, pageWidth / 2, 25, { align: 'center' });
+        
+        // Filtros aplicados
+        pdf.setFontSize(10);
+        const filtrosAplicados = Object.entries(filtrosAtivos).filter(([_, v]) => v !== 'todos').map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`).join(', ');
+        const filtrosTexto = 'Filtros aplicados: ' + (filtrosAplicados || 'Nenhum');
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(filtrosTexto, margin, 42, { maxWidth: pageWidth - 2*margin });
+        
+        yPos = 52;
+        
+        // KPIs
+        const kpis = [
+          { label: 'Remoções Realizadas', valor: Math.round(dadosFiltrados.totais.barricadas), cor: [13, 71, 161] },
+          { label: 'Vias Liberadas', valor: Math.round(dadosFiltrados.totais.vias), cor: [2, 136, 209] },
+          { label: 'Toneladas Removidas', valor: Math.round(dadosFiltrados.totais.peso), cor: [249, 168, 37] },
+          { label: 'Média Diária', valor: Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias), cor: [46, 125, 50] }
+        ];
+        
+        const cardWidth = (pageWidth - 2*margin - 15) / 4;
+        const cardHeight = 28;
+        
+        kpis.forEach((kpi, idx) => {
+          const x = margin + idx * (cardWidth + 5);
+          pdf.setFillColor(245, 247, 250);
+          pdf.roundedRect(x, yPos, cardWidth, cardHeight, 3, 3, 'F');
+          
+          pdf.setFillColor(...kpi.cor);
+          pdf.rect(x, yPos, 4, cardHeight, 'F');
+          
+          pdf.setFontSize(10);
+          pdf.setTextColor(100, 100, 100);
+          pdf.text(kpi.label, x + cardWidth/2, yPos + 8, { align: 'center' });
+          
+          pdf.setFontSize(20);
+          pdf.setTextColor(...kpi.cor);
+          pdf.setFont('helvetica', 'bold');
+          pdf.text(kpi.valor.toString(), x + cardWidth/2, yPos + 20, { align: 'center' });
+        });
+        
+        yPos += cardHeight + 25;
+        
+        // Tabela de CPAs
+        pdf.setFontSize(16);
+        pdf.setTextColor(13, 71, 161);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Desempenho por CPA (Dados Filtrados)', margin, yPos);
+        
+        yPos += 10;
+        
+        pdf.setFillColor(13, 71, 161);
+        pdf.rect(margin, yPos, pageWidth - 2*margin, 8, 'F');
         
         pdf.setTextColor(255, 255, 255);
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'bold');
         
-        currentX = margin + 5;
-        pdf.text('CPA', currentX, yPos + 5);
-        currentX += colWidths.cpa;
-        
-        pdf.text('Comandante', currentX, yPos + 5);
-        currentX += colWidths.comandante;
-        
-        pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
-        currentX += colWidths.remocoes;
-        
-        pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
-        currentX += colWidths.vias;
-        
-        pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
-        currentX += colWidths.peso;
-        
-        pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
-        currentX += colWidths.eficiencia;
-        
-        pdf.text('% Total', currentX, yPos + 5, { align: 'center' });
+        let xPos = margin + 5;
+        pdf.text('CPA', xPos, yPos + 5);
+        xPos += 25;
+        pdf.text('Comandante', xPos, yPos + 5);
+        xPos += 55;
+        pdf.text('Remoções', xPos, yPos + 5, { align: 'center' });
+        xPos += 30;
+        pdf.text('Vias', xPos, yPos + 5, { align: 'center' });
+        xPos += 25;
+        pdf.text('Toneladas', xPos, yPos + 5, { align: 'center' });
+        xPos += 35;
+        pdf.text('Eficiência', xPos, yPos + 5, { align: 'center' });
+        xPos += 35;
+        pdf.text('% Total', xPos, yPos + 5, { align: 'center' });
         
         yPos += 8;
+        
+        const cpasOrdenadas = Object.entries(dadosFiltrados.cpas).sort((a, b) => b[1].barricadas - a[1].barricadas);
+        
         pdf.setTextColor(0, 0, 0);
         pdf.setFont('helvetica', 'normal');
-      }
-      
-      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
-      pdf.setFillColor(...rowColor);
-      pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
-      
-      pdf.setFontSize(10);
-      
-      // Desenhar cada célula com posicionamento correto
-      currentX = margin + 5;
-      pdf.setFont('helvetica', 'bold');
-      pdf.text(area, currentX, yPos + 5);
-      currentX += colWidths.cpa;
-      
-      pdf.setFont('helvetica', 'normal');
-      const comandanteTexto = cpaComandantes[area] || 'Não especificado';
-      pdf.text(comandanteTexto.substring(0, 20) + (comandanteTexto.length > 20 ? '...' : ''), currentX, yPos + 5);
-      currentX += colWidths.comandante;
-      
-      pdf.text(Math.round(dadosArea.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += colWidths.remocoes;
-      
-      pdf.text(Math.round(dadosArea.vias).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += colWidths.vias;
-      
-      pdf.text(Math.round(dadosArea.peso).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += colWidths.peso;
-      
-      pdf.text(dadosArea.eficiencia.toFixed(2), currentX, yPos + 5, { align: 'center' });
-      currentX += colWidths.eficiencia;
-      
-      pdf.text(dadosArea.percentualBarricadas.toFixed(1) + '%', currentX, yPos + 5, { align: 'center' });
-      
-      yPos += 8;
-    });
-    
-    // PÁGINA 2: Evolução e Insights
-    pdf.addPage();
-    yPos = margin;
-    
-    pdf.setFillColor(13, 71, 161);
-    pdf.rect(0, 0, pageWidth, 25, 'F');
-    
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(18);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Evolução Temporal e Comandantes', pageWidth / 2, 15, { align: 'center' });
-    
-    yPos = 35;
-    pdf.setTextColor(0, 0, 0);
-    
-    // Tabela de Evolução Diária
-    pdf.setFontSize(14);
-    pdf.setTextColor(13, 71, 161);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Evolução Diária (Dados Filtrados)', margin, yPos);
-    
-    yPos += 8;
-    
-    // Cabeçalho otimizado
-    pdf.setFillColor(13, 71, 161);
-    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
-    
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold');
-    
-    const evolColWidths = {
-      data: 40,
-      remocoes: 40,
-      vias: 40,
-      peso: 50
-    };
-    
-    currentX = margin + 10;
-    pdf.text('Data', currentX, yPos + 5);
-    currentX += evolColWidths.data;
-    
-    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
-    currentX += evolColWidths.remocoes;
-    
-    pdf.text('Vias', currentX, yPos + 5, { align: 'center' });
-    currentX += evolColWidths.vias;
-    
-    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
-    
-    yPos += 8;
-    
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    
-    dadosFiltrados.evolucao.forEach((dia, idx) => {
-      if (yPos > pageHeight - 30) {
-        pdf.addPage();
-        yPos = margin + 20;
-      }
-      
-      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
-      pdf.setFillColor(...rowColor);
-      pdf.rect(margin, yPos, pageWidth - 2 * margin, 7, 'F');
-      
-      pdf.setFontSize(10);
-      
-      currentX = margin + 10;
-      pdf.text(dia.data, currentX, yPos + 5);
-      currentX += evolColWidths.data;
-      
-      pdf.text(Math.round(dia.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += evolColWidths.remocoes;
-      
-      pdf.text(Math.round(dia.vias).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += evolColWidths.vias;
-      
-      pdf.text(Math.round(dia.peso).toString(), currentX, yPos + 5, { align: 'center' });
-      
-      yPos += 7;
-    });
-    
-    // Tabela de Comandantes
-    yPos += 15;
-    
-    if (yPos > pageHeight - 60) {
-      pdf.addPage();
-      yPos = margin;
-    }
-    
-    pdf.setFontSize(14);
-    pdf.setTextColor(13, 71, 161);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Desempenho por Comandante', margin, yPos);
-    
-    yPos += 8;
-    
-    // Cabeçalho otimizado
-    pdf.setFillColor(13, 71, 161);
-    pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
-    
-    pdf.setTextColor(255, 255, 255);
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'bold');
-    
-    const cmdColWidths = {
-      nome: 70,
-      cpas: 40,
-      remocoes: 35,
-      peso: 40,
-      eficiencia: 40
-    };
-    
-    currentX = margin + 5;
-    pdf.text('Comandante', currentX, yPos + 5);
-    currentX += cmdColWidths.nome;
-    
-    pdf.text('CPAs', currentX, yPos + 5);
-    currentX += cmdColWidths.cpas;
-    
-    pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
-    currentX += cmdColWidths.remocoes;
-    
-    pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
-    currentX += cmdColWidths.peso;
-    
-    pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
-    
-    yPos += 8;
-    
-    const comandantesOrdenados = Object.entries(dadosFiltrados.comandantes)
-      .filter(([_, c]) => c.barricadas > 0)
-      .sort((a, b) => b[1].barricadas - a[1].barricadas);
-    
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    
-    comandantesOrdenados.forEach(([comandante, dadosCmd], idx) => {
-      if (yPos > pageHeight - 30) {
-        pdf.addPage();
-        yPos = margin;
         
-        // Recriar cabeçalho
+        cpasOrdenadas.forEach(([cpa, data], idx) => {
+          if (yPos > pageHeight - 30) {
+            pdf.addPage();
+            yPos = margin;
+          }
+          
+          const fillColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+          pdf.setFillColor(...fillColor);
+          pdf.rect(margin, yPos, pageWidth - 2*margin, 8, 'F');
+          
+          xPos = margin + 5;
+          pdf.text(cpa, xPos, yPos + 5);
+          xPos += 25;
+          pdf.text(cpaComandantes[cpa] || 'N/A', xPos, yPos + 5);
+          xPos += 55;
+          pdf.text(Math.round(data.barricadas).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 30;
+          pdf.text(Math.round(data.vias).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 25;
+          pdf.text(Math.round(data.peso).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 35;
+          pdf.text(data.eficiencia.toFixed(2), xPos, yPos + 5, { align: 'center' });
+          xPos += 35;
+          pdf.text(data.percentualBarricadas.toFixed(1) + '%', xPos, yPos + 5, { align: 'center' });
+          
+          yPos += 8;
+        });
+        
+        // Adicionar página para BPMs se necessário
+        if (yPos > pageHeight - 100) {
+          pdf.addPage();
+          yPos = margin;
+        } else {
+          yPos += 20;
+        }
+        
+        pdf.setFontSize(16);
+        pdf.setTextColor(13, 71, 161);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text('Desempenho por BPM (Dados Filtrados)', margin, yPos);
+        
+        yPos += 10;
+        
         pdf.setFillColor(13, 71, 161);
-        pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
+        pdf.rect(margin, yPos, pageWidth - 2*margin, 8, 'F');
         
         pdf.setTextColor(255, 255, 255);
         pdf.setFontSize(10);
         pdf.setFont('helvetica', 'bold');
         
-        currentX = margin + 5;
-        pdf.text('Comandante', currentX, yPos + 5);
-        currentX += cmdColWidths.nome;
-        
-        pdf.text('CPAs', currentX, yPos + 5);
-        currentX += cmdColWidths.cpas;
-        
-        pdf.text('Remoções', currentX, yPos + 5, { align: 'center' });
-        currentX += cmdColWidths.remocoes;
-        
-        pdf.text('Toneladas', currentX, yPos + 5, { align: 'center' });
-        currentX += cmdColWidths.peso;
-        
-        pdf.text('Eficiência', currentX, yPos + 5, { align: 'center' });
+        xPos = margin + 5;
+        pdf.text('BPM', xPos, yPos + 5);
+        xPos += 30;
+        pdf.text('CPA', xPos, yPos + 5);
+        xPos += 30;
+        pdf.text('Remoções', xPos, yPos + 5, { align: 'center' });
+        xPos += 35;
+        pdf.text('Vias', xPos, yPos + 5, { align: 'center' });
+        xPos += 35;
+        pdf.text('Toneladas', xPos, yPos + 5, { align: 'center' });
+        xPos += 40;
+        pdf.text('Eficiência', xPos, yPos + 5, { align: 'center' });
+        xPos += 40;
+        pdf.text('% Total', xPos, yPos + 5, { align: 'center' });
         
         yPos += 8;
+        
+        const bpmsOrdenadas = Object.entries(dadosFiltrados.bpms).sort((a, b) => b[1].barricadas - a[1].barricadas);
+        
         pdf.setTextColor(0, 0, 0);
         pdf.setFont('helvetica', 'normal');
+        
+        bpmsOrdenadas.forEach(([key, data], idx) => {
+          if (yPos > pageHeight - 30) {
+            pdf.addPage();
+            yPos = margin;
+          }
+          
+          const fillColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+          pdf.setFillColor(...fillColor);
+          pdf.rect(margin, yPos, pageWidth - 2*margin, 8, 'F');
+          
+          const percentualTotal = (data.barricadas / dadosFiltrados.totais.barricadas) * 100 || 0;
+          
+          xPos = margin + 5;
+          pdf.text(data.bpm, xPos, yPos + 5);
+          xPos += 30;
+          pdf.text(data.cpa, xPos, yPos + 5);
+          xPos += 30;
+          pdf.text(Math.round(data.barricadas).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 35;
+          pdf.text(Math.round(data.vias).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 35;
+          pdf.text(Math.round(data.peso).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 40;
+          pdf.text(data.eficiencia.toFixed(2), xPos, yPos + 5, { align: 'center' });
+          xPos += 40;
+          pdf.text(percentualTotal.toFixed(1) + '%', xPos, yPos + 5, { align: 'center' });
+          
+          yPos += 8;
+        });
+        
+        // Rodapé
+        const totalPages = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(8);
+          pdf.setTextColor(150, 150, 150);
+          pdf.text(`Página ${i} de ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
+          pdf.text(`Gerado em ${dataAtual}`, margin, pageHeight - 5);
+        }
+        
+        const pdfBlob = pdf.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        
+        document.getElementById('pdfPreview').src = pdfUrl;
+        abrirModal('modalPDF');
+        
+        window.pdfParaDownload = pdf;
+        
+        mostrarMensagem('PDF gerado com sucesso!', 'success');
+        
+      } catch (error) {
+        console.error('Erro ao gerar PDF:', error);
+        mostrarMensagem('Erro ao gerar PDF.', 'danger');
       }
-      
-      const rowColor = idx % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
-      pdf.setFillColor(...rowColor);
-      pdf.rect(margin, yPos, pageWidth - 2 * margin, 8, 'F');
-      
-      pdf.setFontSize(10);
-      
-      currentX = margin + 5;
-      const nomeCurto = comandante.split('Cel PM ')[1] || comandante;
-      pdf.text(nomeCurto.substring(0, 25) + (nomeCurto.length > 25 ? '...' : ''), currentX, yPos + 5);
-      currentX += cmdColWidths.nome;
-      
-      const areasArray = Array.from(dadosCmd.areas || []);
-      pdf.text(areasArray.join(', ').substring(0, 15) + (areasArray.join(', ').length > 15 ? '...' : ''), currentX, yPos + 5);
-      currentX += cmdColWidths.cpas;
-      
-      pdf.text(Math.round(dadosCmd.barricadas).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += cmdColWidths.remocoes;
-      
-      pdf.text(Math.round(dadosCmd.peso).toString(), currentX, yPos + 5, { align: 'center' });
-      currentX += cmdColWidths.peso;
-      
-      pdf.text(dadosCmd.eficiencia.toFixed(2), currentX, yPos + 5, { align: 'center' });
-      
-      yPos += 8;
-    });
-    
-    // Insights
-    yPos += 15;
-    
-    if (yPos > pageHeight - 50) {
-      pdf.addPage();
-      yPos = margin;
     }
-    
-    pdf.setFontSize(14);
-    pdf.setTextColor(13, 71, 161);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Principais Insights', margin, yPos);
-    
-    yPos += 10;
-    
-    const insights = [
-      `Total de remoções realizadas: ${Math.round(dadosFiltrados.totais.barricadas)}`,
-      `Total de vias liberadas: ${Math.round(dadosFiltrados.totais.vias)}`,
-      `Total de toneladas removidas: ${Math.round(dadosFiltrados.totais.peso)}`,
-      `Média diária: ${Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias)} remoções/dia`,
-      `Período analisado: ${dadosFiltrados.totais.dias} dias`,
-      `CPAs com atividade: ${areasOrdenadas.length}`,
-      `Comandantes com atividade: ${comandantesOrdenados.length}`,
-      `Municípios atendidos: ${Object.keys(dadosFiltrados.municipios).length}`
-    ];
-    
-    pdf.setFontSize(11);
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFont('helvetica', 'normal');
-    
-    insights.forEach((insight, idx) => {
-      if (yPos > pageHeight - 20) {
-        pdf.addPage();
-        yPos = margin;
-      }
+
+    function baixarPDF() {
+      if (!window.pdfParaDownload) return mostrarMensagem('Gere o PDF primeiro!', 'warning');
       
-      pdf.text(`• ${insight}`, margin + 5, yPos);
-      yPos += 7;
-    });
-    
-    // Rodapé em todas as páginas
-    const totalPages = pdf.internal.getNumberOfPages();
-    for (let i = 1; i <= totalPages; i++) {
-      pdf.setPage(i);
-      pdf.setFontSize(8);
-      pdf.setTextColor(150, 150, 150);
-      pdf.text(`Página ${i} de ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
-      pdf.text(`Gerado em ${dataAtual}`, margin, pageHeight - 5);
-      pdf.text('Operação Barricada Zero - Dashboard Estratégico', pageWidth / 2, pageHeight - 5, { align: 'center' });
+      const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+      window.pdfParaDownload.save(`Relatorio_Barricada_Zero_${dataAtual}.pdf`);
+      mostrarMensagem('PDF baixado!', 'success');
     }
-    
-    // Gerar URL do PDF
-    const pdfBlob = pdf.output('blob');
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    
-    // Mostrar no modal
-    document.getElementById('pdfPreview').src = pdfUrl;
-    abrirModal('modalPDF');
-    
-    // Armazenar o PDF para download posterior
-    window.pdfParaDownload = pdf;
-    
-    mostrarMensagem('PDF gerado com sucesso! Visualize no modal.', 'success');
-    
-  } catch (error) {
-    console.error('Erro ao gerar PDF:', error);
-    mostrarMensagem('Erro ao gerar PDF: ' + error.message, 'danger');
-  }
-}
 
-// FUNÇÃO PARA BAIXAR O PDF JÁ GERADO - ORIGINAL DO INDEX I
-function baixarPDF() {
-  if (!window.pdfParaDownload) {
-    mostrarMensagem('Gere o PDF primeiro!', 'warning');
-    return;
-  }
-  
-  const dataAtual = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
-  const nomeArquivo = `Relatorio_Barricada_Zero_${dataAtual}.pdf`;
-  
-  window.pdfParaDownload.save(nomeArquivo);
-  mostrarMensagem('PDF baixado com sucesso!', 'success');
-}
+    // ============================================================================
+    // EVENT LISTENERS
+    // ============================================================================
 
-// ============================================================================
-// INICIALIZAÇÃO
-// ============================================================================
+    document.getElementById('uploadExcel').addEventListener('change', e => processarExcel(e.target.files[0]));
 
-// INICIALIZAR QUANDO A PÁGINA CARREGAR
-document.addEventListener('DOMContentLoaded', function() {
-  // Inicializar status dos filtros
-  atualizarStatusFiltros();
-});
+    // Tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
 
-// FECHAR MODAL AO CLICAR FORA
-window.onclick = function(event) {
-  if (event.target.classList.contains('modal')) {
-    event.target.style.display = 'none';
-  }
-};
-</script>
+    // Modal close on outside click
+    window.onclick = e => {
+      if (e.target.classList.contains('modal')) fecharModal(e.target.id);
+    };
+
+  </script>
 </body>
 </html>
