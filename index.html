@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ESTILOS MANTIDOS IGUAIS - NÃO PRECISAM SER ALTERADOS */
     :root {
       --primary: #0d47a1;
       --primary-dark: #002171;
@@ -181,7 +180,7 @@
       background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
     }
     
-    /* FILTROS - ESTILOS MANTIDOS DO INDEX I */
+    /* FILTROS */
     .filtros-container {
       background: white;
       padding: 25px 30px;
@@ -443,11 +442,16 @@
     .cpa-card {
       background: white;
       border-radius: 16px;
-      padding: 25px;
+      padding: 20px;
       box-shadow: var(--shadow-md);
       transition: all 0.3s ease;
       border-top: 4px solid var(--primary);
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
     }
     
     .cpa-card:hover {
@@ -459,7 +463,8 @@
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      flex-shrink: 0;
     }
     
     .cpa-icon {
@@ -470,28 +475,75 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 24px;
+      color: blue;
+      font-size: 28px;
       font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      flex-shrink: 0;
+      padding: 5px;
+    }
+    
+    .cpa-icon-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    .cpa-icon-content::before {
+      content: '⚔️';
+      font-size: 30px;
+      position: absolute;
+      top: 2px;
+      opacity: 0.9;
+    }
+    
+    .cpa-info {
+      flex: 1;
+      min-width: 0;
     }
     
     .cpa-info h4 {
       margin: 0;
       font-size: 22px;
-      color: var(--primary-dark);
+      color: var(--primary-blue);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .cpa-info p {
       margin: 5px 0 0;
       color: var(--gray-600);
       font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .cpa-chart-container {
+      height: 100px;
+      margin: 10px 0;
+      position: relative;
+      flex-shrink: 0;
+    }
+    
+    .cpa-chart-canvas {
+      width: 100% !important;
+      height: 100px !important;
     }
     
     .cpa-details {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: 10px;
+      flex-shrink: 0;
     }
     
     .cpa-detail {
@@ -499,85 +551,27 @@
       padding: 12px;
       border-radius: 10px;
       text-align: center;
+      overflow: hidden;
     }
     
     .cpa-detail-value {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--primary);
       display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     .cpa-detail-label {
-      font-size: 12px;
-      color: var(--gray-600);
-      margin-top: 5px;
-      text-transform: uppercase;
-    }
-    
-    /* COMANDANTE CARDS */
-    .comandante-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: var(--shadow-md);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      border-left: 4px solid;
-    }
-    
-    .comandante-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-lg);
-    }
-    
-    .comandante-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    
-    .comandante-name {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--gray-800);
-    }
-    
-    .comandante-cpa {
-      background: var(--primary-light);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    
-    .comandante-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 15px 0;
-    }
-    
-    .comandante-stat {
-      text-align: center;
-      padding: 10px;
-      background: var(--gray-100);
-      border-radius: 10px;
-    }
-    
-    .comandante-stat-value {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary);
-      display: block;
-    }
-    
-    .comandante-stat-label {
       font-size: 11px;
-      color: var(--gray-600);
+      color: var(--black-600);
       margin-top: 3px;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     /* INSIGHTS */
@@ -660,6 +654,7 @@
       box-shadow: var(--shadow-md);
       margin-bottom: 30px;
       position: relative;
+      height: 400px;
     }
     
     .chart-title {
@@ -668,6 +663,11 @@
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 25px;
+    }
+    
+    .comparative-chart {
+      height: 350px;
+      width: 100%;
     }
     
     canvas { 
@@ -854,22 +854,17 @@
       margin-top: 60px;
     }
     
-    footer strong {
-      font-weight: 700;
-      font-size: 18px;
-    }
-    
     /* LISTAS EM MODAL */
     .localidades-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 10px;
       margin-top: 15px;
     }
     
     .localidade-item {
       background: var(--gray-100);
-      padding: 12px 15px;
+      padding: 10px 15px;
       border-radius: 10px;
       display: flex;
       justify-content: space-between;
@@ -883,22 +878,18 @@
     
     .localidade-nome {
       font-weight: 500;
+      font-size: 14px;
     }
     
-    .localidade-link {
-      color: var(--primary);
-      text-decoration: none;
-      font-size: 14px;
-      padding: 5px 10px;
-      border-radius: 6px;
+    .localidade-count {
       background: var(--primary-light);
       color: white;
-      transition: all 0.3s ease;
-    }
-    
-    .localidade-link:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      min-width: 30px;
+      text-align: center;
     }
     
     /* MODAL PDF PREVIEW */
@@ -909,12 +900,16 @@
       border-radius: 8px;
       overflow: hidden;
       margin: 15px 0;
+      position: relative;
+      z-index: 1001;
     }
     
     .pdf-preview-iframe {
       width: 100%;
       height: 100%;
       border: none;
+      position: relative;
+      z-index: 1001;
     }
     
     .pdf-actions {
@@ -1065,15 +1060,25 @@
       <button class="tab active" data-tab="tab-cpa">Rank CPAs</button>
       <button class="tab" data-tab="tab-bpm">Rank BPMs</button>
     </div>
+    
     <div class="tab-content active" id="tab-cpa">
+      <div class="chart-container">
+        <div class="chart-title">Comparativo de Desempenho - CPAs</div>
+        <canvas id="graficoComparativoCPA" class="comparative-chart"></canvas>
+      </div>
       <table class="ranking-table" id="tabelaComparativaCPA"></table>
     </div>
+    
     <div class="tab-content" id="tab-bpm">
+      <div class="chart-container">
+        <div class="chart-title">Comparativo de Desempenho - BPMs (Top 10)</div>
+        <canvas id="graficoComparativoBPM" class="comparative-chart"></canvas>
+      </div>
       <table class="ranking-table" id="tabelaComparativaBPM"></table>
     </div>
 
     <footer>
-      Desenvolvido com <strong>IA Avançada</strong> para Operações Estratégicas
+      @ 2025 - GSI - Operações Estratégicas - Todos os direitos reservados
     </footer>
   </div>
 
@@ -1120,6 +1125,10 @@
           <h4>Batalhões e Áreas de Atuação</h4>
           <div id="cpaBPMList"></div>
         </div>
+        <div class="modal-section">
+          <h4>Localidades de Atuação para Remoção de Barricadas</h4>
+          <div id="cpaLocalidadesList"></div>
+        </div>
         <div class="pdf-actions">
           <button class="btn btn-pdf" onclick="gerarPDFCPA()">
             <i class="fas fa-file-pdf"></i> Gerar PDF
@@ -1133,7 +1142,6 @@
     // ============================================================================
     // VARIÁVEIS GLOBAIS
     // ============================================================================
-
     let dadosBrutos = null;
     let dadosFiltrados = null;
     let filtrosAtivos = {
@@ -1150,13 +1158,16 @@
     };
 
     let cpaComandantes = {};
-    let cpaDetails = {}; // Para armazenar BPMs e áreas por CPA
-    let cpaAreas = {}; // Para armazenar áreas (Alpha, Bravo etc.) por CPA de GLOBAL
+    let cpaDetails = {};
+    let cpaAreas = {};
+    let cpaLocalidades = {};
+    
+    let graficoComparativoCPA = null;
+    let graficoComparativoBPM = null;
 
     // ============================================================================
     // FUNÇÕES AUXILIARES
     // ============================================================================
-
     function mostrarMensagem(texto, classe) {
       const msg = document.createElement('div');
       msg.className = `mensagem ${classe}`;
@@ -1187,25 +1198,37 @@
       aplicarFiltros();
     }
 
+    function excelDateToJSDate(excelDate) {
+      if (!excelDate || isNaN(excelDate)) return null;
+      const excelEpoch = new Date(Date.UTC(1900, 11, 30));
+      const jsDate = new Date(excelEpoch.getTime() + excelDate * 86400000);
+      return new Date(jsDate.getUTCFullYear(), jsDate.getUTCMonth(), jsDate.getUTCDate());
+    }
+
+    function formatarDataBR(data) {
+      if (!data) return '';
+      const dia = String(data.getDate()).padStart(2, '0');
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const ano = data.getFullYear();
+      return `${dia}/${mes}/${ano}`;
+    }
+
     // ============================================================================
     // PROCESSAMENTO DE DADOS
     // ============================================================================
-
     async function processarExcel(file) {
       try {
         const arrayBuffer = await file.arrayBuffer();
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 
-        // Processar sheet GLOBAL
         const globalSheet = workbook.Sheets['GLOBAL'];
         const globalData = XLSX.utils.sheet_to_json(globalSheet, { header: 1 });
 
-        // Headers
         const headers = globalData[0];
         const dataRows = globalData.slice(1).filter(row => row.some(cell => cell));
 
         dadosBrutos = {
-          rows: dataRows, // Armazenar rows para filtragem
+          rows: dataRows,
           totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
           cpas: {},
           bpms: {},
@@ -1213,7 +1236,7 @@
           evolucao: {}
         };
 
-        // Mapear CPAs, Comandantes, BPMs e Áreas da sheet CPA x BTL
+        // Processar sheet CPA x BTL
         const cpaBtlSheet = workbook.Sheets['CPA x BTL'];
         if (cpaBtlSheet) {
           const cpaBtlData = XLSX.utils.sheet_to_json(cpaBtlSheet, { header: ['CPA', 'CMT', 'TEL', 'BPM', 'AREA', 'AREAS'] }).slice(1);
@@ -1236,13 +1259,15 @@
           });
         }
 
-        const dateSet = new Set();
+        // Inicializar objetos
+        cpaLocalidades = {};
+        let datasJS = [];
 
         dataRows.forEach(row => {
-          const data = parseFloat(row[0]) || null;
+          const dataExcel = parseFloat(row[0]) || null;
           let cpa = (row[8] || '').trim();
-          cpa = cpa.replace('°', 'ª'); // Normalizar
-          const area = (row[1] || '').trim().toUpperCase(); // Coluna B: ÁREA
+          cpa = cpa.replace('°', 'ª');
+          const area = (row[1] || '').trim().toUpperCase();
           const bpm = (row[10] || '').trim();
           const municipio = (row[2] || '').trim();
           const remocoes = parseFloat(row[5]) || 0;
@@ -1250,26 +1275,31 @@
           const peso = parseFloat(row[7]) || 0;
 
           if (cpa && remocoes > 0) {
-            // Atualizar totais
             dadosBrutos.totais.barricadas += remocoes;
             dadosBrutos.totais.vias += vias;
             dadosBrutos.totais.peso += peso;
 
-            // Dias
-            if (data) dateSet.add(data);
+            if (dataExcel) {
+              const dataJS = excelDateToJSDate(dataExcel);
+              if (dataJS) {
+                datasJS.push(dataJS);
+                const dateStr = formatarDataBR(dataJS);
+                if (!dadosBrutos.evolucao[dateStr]) dadosBrutos.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
+                dadosBrutos.evolucao[dateStr].barricadas += remocoes;
+                dadosBrutos.evolucao[dateStr].vias += vias;
+                dadosBrutos.evolucao[dateStr].peso += peso;
+              }
+            }
 
-            // Por CPA
             if (!dadosBrutos.cpas[cpa]) dadosBrutos.cpas[cpa] = { barricadas: 0, vias: 0, peso: 0, bpms: new Set(), eficiencia: 0 };
             dadosBrutos.cpas[cpa].barricadas += remocoes;
             dadosBrutos.cpas[cpa].vias += vias;
             dadosBrutos.cpas[cpa].peso += peso;
             dadosBrutos.cpas[cpa].eficiencia = dadosBrutos.cpas[cpa].barricadas / (dadosBrutos.cpas[cpa].vias || 1);
 
-            // Áreas por CPA
             if (!cpaAreas[cpa]) cpaAreas[cpa] = new Set();
             if (area) cpaAreas[cpa].add(area);
 
-            // Por BPM
             const bpmKey = `${cpa}-${bpm}`;
             if (!dadosBrutos.bpms[bpmKey]) dadosBrutos.bpms[bpmKey] = { cpa, bpm, barricadas: 0, vias: 0, peso: 0, eficiencia: 0 };
             dadosBrutos.bpms[bpmKey].barricadas += remocoes;
@@ -1279,46 +1309,60 @@
 
             dadosBrutos.cpas[cpa].bpms.add(bpm);
 
-            // Municípios
             if (municipio) dadosBrutos.municipios.add(municipio);
 
-            // Evolução
-            if (data) {
-              const dateStr = new Date(Math.round((data - 25569) * 86400 * 1000)).toLocaleDateString('pt-BR');
-              if (!dadosBrutos.evolucao[dateStr]) dadosBrutos.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
-              dadosBrutos.evolucao[dateStr].barricadas += remocoes;
-              dadosBrutos.evolucao[dateStr].vias += vias;
-              dadosBrutos.evolucao[dateStr].peso += peso;
+            // Coletar localidades por CPA
+            if (municipio && municipio.trim() !== '') {
+              if (!cpaLocalidades[cpa]) cpaLocalidades[cpa] = {};
+              if (!cpaLocalidades[cpa][municipio]) cpaLocalidades[cpa][municipio] = 0;
+              cpaLocalidades[cpa][municipio] += remocoes;
             }
           }
         });
 
-        dadosBrutos.totais.dias = dateSet.size;
+        // Calcular dias
+        if (datasJS.length > 0) {
+          const datasUnicas = new Set(datasJS.map(d => formatarDataBR(d)));
+          dadosBrutos.totais.dias = datasUnicas.size;
+          const dataInicio = new Date(Math.min(...datasJS.map(d => d.getTime())));
+          const dataFim = new Date(Math.max(...datasJS.map(d => d.getTime())));
+          dadosBrutos.dataInicio = dataInicio;
+          dadosBrutos.dataFim = dataFim;
+        } else {
+          dadosBrutos.totais.dias = 0;
+        }
 
-        // Calcular percentuais para CPAs
+        // Calcular percentuais
         Object.entries(dadosBrutos.cpas).forEach(([cpa, data]) => {
           data.percentualBarricadas = (data.barricadas / dadosBrutos.totais.barricadas) * 100 || 0;
         });
 
         // Ordenar evolução
         dadosBrutos.evolucao = Object.entries(dadosBrutos.evolucao)
-          .sort((a, b) => new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-')))
+          .sort((a, b) => {
+            const [diaA, mesA, anoA] = a[0].split('/').map(Number);
+            const [diaB, mesB, anoB] = b[0].split('/').map(Number);
+            const dataA = new Date(anoA, mesA - 1, diaA);
+            const dataB = new Date(anoB, mesB - 1, diaB);
+            return dataA - dataB;
+          })
           .map(([data, vals]) => ({ data, ...vals }));
 
-        // Preencher selects de filtros
+        // Preencher filtros
         const selectCPA = document.getElementById('filtroCPA');
-        selectCPA.innerHTML = '<option value="todos">Todos</option>' + Object.keys(dadosBrutos.cpas).map(cpa => `<option value="${cpa}">${cpa}</option>`).join('');
+        selectCPA.innerHTML = '<option value="todos">Todos</option>' + 
+          Object.keys(dadosBrutos.cpas).map(cpa => `<option value="${cpa}">${cpa}</option>`).join('');
 
         const selectBPM = document.getElementById('filtroBPM');
         const allBPMs = new Set(Object.values(dadosBrutos.bpms).map(b => b.bpm));
-        selectBPM.innerHTML = '<option value="todos">Todos</option>' + Array.from(allBPMs).map(bpm => `<option value="${bpm}">${bpm}</option>`).join('');
+        selectBPM.innerHTML = '<option value="todos">Todos</option>' + 
+          Array.from(allBPMs).map(bpm => `<option value="${bpm}">${bpm}</option>`).join('');
 
         const selectMunicipio = document.getElementById('filtroMunicipio');
-        selectMunicipio.innerHTML = '<option value="todos">Todos</option>' + Array.from(dadosBrutos.municipios).map(mun => `<option value="${mun}">${mun}</option>`).join('');
+        selectMunicipio.innerHTML = '<option value="todos">Todos</option>' + 
+          Array.from(dadosBrutos.municipios).map(mun => `<option value="${mun}">${mun}</option>`).join('');
 
-        // Aplicar filtros iniciais
         aplicarFiltros();
-
         mostrarMensagem('Planilha processada com sucesso!', 'success');
 
       } catch (error) {
@@ -1332,7 +1376,6 @@
       filtrosAtivos.bpm = document.getElementById('filtroBPM').value;
       filtrosAtivos.municipio = document.getElementById('filtroMunicipio').value;
 
-      // Filtrar rows
       let filteredRows = dadosBrutos.rows.filter(row => {
         let rowCPA = (row[8] || '').trim();
         rowCPA = rowCPA.replace('°', 'ª');
@@ -1344,7 +1387,6 @@
                (filtrosAtivos.municipio === 'todos' || rowMunicipio.toLowerCase() === filtrosAtivos.municipio.toLowerCase());
       });
 
-      // Recalcular agregações baseadas em filteredRows
       dadosFiltrados = {
         totais: { barricadas: 0, vias: 0, peso: 0, dias: 0 },
         cpas: {},
@@ -1353,10 +1395,10 @@
         evolucao: {}
       };
 
-      const dateSet = new Set();
+      let datasJSFiltradas = [];
 
       filteredRows.forEach(row => {
-        const data = parseFloat(row[0]) || null;
+        const dataExcel = parseFloat(row[0]) || null;
         let cpa = (row[8] || '').trim();
         cpa = cpa.replace('°', 'ª');
         const bpm = (row[10] || '').trim();
@@ -1370,7 +1412,17 @@
           dadosFiltrados.totais.vias += vias;
           dadosFiltrados.totais.peso += peso;
 
-          if (data) dateSet.add(data);
+          if (dataExcel) {
+            const dataJS = excelDateToJSDate(dataExcel);
+            if (dataJS) {
+              datasJSFiltradas.push(dataJS);
+              const dateStr = formatarDataBR(dataJS);
+              if (!dadosFiltrados.evolucao[dateStr]) dadosFiltrados.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
+              dadosFiltrados.evolucao[dateStr].barricadas += remocoes;
+              dadosFiltrados.evolucao[dateStr].vias += vias;
+              dadosFiltrados.evolucao[dateStr].peso += peso;
+            }
+          }
 
           if (!dadosFiltrados.cpas[cpa]) dadosFiltrados.cpas[cpa] = { barricadas: 0, vias: 0, peso: 0, bpms: new Set(), eficiencia: 0 };
           dadosFiltrados.cpas[cpa].barricadas += remocoes;
@@ -1386,27 +1438,34 @@
           dadosFiltrados.bpms[bpmKey].eficiencia = dadosFiltrados.bpms[bpmKey].barricadas / (dadosFiltrados.bpms[bpmKey].vias || 1);
 
           dadosFiltrados.cpas[cpa].bpms.add(bpm);
-
           if (municipio) dadosFiltrados.municipios.add(municipio);
-
-          if (data) {
-            const dateStr = new Date(Math.round((data - 25569) * 86400 * 1000)).toLocaleDateString('pt-BR');
-            if (!dadosFiltrados.evolucao[dateStr]) dadosFiltrados.evolucao[dateStr] = { barricadas: 0, vias: 0, peso: 0 };
-            dadosFiltrados.evolucao[dateStr].barricadas += remocoes;
-            dadosFiltrados.evolucao[dateStr].vias += vias;
-            dadosFiltrados.evolucao[dateStr].peso += peso;
-          }
         }
       });
 
-      dadosFiltrados.totais.dias = dateSet.size;
+      // Calcular dias filtrados
+      if (datasJSFiltradas.length > 0) {
+        const datasUnicas = new Set(datasJSFiltradas.map(d => formatarDataBR(d)));
+        dadosFiltrados.totais.dias = datasUnicas.size;
+        const dataInicio = new Date(Math.min(...datasJSFiltradas.map(d => d.getTime())));
+        const dataFim = new Date(Math.max(...datasJSFiltradas.map(d => d.getTime())));
+        dadosFiltrados.dataInicio = dataInicio;
+        dadosFiltrados.dataFim = dataFim;
+      } else {
+        dadosFiltrados.totais.dias = 0;
+      }
 
       Object.entries(dadosFiltrados.cpas).forEach(([cpa, data]) => {
         data.percentualBarricadas = (data.barricadas / dadosFiltrados.totais.barricadas) * 100 || 0;
       });
 
       dadosFiltrados.evolucao = Object.entries(dadosFiltrados.evolucao)
-        .sort((a, b) => new Date(a[0].split('/').reverse().join('-')) - new Date(b[0].split('/').reverse().join('-')))
+        .sort((a, b) => {
+          const [diaA, mesA, anoA] = a[0].split('/').map(Number);
+          const [diaB, mesB, anoB] = b[0].split('/').map(Number);
+          const dataA = new Date(anoA, mesA - 1, diaA);
+          const dataB = new Date(anoB, mesB - 1, diaB);
+          return dataA - dataB;
+        })
         .map(([data, vals]) => ({ data, ...vals }));
 
       atualizarDashboard();
@@ -1417,7 +1476,6 @@
     // ============================================================================
     // ATUALIZAÇÃO DO DASHBOARD
     // ============================================================================
-
     function atualizarDashboard() {
       atualizarHeaderStats();
       criarCardsTotais(dadosFiltrados);
@@ -1426,6 +1484,7 @@
       criarCardsBPMs(dadosFiltrados);
       criarTabelaComparativaCPA(dadosFiltrados);
       criarTabelaComparativaBPM(dadosFiltrados);
+      criarGraficosComparativos(dadosFiltrados);
     }
 
     function atualizarHeaderStats() {
@@ -1455,7 +1514,7 @@
         {
           icone: 'fa-chart-line',
           titulo: 'Média Diária',
-          valor: dados.totais.dias > 0 ? Math.round(dados.totais.barricadas / dados.totais.dias) : 0,
+          valor: dados.totais.dias > 0 ? (dados.totais.barricadas / dados.totais.dias).toFixed(1) : 0,
           descricao: 'Média de remoções por dia',
           classe: 'success'
         },
@@ -1489,21 +1548,21 @@
           <ul style="list-style-type: none; padding: 0;">
       `;
 
-      // Insight 1: CPA mais produtiva
       const cpasOrdenadas = Object.entries(dados.cpas).sort((a, b) => b[1].barricadas - a[1].barricadas);
       const topCPA = cpasOrdenadas[0] ? cpasOrdenadas[0][0] : 'N/A';
       html += `<li class="insight info"><i class="fas fa-star"></i> CPA mais produtiva: ${topCPA} com ${Math.round(cpasOrdenadas[0] ? cpasOrdenadas[0][1].barricadas : 0)} remoções</li>`;
 
-      // Insight 2: Média de peso por remoção
       const mediaPeso = dados.totais.barricadas > 0 ? (dados.totais.peso / dados.totais.barricadas).toFixed(2) : 0;
       html += `<li class="insight success"><i class="fas fa-balance-scale"></i> Média de peso por remoção: ${mediaPeso} toneladas</li>`;
 
-      // Insight 3: Número de municípios atendidos
       html += `<li class="insight warning"><i class="fas fa-map-marker-alt"></i> Municípios atendidos: ${dados.municipios.size}</li>`;
 
-      // Insight 4: Dia com mais remoções
       const maxDia = dados.evolucao.reduce((max, dia) => dia.barricadas > max.barricadas ? dia : max, {barricadas: 0});
       html += `<li class="insight danger"><i class="fas fa-calendar-day"></i> Dia com mais remoções: ${maxDia.data || 'N/A'} (${Math.round(maxDia.barricadas)})</li>`;
+
+      const periodoInicio = dados.evolucao[0]?.data || 'N/A';
+      const periodoFim = dados.evolucao[dados.evolucao.length - 1]?.data || 'N/A';
+      html += `<li class="insight info"><i class="fas fa-calendar-alt"></i> Período analisado: ${periodoInicio} a ${periodoFim}</li>`;
 
       html += '</ul></div>';
       container.innerHTML = html;
@@ -1513,12 +1572,13 @@
       const grid = document.getElementById('cardsCPAs');
       let html = '';
       Object.entries(dados.cpas).sort((a, b) => b[1].barricadas - a[1].barricadas).forEach(([cpa, data]) => {
+        const numeroCPA = cpa.split(' ')[0];
+        
         html += `
           <div class="cpa-card" onclick="abrirModalCPA('${cpa}')">
             <div class="cpa-header">
               <div class="cpa-icon">
-                <div style="position: absolute; top: 10px; font-size: 20px;">${cpa.split('ª')[0]}ª</div>
-                <div style="position: absolute; bottom: 10px; font-size: 16px;">CPA</div>
+                <div class="cpa-icon-content"></div>
               </div>
               <div class="cpa-info">
                 <h4>${cpa}</h4>
@@ -1531,8 +1591,11 @@
                 <span>${data.percentualBarricadas.toFixed(1)}%</span>
               </div>
               <div class="progress-bar">
-                <div class="progress" style="width: ${data.percentualBarricadas}%; background: ${colors[cpa] || '#2196f3'};"></div>
+                <div class="progress" style="width: ${Math.min(data.percentualBarricadas, 100)}%; background: ${colors[numeroCPA] || '#2196f3'};"></div>
               </div>
+            </div>
+            <div class="cpa-chart-container">
+              <canvas id="chart-${cpa.replace('ª', '').replace(' ', '')}" class="cpa-chart-canvas"></canvas>
             </div>
             <div class="cpa-details">
               <div class="cpa-detail">
@@ -1556,131 +1619,79 @@
         `;
       });
       grid.innerHTML = html;
-    }
 
-    function abrirModalCPA(cpa) {
-      document.getElementById('modalCPATitle').textContent = `Detalhes da ${cpa}`;
-      document.getElementById('cpaComandante').textContent = cpaComandantes[cpa] || 'Não especificado';
-
-      const areasList = document.getElementById('cpaAreasList');
-      let areasHtml = '<ul>';
-      (Array.from(cpaAreas[cpa] || [])).sort().forEach(area => {
-        areasHtml += `<li>${area}</li>`;
-      });
-      areasHtml += '</ul>';
-      areasList.innerHTML = areasHtml;
-
-      const list = document.getElementById('cpaBPMList');
-      let html = '<ul>';
-      (cpaDetails[cpa] || []).forEach(detail => {
-        html += `<li><strong>${detail.bpm}</strong>: ${detail.areasAtuacao}</li>`;
-      });
-      html += '</ul>';
-      list.innerHTML = html;
-
-      window.currentCPA = cpa; // Para gerar PDF
-
-      abrirModal('modalCPA');
-    }
-
-    async function gerarPDFCPA() {
-      const cpa = window.currentCPA;
-      if (!cpa) return;
-
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: 'a4'
-      });
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 15;
-      let yPos = margin;
-
-      // Cabeçalho colorido
-      pdf.setFillColor(13, 71, 161);
-      pdf.rect(0, 0, pageWidth, 40, 'F');
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(24);
-      pdf.text(`Detalhes da ${cpa}`, pageWidth / 2, 25, { align: 'center' });
-
-      yPos = 50;
-
-      // Card para Comandante
-      pdf.setFillColor(245, 247, 250);
-      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
-      pdf.setFillColor(13, 71, 161);
-      pdf.rect(margin, yPos, 5, 30, 'F');
-      pdf.setTextColor(13, 71, 161);
-      pdf.setFontSize(16);
-      pdf.text('Comandante', margin + 15, yPos + 10);
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(12);
-      pdf.text(cpaComandantes[cpa] || 'Não especificado', margin + 15, yPos + 20);
-
-      yPos += 40;
-
-      // Card para Áreas/Equipes
-      pdf.setFillColor(245, 247, 250);
-      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
-      pdf.setFillColor(46, 125, 50);
-      pdf.rect(margin, yPos, 5, 30, 'F');
-      pdf.setTextColor(46, 125, 50);
-      pdf.setFontSize(16);
-      pdf.text('Áreas/Equipes Vinculadas', margin + 15, yPos + 10);
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(12);
-      let areasY = yPos + 40;
-      (Array.from(cpaAreas[cpa] || [])).sort().forEach((area, idx) => {
-        if (areasY > pageHeight - 20) {
-          pdf.addPage();
-          areasY = margin;
+      // Criar gráficos
+      Object.entries(dados.cpas).forEach(([cpa, data]) => {
+        const canvasId = `chart-${cpa.replace('ª', '').replace(' ', '')}`;
+        const ctx = document.getElementById(canvasId);
+        if (!ctx) return;
+        
+        if (window[`chart_${canvasId}`]) {
+          window[`chart_${canvasId}`].destroy();
         }
-        pdf.text(area, margin + 15, areasY);
-        areasY += 10;
+        
+        const numeroCPA = cpa.split(' ')[0];
+        const corCPA = colors[numeroCPA] || '#2196f3';
+        
+        window[`chart_${canvasId}`] = new Chart(ctx.getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: ['Remoções', 'Vias', 'Toneladas'],
+            datasets: [{
+              data: [data.barricadas, data.vias, data.peso],
+              backgroundColor: [corCPA, '#2e7d32', '#f9a825'],
+              borderColor: [corCPA, '#1b5e20', '#f57f17'],
+              borderWidth: 1,
+              borderRadius: 5,
+              barPercentage: 0.6,
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                beginAtZero: true,
+                display: false,
+                grid: { display: false }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const label = context.label || '';
+                    const value = context.raw;
+                    const actualValue = Math.round(value);
+                    const unit = label === 'Toneladas' ? 't' : '';
+                    return `${label}: ${actualValue}${unit}`;
+                  }
+                }
+              }
+            }
+          }
+        });
       });
-
-      yPos = areasY + 10;
-
-      // Card para Batalhões
-      pdf.setFillColor(245, 247, 250);
-      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
-      pdf.setFillColor(249, 168, 37);
-      pdf.rect(margin, yPos, 5, 30, 'F');
-      pdf.setTextColor(249, 168, 37);
-      pdf.setFontSize(16);
-      pdf.text('Batalhões e Áreas de Atuação', margin + 15, yPos + 10);
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(12);
-      let bpmY = yPos + 40;
-      (cpaDetails[cpa] || []).forEach((detail, idx) => {
-        if (bpmY > pageHeight - 20) {
-          pdf.addPage();
-          bpmY = margin;
-        }
-        pdf.text(`${detail.bpm}: ${detail.areasAtuacao}`, margin + 15, bpmY);
-        bpmY += 10;
-      });
-
-      const pdfBlob = pdf.output('blob');
-      const pdfUrl = URL.createObjectURL(pdfBlob);
-      document.getElementById('pdfPreview').src = pdfUrl;
-      abrirModal('modalPDF');
-
-      window.pdfParaDownload = pdf;
     }
 
     function criarCardsBPMs(dados) {
       const grid = document.getElementById('cardsBPMs');
       let html = '';
       Object.entries(dados.bpms).sort((a, b) => b[1].barricadas - a[1].barricadas).forEach(([key, data]) => {
+        const numeroCPA = data.cpa.split(' ')[0];
+        const corCPA = colors[numeroCPA] || '#2196f3';
+        
         html += `
           <div class="area-card">
             <div class="area-header">
               <span class="area-name">${data.bpm} (${data.cpa})</span>
-              <span class="area-badge" style="background: ${colors[data.cpa] || '#2196f3'}; color: white;">${((data.barricadas / dados.totais.barricadas) * 100 || 0).toFixed(1)}%</span>
+              <span class="area-badge" style="background: ${corCPA}; color: white;">${((data.barricadas / dados.totais.barricadas) * 100 || 0).toFixed(1)}%</span>
             </div>
             <div class="area-stats">
               <div class="area-stat">
@@ -1743,12 +1754,15 @@
         `;
       } else {
         cpasOrdenadas.forEach(([cpa, data], index) => {
+          const numeroCPA = cpa.split(' ')[0];
+          const corCPA = colors[numeroCPA] || '#2196f3';
+          
           html += `
             <tr>
               <td class="ranking-position">
                 ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
               </td>
-              <td><strong style="color: ${colors[cpa]};">${cpa}</strong></td>
+              <td><strong style="color: ${corCPA};">${cpa}</strong></td>
               <td style="text-align: center;"><small>${cpaComandantes[cpa] || 'Não especificado'}</small></td>
               <td style="text-align: center; font-weight: 600;">${Math.round(data.barricadas)}</td>
               <td style="text-align: center; font-weight: 600;">${Math.round(data.vias)}</td>
@@ -1757,7 +1771,7 @@
               <td style="text-align: center;">
                 <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
                   <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
-                    <div style="width: ${data.percentualBarricadas}%; height: 100%; background: ${colors[cpa]};"></div>
+                    <div style="width: ${data.percentualBarricadas}%; height: 100%; background: ${corCPA};"></div>
                   </div>
                   <span style="font-weight: 600;">${data.percentualBarricadas.toFixed(1)}%</span>
                 </div>
@@ -1804,12 +1818,15 @@
       } else {
         bpmsOrdenadas.forEach(([key, data], index) => {
           const percentualTotal = (data.barricadas / dados.totais.barricadas) * 100 || 0;
+          const numeroCPA = data.cpa.split(' ')[0];
+          const corCPA = colors[numeroCPA] || '#2196f3';
+          
           html += `
             <tr>
               <td class="ranking-position">
                 ${index < 3 ? '<span class="ranking-medal">' + medalhas[index] + '</span>' : (index + 1) + 'º'}
               </td>
-              <td><strong style="color: ${colors[data.cpa]};">${data.bpm}</strong></td>
+              <td><strong style="color: ${corCPA};">${data.bpm}</strong></td>
               <td style="text-align: center;"><small>${data.cpa}</small></td>
               <td style="text-align: center; font-weight: 600;">${Math.round(data.barricadas)}</td>
               <td style="text-align: center; font-weight: 600;">${Math.round(data.vias)}</td>
@@ -1818,7 +1835,7 @@
               <td style="text-align: center;">
                 <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
                   <div style="width: 80px; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden;">
-                    <div style="width: ${percentualTotal}%; height: 100%; background: ${colors[data.cpa]};"></div>
+                    <div style="width: ${percentualTotal}%; height: 100%; background: ${corCPA};"></div>
                   </div>
                   <span style="font-weight: 600;">${percentualTotal.toFixed(1)}%</span>
                 </div>
@@ -1832,10 +1849,414 @@
       tabela.innerHTML = html;
     }
 
-    // ============================================================================
-    // PDF GENERATION - ADAPTADO PARA CPA E BPM
-    // ============================================================================
+    function criarGraficosComparativos(dados) {
+      criarGraficoComparativoCPA(dados);
+      criarGraficoComparativoBPM(dados);
+    }
 
+    function criarGraficoComparativoCPA(dados) {
+      const ctx = document.getElementById('graficoComparativoCPA');
+      if (!ctx) return;
+      
+      if (graficoComparativoCPA) {
+        graficoComparativoCPA.destroy();
+      }
+      
+      const cpasOrdenadas = Object.entries(dados.cpas)
+        .sort((a, b) => b[1].barricadas - a[1].barricadas)
+        .slice(0, 10);
+      
+      if (cpasOrdenadas.length === 0) {
+        ctx.parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: var(--gray-600);">Nenhum dado disponível para exibir</div>';
+        return;
+      }
+      
+      const labels = cpasOrdenadas.map(([cpa]) => cpa);
+      const remocoes = cpasOrdenadas.map(([_, data]) => Math.round(data.barricadas));
+      const vias = cpasOrdenadas.map(([_, data]) => Math.round(data.vias));
+      const pesos = cpasOrdenadas.map(([_, data]) => Math.round(data.peso));
+      
+      const coresBarras = labels.map(cpa => {
+        const numeroCPA = cpa.split(' ')[0];
+        return colors[numeroCPA] || '#2196f3';
+      });
+      
+      graficoComparativoCPA = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Remoções',
+              data: remocoes,
+              backgroundColor: coresBarras.map(cor => cor),
+              borderColor: coresBarras.map(cor => cor),
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: 'Vias Liberadas',
+              data: vias,
+              backgroundColor: '#2e7d32',
+              borderColor: '#1b5e20',
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: 'Toneladas',
+              data: pesos,
+              backgroundColor: '#f9a825',
+              borderColor: '#f57f17',
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              stacked: false,
+              title: {
+                display: true,
+                text: 'Quantidade',
+                font: { size: 14, weight: 'bold' }
+              },
+              grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            y: {
+              stacked: false,
+              title: {
+                display: true,
+                text: 'CPA',
+                font: { size: 14, weight: 'bold' }
+              },
+              grid: { color: 'rgba(0,0,0,0.05)' }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { font: { size: 12 }, padding: 20 }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  const label = context.dataset.label || '';
+                  const value = context.raw;
+                  const unit = label === 'Toneladas' ? 't' : '';
+                  return `${label}: ${value}${unit}`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function criarGraficoComparativoBPM(dados) {
+      const ctx = document.getElementById('graficoComparativoBPM');
+      if (!ctx) return;
+      
+      if (graficoComparativoBPM) {
+        graficoComparativoBPM.destroy();
+      }
+      
+      const bpmsOrdenadas = Object.entries(dados.bpms)
+        .sort((a, b) => b[1].barricadas - a[1].barricadas)
+        .slice(0, 10);
+      
+      if (bpmsOrdenadas.length === 0) {
+        ctx.parentElement.innerHTML = '<div style="text-align: center; padding: 50px; color: var(--gray-600);">Nenhum dado disponível para exibir</div>';
+        return;
+      }
+      
+      const labels = bpmsOrdenadas.map(([_, data]) => `${data.bpm} (${data.cpa})`);
+      const remocoes = bpmsOrdenadas.map(([_, data]) => Math.round(data.barricadas));
+      const vias = bpmsOrdenadas.map(([_, data]) => Math.round(data.vias));
+      const pesos = bpmsOrdenadas.map(([_, data]) => Math.round(data.peso));
+      
+      const coresBarras = bpmsOrdenadas.map(([_, data]) => {
+        const numeroCPA = data.cpa.split(' ')[0];
+        return colors[numeroCPA] || '#2196f3';
+      });
+      
+      graficoComparativoBPM = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Remoções',
+              data: remocoes,
+              backgroundColor: coresBarras.map(cor => cor),
+              borderColor: coresBarras.map(cor => cor),
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: 'Vias Liberadas',
+              data: vias,
+              backgroundColor: '#2e7d32',
+              borderColor: '#1b5e20',
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            },
+            {
+              label: 'Toneladas',
+              data: pesos,
+              backgroundColor: '#f9a825',
+              borderColor: '#f57f17',
+              borderWidth: 1,
+              barPercentage: 0.7,
+              categoryPercentage: 0.8
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              beginAtZero: true,
+              stacked: false,
+              title: {
+                display: true,
+                text: 'Quantidade',
+                font: { size: 14, weight: 'bold' }
+              },
+              grid: { color: 'rgba(0,0,0,0.05)' }
+            },
+            y: {
+              stacked: false,
+              title: {
+                display: true,
+                text: 'BPM (CPA)',
+                font: { size: 14, weight: 'bold' }
+              },
+              grid: { color: 'rgba(0,0,0,0.05)' },
+              ticks: { font: { size: 11 } }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: { font: { size: 12 }, padding: 20 }
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  const label = context.dataset.label || '';
+                  const value = context.raw;
+                  const unit = label === 'Toneladas' ? 't' : '';
+                  return `${label}: ${value}${unit}`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ============================================================================
+    // MODAL CPA E PDF
+    // ============================================================================
+    function abrirModalCPA(cpa) {
+      document.getElementById('modalCPATitle').textContent = `Detalhes da ${cpa}`;
+      document.getElementById('cpaComandante').textContent = cpaComandantes[cpa] || 'Não especificado';
+
+      // Áreas/Equipes
+      const areasList = document.getElementById('cpaAreasList');
+      let areasHtml = '<div class="localidades-list">';
+      (Array.from(cpaAreas[cpa] || [])).sort().forEach(area => {
+        areasHtml += `<div class="localidade-item"><span class="localidade-nome">${area}</span></div>`;
+      });
+      areasHtml += '</div>';
+      areasList.innerHTML = areasHtml || '<p>Nenhuma área registrada</p>';
+
+      // Batalhões
+      const bpmList = document.getElementById('cpaBPMList');
+      let bpmHtml = '<div class="localidades-list">';
+      (cpaDetails[cpa] || []).forEach(detail => {
+        bpmHtml += `<div class="localidade-item">
+                      <span class="localidade-nome">${detail.bpm}</span>
+                      <span class="localidade-nome">${detail.areasAtuacao}</span>
+                    </div>`;
+      });
+      bpmHtml += '</div>';
+      bpmList.innerHTML = bpmHtml || '<p>Nenhum batalhão registrado</p>';
+
+      // Localidades
+      const localidadesList = document.getElementById('cpaLocalidadesList');
+      let localidadesHtml = '<div class="localidades-list">';
+      
+      if (cpaLocalidades[cpa]) {
+        const localidadesArray = Object.entries(cpaLocalidades[cpa])
+          .map(([nome, count]) => ({ nome, count }))
+          .sort((a, b) => b.count - a.count);
+        
+        if (localidadesArray.length > 0) {
+          localidadesArray.forEach(local => {
+            localidadesHtml += `<div class="localidade-item">
+                                <span class="localidade-nome">${local.nome}</span>
+                                <span class="localidade-count">${local.count} remoções</span>
+                              </div>`;
+          });
+        } else {
+          localidadesHtml = '<p>Nenhuma localidade registrada para esta CPA</p>';
+        }
+      } else {
+        localidadesHtml = '<p>Nenhuma localidade registrada para esta CPA</p>';
+      }
+      
+      localidadesHtml += '</div>';
+      localidadesList.innerHTML = localidadesHtml;
+
+      window.currentCPA = cpa;
+      abrirModal('modalCPA');
+    }
+
+    async function gerarPDFCPA() {
+      const cpa = window.currentCPA;
+      if (!cpa) return;
+
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 15;
+      let yPos = margin;
+
+      // Cabeçalho
+      pdf.setFillColor(13, 71, 161);
+      pdf.rect(0, 0, pageWidth, 40, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(24);
+      pdf.text(`Detalhes da ${cpa}`, pageWidth / 2, 25, { align: 'center' });
+
+      yPos = 50;
+
+      // Comandante
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(13, 71, 161);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(13, 71, 161);
+      pdf.setFontSize(16);
+      pdf.text('Comandante', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      pdf.text(cpaComandantes[cpa] || 'Não especificado', margin + 15, yPos + 20);
+
+      yPos += 40;
+
+      // Áreas/Equipes
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(46, 125, 50);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(46, 125, 50);
+      pdf.setFontSize(16);
+      pdf.text('Áreas/Equipes Vinculadas', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      let areasY = yPos + 40;
+      (Array.from(cpaAreas[cpa] || [])).sort().forEach((area, idx) => {
+        if (areasY > pageHeight - 20) {
+          pdf.addPage();
+          areasY = margin;
+        }
+        pdf.text(`• ${area}`, margin + 15, areasY);
+        areasY += 10;
+      });
+
+      yPos = areasY + 10;
+
+      // Batalhões
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, yPos, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(249, 168, 37);
+      pdf.rect(margin, yPos, 5, 30, 'F');
+      pdf.setTextColor(249, 168, 37);
+      pdf.setFontSize(16);
+      pdf.text('Batalhões e Áreas de Atuação', margin + 15, yPos + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      let bpmY = yPos + 40;
+      (cpaDetails[cpa] || []).forEach((detail, idx) => {
+        if (bpmY > pageHeight - 20) {
+          pdf.addPage();
+          bpmY = margin;
+        }
+        pdf.text(`• ${detail.bpm}: ${detail.areasAtuacao}`, margin + 15, bpmY);
+        bpmY += 10;
+      });
+
+      // Localidades
+      let localY = bpmY + 10;
+      if (localY > pageHeight - 30) {
+        pdf.addPage();
+        localY = margin;
+      }
+
+      pdf.setFillColor(245, 247, 250);
+      pdf.roundedRect(margin, localY, pageWidth - 2*margin, 30, 5, 5, 'F');
+      pdf.setFillColor(158, 0, 89);
+      pdf.rect(margin, localY, 5, 30, 'F');
+      pdf.setTextColor(158, 0, 89);
+      pdf.setFontSize(16);
+      pdf.text('Localidades de Atuação para Remoção de Barricadas', margin + 15, localY + 10);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(12);
+      let localidadesY = localY + 40;
+      
+      if (cpaLocalidades[cpa]) {
+        const localidadesArray = Object.entries(cpaLocalidades[cpa])
+          .map(([nome, count]) => ({ nome, count }))
+          .sort((a, b) => b.count - a.count);
+        
+        localidadesArray.forEach((local, idx) => {
+          if (localidadesY > pageHeight - 20) {
+            pdf.addPage();
+            localidadesY = margin;
+          }
+          pdf.text(`• ${local.nome} (${local.count} remoções)`, margin + 15, localidadesY);
+          localidadesY += 10;
+        });
+      } else {
+        pdf.text('Nenhuma localidade registrada', margin + 15, localidadesY);
+      }
+
+      const pdfBlob = pdf.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      document.getElementById('pdfPreview').src = pdfUrl;
+      abrirModal('modalPDF');
+      window.pdfParaDownload = pdf;
+    }
+
+    // ============================================================================
+    // PDF GERAL
+    // ============================================================================
     async function visualizarPDF() {
       if (!dadosFiltrados) {
         mostrarMensagem('Carregue os dados primeiro antes de visualizar!', 'warning');
@@ -1857,7 +2278,7 @@
         const margin = 15;
         let yPos = margin;
         
-        // PÁGINA 1: Cabeçalho e KPIs
+        // Cabeçalho
         pdf.setFillColor(13, 71, 161);
         pdf.rect(0, 0, pageWidth, 35, 'F');
         
@@ -1871,7 +2292,7 @@
         const dataAtual = new Date().toLocaleDateString('pt-BR');
         pdf.text(`Período analisado: ${dadosFiltrados.evolucao[0]?.data || ''} a ${dadosFiltrados.evolucao[dadosFiltrados.evolucao.length - 1]?.data || ''}`, pageWidth / 2, 25, { align: 'center' });
         
-        // Filtros aplicados
+        // Filtros
         pdf.setFontSize(10);
         const filtrosAplicados = Object.entries(filtrosAtivos).filter(([_, v]) => v !== 'todos').map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`).join(', ');
         const filtrosTexto = 'Filtros aplicados: ' + (filtrosAplicados || 'Nenhum');
@@ -1885,7 +2306,7 @@
           { label: 'Remoções Realizadas', valor: Math.round(dadosFiltrados.totais.barricadas), cor: [13, 71, 161] },
           { label: 'Vias Liberadas', valor: Math.round(dadosFiltrados.totais.vias), cor: [2, 136, 209] },
           { label: 'Toneladas Removidas', valor: Math.round(dadosFiltrados.totais.peso), cor: [249, 168, 37] },
-          { label: 'Média Diária', valor: Math.round(dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias), cor: [46, 125, 50] }
+          { label: 'Média Diária', valor: dadosFiltrados.totais.dias > 0 ? (dadosFiltrados.totais.barricadas / dadosFiltrados.totais.dias).toFixed(1) : 0, cor: [46, 125, 50] }
         ];
         
         const cardWidth = (pageWidth - 2*margin - 15) / 4;
@@ -1928,13 +2349,13 @@
         
         let xPos = margin + 5;
         pdf.text('CPA', xPos, yPos + 5);
-        xPos += 25;
-        pdf.text('Comandante', xPos, yPos + 5);
-        xPos += 70;
-        pdf.text('Remoções', xPos, yPos + 5, { align: 'center' });
         xPos += 35;
-        pdf.text('Vias', xPos, yPos + 5, { align: 'center' });
+        pdf.text('Comandante', xPos, yPos + 5);
+        xPos += 65;
+        pdf.text('Remoções', xPos, yPos + 5, { align: 'center' });
         xPos += 30;
+        pdf.text('Vias', xPos, yPos + 5, { align: 'center' });
+        xPos += 25;
         pdf.text('Toneladas', xPos, yPos + 5, { align: 'center' });
         xPos += 35;
         pdf.text('Eficiência', xPos, yPos + 5, { align: 'center' });
@@ -1960,13 +2381,18 @@
           
           xPos = margin + 5;
           pdf.text(cpa, xPos, yPos + 5);
-          xPos += 25;
-          pdf.text(cpaComandantes[cpa] || 'N/A', xPos, yPos + 5);
-          xPos += 70;
-          pdf.text(Math.round(data.barricadas).toString(), xPos, yPos + 5, { align: 'center' });
           xPos += 35;
-          pdf.text(Math.round(data.vias).toString(), xPos, yPos + 5, { align: 'center' });
+          
+          let comandante = cpaComandantes[cpa] || 'N/A';
+          if (comandante.length > 18) {
+            comandante = comandante.substring(0, 15) + '...';
+          }
+          pdf.text(comandante, xPos, yPos + 5);
+          xPos += 65;
+          pdf.text(Math.round(data.barricadas).toString(), xPos, yPos + 5, { align: 'center' });
           xPos += 30;
+          pdf.text(Math.round(data.vias).toString(), xPos, yPos + 5, { align: 'center' });
+          xPos += 25;
           pdf.text(Math.round(data.peso).toString(), xPos, yPos + 5, { align: 'center' });
           xPos += 35;
           pdf.text(data.eficiencia.toFixed(2), xPos, yPos + 5, { align: 'center' });
@@ -1976,7 +2402,6 @@
           yPos += 8;
         });
         
-        // Adicionar página para BPMs se necessário
         if (yPos > pageHeight - 100) {
           pdf.addPage();
           yPos = margin;
@@ -2087,7 +2512,6 @@
     // ============================================================================
     // EVENT LISTENERS
     // ============================================================================
-
     document.getElementById('uploadExcel').addEventListener('change', e => processarExcel(e.target.files[0]));
 
     // Tabs
@@ -2097,6 +2521,15 @@
         tab.classList.add('active');
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
         document.getElementById(tab.dataset.tab).classList.add('active');
+        
+        setTimeout(() => {
+          if (graficoComparativoCPA && tab.dataset.tab === 'tab-cpa') {
+            graficoComparativoCPA.resize();
+          }
+          if (graficoComparativoBPM && tab.dataset.tab === 'tab-bpm') {
+            graficoComparativoBPM.resize();
+          }
+        }, 100);
       });
     });
 
@@ -2104,7 +2537,6 @@
     window.onclick = e => {
       if (e.target.classList.contains('modal')) fecharModal(e.target.id);
     };
-
   </script>
 </body>
 </html>
